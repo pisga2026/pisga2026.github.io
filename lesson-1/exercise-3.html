@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תרגיל 3 – כיבוי הנורות</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
+    h1 { font-size: 1.55rem; margin-bottom: 8px; }
+    .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
+    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 10px; direction: ltr; overflow-x: auto; padding: 12px 0; }
+    .lamp-wrap { min-width: 54px; text-align: center; }
+    .lamp { display: block; width: 46px; height: 46px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    button.lamp { cursor: pointer; }
+    button.lamp.selected { outline: 4px solid #2463a6; outline-offset: 3px; }
+    button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
+    .lamp.on { background: #ffd84d; }
+    .number { margin-top: 5px; font-size: 0.9rem; }
+    #reset { padding: 8px 14px; font: inherit; cursor: pointer; }
+    #status { min-height: 1.5em; font-weight: bold; }
+    .key { margin-top: 0; }
+  </style>
+</head>
+<body>
+  <h1>תרגיל 3: האם אפשר לכבות את כולן?</h1>
+  <p>יש עשר נורות. בתחילה רק נורה 5 דולקת.</p>
+  <p><strong>הכלל:</strong> בכל צעד בוחרים שתי נורות שונות והופכים את מצב שתיהן. לחצו על נורה אחת ואז על נורה נוספת.</p>
+  <p><strong>המטרה:</strong> לכבות את כל הנורות.</p>
+
+  <div class="panel">
+    <p class="key"><strong>מצב נוכחי</strong></p>
+    <div id="board" class="board" aria-label="מצב הנורות הנוכחי"></div>
+    <p><strong>מצב היעד</strong></p>
+    <div id="target" class="target" aria-label="מצב היעד"></div>
+    <p>מספר צעדים: <span id="moves">0</span></p>
+    <p id="status" aria-live="polite">בחרו שתי נורות.</p>
+    <button id="reset" type="button">התחלה מחדש</button>
+  </div>
+
+  <script>
+    const start = [false, false, false, false, true, false, false, false, false, false];
+    const goal = Array(10).fill(false);
+    let state = [...start];
+    let selected = null;
+    let moveCount = 0;
+
+    function lampElement(on, index, interactive) {
+      const wrap = document.createElement('div');
+      wrap.className = 'lamp-wrap';
+      const lamp = document.createElement(interactive ? 'button' : 'div');
+      if (interactive) {
+        lamp.type = 'button';
+        lamp.className = 'lamp' + (on ? ' on' : '') + (selected === index ? ' selected' : '');
+        lamp.setAttribute('aria-pressed', String(selected === index));
+        lamp.addEventListener('click', () => choose(index));
+      } else {
+        lamp.className = 'lamp' + (on ? ' on' : '');
+        lamp.setAttribute('role', 'img');
+      }
+      lamp.setAttribute('aria-label', `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}`);
+      const number = document.createElement('div');
+      number.className = 'number';
+      number.textContent = index + 1;
+      wrap.append(lamp, number);
+      return wrap;
+    }
+
+    function renderTarget() {
+      document.getElementById('target').replaceChildren(
+        ...goal.map((on, index) => lampElement(on, index, false))
+      );
+    }
+
+    function render(message) {
+      document.getElementById('board').replaceChildren(
+        ...state.map((on, index) => lampElement(on, index, true))
+      );
+      document.getElementById('moves').textContent = moveCount;
+      const solved = state.every((value, index) => value === goal[index]);
+      document.getElementById('status').textContent = solved
+        ? `הצלחתם! כל הנורות כבויות לאחר ${moveCount} צעדים.`
+        : message || `נורות דולקות כעת: ${state.filter(Boolean).length}. בחרו שתי נורות.`;
+    }
+
+    function choose(index) {
+      if (selected === null) {
+        selected = index;
+        render(`נבחרה נורה ${index + 1}. בחרו נורה נוספת.`);
+        return;
+      }
+      if (selected === index) {
+        selected = null;
+        render('הבחירה בוטלה. בחרו שתי נורות.');
+        return;
+      }
+      state[selected] = !state[selected];
+      state[index] = !state[index];
+      selected = null;
+      moveCount += 1;
+      render();
+    }
+
+    document.getElementById('reset').addEventListener('click', () => {
+      state = [...start];
+      selected = null;
+      moveCount = 0;
+      render('בחרו שתי נורות.');
+    });
+
+    renderTarget();
+    render('בחרו שתי נורות.');
+  </script>
+</body>
+</html>
+
