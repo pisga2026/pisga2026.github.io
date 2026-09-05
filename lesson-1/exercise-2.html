@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תרגיל 2 – האם אפשר להגיע ליעד?</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
+    h1 { font-size: 1.55rem; margin-bottom: 8px; }
+    .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
+    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 12px; direction: ltr; overflow-x: auto; padding: 12px 0; }
+    .lamp-wrap { min-width: 58px; text-align: center; }
+    .lamp { display: block; width: 50px; height: 50px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    button.lamp { cursor: pointer; }
+    button.lamp.last { cursor: default; }
+    button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
+    .lamp.on { background: #ffd84d; }
+    .number { margin-top: 5px; font-size: 0.9rem; }
+    #reset { padding: 8px 14px; font: inherit; cursor: pointer; }
+    #status { min-height: 1.5em; font-weight: bold; }
+    .key { margin-top: 0; }
+  </style>
+</head>
+<body>
+  <h1>תרגיל 2: האם תוכלו להגיע ליעד?</h1>
+  <p>יש שמונה נורות בשורה. בתחילת המשחק כולן כבויות.</p>
+  <p><strong>הכלל:</strong> לחיצה על נורה הופכת אותה ואת הנורה שמימינה. לחיצה על הנורה הימנית ביותר אינה משנה דבר.</p>
+  <p><strong>המטרה:</strong> להגיע למצב שבו רק נורות 2, 5 ו־8 דולקות.</p>
+
+  <div class="panel">
+    <p class="key"><strong>מצב נוכחי</strong> — לחצו ישירות על אחת הנורות.</p>
+    <div id="board" class="board" aria-label="מצב הנורות הנוכחי"></div>
+    <p><strong>מצב היעד</strong></p>
+    <div id="target" class="target" aria-label="מצב היעד"></div>
+    <p>מספר צעדים: <span id="moves">0</span></p>
+    <p id="status" aria-live="polite">התחילו לנסות.</p>
+    <button id="reset" type="button">התחלה מחדש</button>
+  </div>
+
+  <script>
+    const start = [false, false, false, false, false, false, false, false];
+    const goal =  [false, true,  false, false, true,  false, false, true ];
+    let state = [...start];
+    let moveCount = 0;
+
+    function lampElement(on, index, interactive) {
+      const wrap = document.createElement('div');
+      wrap.className = 'lamp-wrap';
+      const lamp = document.createElement(interactive ? 'button' : 'div');
+      if (interactive) {
+        lamp.type = 'button';
+        lamp.setAttribute('aria-pressed', String(on));
+        lamp.addEventListener('click', () => flip(index));
+      } else {
+        lamp.setAttribute('role', 'img');
+      }
+      lamp.className = 'lamp' + (on ? ' on' : '') + (interactive && index === state.length - 1 ? ' last' : '');
+      lamp.setAttribute('aria-label', interactive
+        ? `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}. ${index === state.length - 1 ? 'לחיצה אינה משנה דבר' : `לחיצה תהפוך גם את נורה ${index + 2}`}`
+        : `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}`);
+      const number = document.createElement('div');
+      number.className = 'number';
+      number.textContent = index + 1;
+      wrap.append(lamp, number);
+      return wrap;
+    }
+
+    function renderTarget() {
+      document.getElementById('target').replaceChildren(
+        ...goal.map((on, index) => lampElement(on, index, false))
+      );
+    }
+
+    function render() {
+      document.getElementById('board').replaceChildren(
+        ...state.map((on, index) => lampElement(on, index, true))
+      );
+      document.getElementById('moves').textContent = moveCount;
+      const solved = state.every((value, index) => value === goal[index]);
+      const onCount = state.filter(Boolean).length;
+      document.getElementById('status').textContent = solved
+        ? `הגעתם ליעד ב-${moveCount} צעדים.`
+        : `נורות דולקות כעת: ${onCount}.`;
+    }
+
+    function flip(index) {
+      if (index === state.length - 1) return;
+      state[index] = !state[index];
+      state[index + 1] = !state[index + 1];
+      moveCount += 1;
+      render();
+    }
+
+    document.getElementById('reset').addEventListener('click', () => {
+      state = [...start];
+      moveCount = 0;
+      render();
+    });
+
+    renderTarget();
+    render();
+  </script>
+</body>
+</html>
+
