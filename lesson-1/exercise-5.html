@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תרגיל 5 – מסלול אלכסוני</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; max-width: 1050px; margin: 12px auto; padding: 0 14px; color: #222; line-height: 1.4; }
+    h1 { font-size: 1.45rem; margin: 0 0 4px; }
+    p { margin: 4px 0; }
+    .panel { border: 1px solid #aaa; padding: 12px; margin-top: 10px; display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: 16px; align-items: start; }
+    #grid { display: block; width: 100%; height: min(calc(100vh - 185px), 520px); min-height: 320px; direction: ltr; }
+    .sidebar { padding-top: 8px; }
+    .controls { display: grid; grid-template-columns: repeat(2, 54px); gap: 8px; justify-content: center; direction: ltr; margin: 0 0 14px; }
+    .controls button { width: 54px; height: 44px; font: 1.4rem Arial, sans-serif; cursor: pointer; }
+    .controls button:disabled { cursor: default; opacity: 0.35; }
+    #reset { width: 100%; padding: 8px 10px; font: inherit; cursor: pointer; }
+    #status { min-height: 3em; font-weight: bold; }
+    .info { margin: 10px 0 4px; }
+    @media (max-width: 720px) {
+      body { margin: 8px auto; padding: 0 10px; }
+      .panel { grid-template-columns: 1fr; gap: 6px; padding: 8px; }
+      #grid { height: min(43vh, 340px); min-height: 220px; }
+      .sidebar { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; align-items: center; padding-top: 0; }
+      .controls { grid-row: span 3; margin: 0; }
+      #status { min-height: 1.5em; }
+      #reset { width: auto; justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <h1>תרגיל 5: האם תוכלו להגיע ליעד?</h1>
+  <p>מתחילים בנקודה (0,0). בכל צעד זזים יחידה אחת באלכסון, בלי לצאת מהרביע הראשון.</p>
+  <p><strong>המטרה:</strong> להגיע לנקודה (8,5).</p>
+
+  <div class="panel">
+    <svg id="grid" viewBox="0 0 760 520" role="img" aria-labelledby="grid-title grid-desc">
+      <title id="grid-title">מערכת צירים ומסלול התנועה</title>
+      <desc id="grid-desc">הנקודה הנוכחית, נקודת היעד והמסלול שנעשה.</desc>
+    </svg>
+    <div class="sidebar">
+      <div class="controls" aria-label="כפתורי תנועה אלכסונית">
+        <button type="button" data-dx="-1" data-dy="1" aria-label="שמאלה ולמעלה">↖</button>
+        <button type="button" data-dx="1" data-dy="1" aria-label="ימינה ולמעלה">↗</button>
+        <button type="button" data-dx="-1" data-dy="-1" aria-label="שמאלה ולמטה">↙</button>
+        <button type="button" data-dx="1" data-dy="-1" aria-label="ימינה ולמטה">↘</button>
+      </div>
+      <p class="info">מיקום: (<span id="x">0</span>,<span id="y">0</span>)<br>צעדים: <span id="moves">0</span></p>
+      <p id="status" aria-live="polite">בחרו תנועה.</p>
+      <button id="reset" type="button">התחלה מחדש</button>
+    </div>
+  </div>
+
+  <script>
+    const svg = document.getElementById('grid');
+    const target = { x: 8, y: 5 };
+    const baseMaxX = 14;
+    const baseMaxY = 10;
+    let position = { x: 0, y: 0 };
+    let trail = [{ ...position }];
+    const ns = 'http://www.w3.org/2000/svg';
+
+    function svgElement(tag, attributes, text) {
+      const element = document.createElementNS(ns, tag);
+      for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function draw() {
+      const width = 760;
+      const height = 520;
+      const margin = { left: 48, right: 22, top: 22, bottom: 46 };
+      const maxX = Math.max(baseMaxX, target.x + 1, ...trail.map((point) => point.x + 1));
+      const maxY = Math.max(baseMaxY, target.y + 1, ...trail.map((point) => point.y + 1));
+      const plotWidth = width - margin.left - margin.right;
+      const plotHeight = height - margin.top - margin.bottom;
+      const sx = (x) => margin.left + x * plotWidth / maxX;
+      const sy = (y) => margin.top + (maxY - y) * plotHeight / maxY;
+      const xEvery = Math.max(1, Math.ceil(maxX / 14));
+      const yEvery = Math.max(1, Math.ceil(maxY / 10));
+
+      svg.replaceChildren(
+        svgElement('title', { id: 'grid-title' }, 'מערכת צירים ומסלול התנועה'),
+        svgElement('desc', { id: 'grid-desc' }, `הנקודה הנוכחית היא (${position.x},${position.y}) ונקודת היעד היא (${target.x},${target.y}).`)
+      );
+
+      for (let x = 0; x <= maxX; x += 1) {
+        svg.append(svgElement('line', {
+          x1: sx(x), y1: sy(0), x2: sx(x), y2: sy(maxY),
+          stroke: x === 0 ? '#555' : '#ddd', 'stroke-width': x === 0 ? 2 : 1
+        }));
+        if (x % xEvery === 0) svg.append(svgElement('text', {
+          x: sx(x), y: sy(0) + 24, 'text-anchor': 'middle', 'font-size': 13, fill: '#333'
+        }, x));
+      }
+      for (let y = 0; y <= maxY; y += 1) {
+        svg.append(svgElement('line', {
+          x1: sx(0), y1: sy(y), x2: sx(maxX), y2: sy(y),
+          stroke: y === 0 ? '#555' : '#ddd', 'stroke-width': y === 0 ? 2 : 1
+        }));
+        if (y > 0 && y % yEvery === 0) svg.append(svgElement('text', {
+          x: sx(0) - 10, y: sy(y) + 4, 'text-anchor': 'end', 'font-size': 13, fill: '#333'
+        }, y));
+      }
+
+      svg.append(svgElement('polyline', {
+        points: trail.map((point) => `${sx(point.x)},${sy(point.y)}`).join(' '),
+        fill: 'none', stroke: '#2463a6', 'stroke-width': 3, 'stroke-linejoin': 'round'
+      }));
+      svg.append(svgElement('circle', {
+        cx: sx(target.x), cy: sy(target.y), r: 8, fill: '#c43d3d'
+      }));
+      svg.append(svgElement('text', {
+        x: sx(target.x) + 10, y: sy(target.y) - 12, 'text-anchor': 'start', 'font-size': 14, fill: '#8b2525'
+      }, `יעד (${target.x},${target.y})`));
+      svg.append(svgElement('circle', {
+        cx: sx(position.x), cy: sy(position.y), r: 7, fill: '#24733f', stroke: '#fff', 'stroke-width': 2
+      }));
+    }
+
+    function render(message) {
+      draw();
+      document.getElementById('x').textContent = position.x;
+      document.getElementById('y').textContent = position.y;
+      document.getElementById('moves').textContent = trail.length - 1;
+      const solved = position.x === target.x && position.y === target.y;
+      document.getElementById('status').textContent = solved
+        ? `הצלחתם! הגעתם ליעד ב־${trail.length - 1} צעדים.`
+        : message || 'בחרו תנועה.';
+      document.querySelectorAll('.controls button').forEach((button) => {
+        const nextX = position.x + Number(button.dataset.dx);
+        const nextY = position.y + Number(button.dataset.dy);
+        button.disabled = nextX < 0 || nextY < 0;
+      });
+    }
+
+    document.querySelectorAll('.controls button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const next = {
+          x: position.x + Number(button.dataset.dx),
+          y: position.y + Number(button.dataset.dy)
+        };
+        if (next.x < 0 || next.y < 0) {
+          render('אי אפשר לצאת מהרביע הראשון.');
+          return;
+        }
+        position = next;
+        trail.push({ ...position });
+        render();
+      });
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      position = { x: 0, y: 0 };
+      trail = [{ ...position }];
+      render('בחרו תנועה.');
+    });
+
+    render('בחרו תנועה.');
+  </script>
+</body>
+</html>
+
