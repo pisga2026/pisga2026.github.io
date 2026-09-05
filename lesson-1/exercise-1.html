@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>תרגיל 1 – יעד אפשרי</title>
+  <title>הצעה לתרגיל 1 – אתגר הנורות</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
+    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
     h1 { font-size: 1.55rem; margin-bottom: 8px; }
     .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
-    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 12px; direction: ltr; overflow-x: auto; padding: 12px 0; }
-    .lamp-wrap { min-width: 58px; text-align: center; }
-    .lamp { display: block; width: 50px; height: 50px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 10px; direction: ltr; overflow-x: auto; padding: 12px 0; }
+    .lamp-wrap { min-width: 54px; text-align: center; }
+    .lamp { display: block; width: 46px; height: 46px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
     button.lamp { cursor: pointer; }
     button.lamp.last { cursor: default; }
     button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
@@ -23,10 +23,15 @@
   </style>
 </head>
 <body>
-  <h1>תרגיל 1: האם תוכלו להגיע ליעד?</h1>
-  <p>יש שמונה נורות בשורה. בתחילת המשחק כולן כבויות.</p>
+  <h1>תרגיל 1: אתגר הנורות</h1>
+  <p>יש עשר נורות בשורה. בתחילת המשחק כולן כבויות.</p>
   <p><strong>הכלל:</strong> לחיצה על נורה הופכת אותה ואת הנורה שמימינה. לחיצה על הנורה הימנית ביותר אינה משנה דבר.</p>
-  <p><strong>המטרה:</strong> להגיע למצב שבו רק נורות 2 ו־7 דולקות.</p>
+  <p><strong>המטרה:</strong> להגיע בדיוק למצב היעד המוצג למטה.</p>
+  <ol>
+    <li>נסו להגיע ליעד בדרך כלשהי.</li>
+    <li>לאחר שהצלחתם, התחילו מחדש ונסו להגיע ליעד ב־7 צעדים לכל היותר.</li>
+    <li>רשמו את מספרי הנורות שעליהן לחצתם. הרשימה היא הטיעון שלכם לכך שאפשר להגיע ליעד.</li>
+  </ol>
 
   <div class="panel">
     <p class="key"><strong>מצב נוכחי</strong> — לחצו ישירות על אחת הנורות.</p>
@@ -39,8 +44,8 @@
   </div>
 
   <script>
-    const start = [false, false, false, false, false, false, false, false];
-    const goal =  [false, true,  false, false, false, false, true,  false];
+    const start = Array(10).fill(false);
+    const goal = [true, false, true, true, false, false, true, true, false, true];
     let state = [...start];
     let moveCount = 0;
 
@@ -79,9 +84,13 @@
       document.getElementById('moves').textContent = moveCount;
       const solved = state.every((value, index) => value === goal[index]);
       const onCount = state.filter(Boolean).length;
-      document.getElementById('status').textContent = solved
-        ? `הצלחתם! הגעתם ליעד ב-${moveCount} צעדים.`
-        : `נורות דולקות כעת: ${onCount}.`;
+      if (solved && moveCount <= 7) {
+        document.getElementById('status').textContent = `הצלחתם באתגר! הגעתם ליעד ב־${moveCount} צעדים.`;
+      } else if (solved) {
+        document.getElementById('status').textContent = `הגעתם ליעד ב־${moveCount} צעדים. עכשיו נסו שוב ב־7 צעדים לכל היותר.`;
+      } else {
+        document.getElementById('status').textContent = `נורות דולקות כעת: ${onCount}.`;
+      }
     }
 
     function flip(index) {
