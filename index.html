@@ -3,34 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>תוכנית פסגה – תוכן עניינים</title>
+  <title>תוכנית פסגה - תוכן עניינים</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #222;
+      line-height: 1.5;
+      color: #202124;
       background: #fff;
     }
     main {
-      max-width: 720px;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 40px 24px;
+      padding: 38px 24px 46px;
     }
     .logo-row {
       margin-bottom: 28px;
       text-align: center;
     }
     .logo {
-      width: 272px;
-      max-width: 100%;
+      display: inline-block;
+      width: 240px;
+      max-width: 70%;
       height: auto;
     }
-    h1 { margin-bottom: 32px; }
-    h2 { margin-bottom: 12px; }
-    ul { padding-right: 24px; }
-    li { margin: 8px 0; }
-    a { color: #0645ad; }
+    header {
+      padding-bottom: 22px;
+      text-align: center;
+      border-bottom: 1px solid #d8e2e8;
+    }
+    h1 {
+      margin: 0;
+      font-weight: 600;
+    }
+    section {
+      max-width: 500px;
+      margin: 30px auto 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid #e2e8ec;
+    }
+    li {
+      border-bottom: 1px solid #e2e8ec;
+    }
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 4px;
+      color: #17628a;
+      text-decoration: none;
+    }
+    a:hover, a:focus-visible {
+      text-decoration: underline;
+    }
+    .arrow {
+      color: #8b9aa3;
+    }
+    .questionnaire {
+      margin-top: 14px;
+      border-top: 1px solid #b9d7e5;
+    }
+    .questionnaire a {
+      font-weight: 600;
+    }
+    .questionnaire small {
+      display: block;
+      color: #5f6b73;
+      font-weight: 400;
+    }
+    @media (max-width: 480px) {
+      main { padding: 26px 16px 36px; }
+      .logo { width: 190px; }
+      section { margin-top: 24px; }
+    }
   </style>
 </head>
 <body>
@@ -43,18 +98,23 @@
       >
     </div>
 
-    <h1>תוכנית פסגה – תוכן עניינים</h1>
+    <header>
+      <h1>תוכנית פסגה - תוכן עניינים</h1>
+    </header>
 
     <section>
       <h2>שיעור 1</h2>
       <ul>
-        <li><a href="lesson-1/exercise-1.html">תרגיל 1</a></li>
-        <li><a href="lesson-1/exercise-2.html">תרגיל 2</a></li>
-        <li><a href="lesson-1/exercise-3.html">תרגיל 3</a></li>
-        <li><a href="lesson-1/exercise-4.html">תרגיל 4</a></li>
-        <li><a href="lesson-1/exercise-5.html">תרגיל 5</a></li>
-        <li>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKx-q5yI_Lu801rqHGRZEIH_sketJPofAL9HIEB4-YGyf-0Q/viewform">שאלון סיכום והרחבה</a>
+        <li><a href="lesson-1/exercise-1.html"><span>תרגיל 1</span><span class="arrow" aria-hidden="true">←</span></a></li>
+        <li><a href="lesson-1/exercise-2.html"><span>תרגיל 2</span><span class="arrow" aria-hidden="true">←</span></a></li>
+        <li><a href="lesson-1/exercise-3.html"><span>תרגיל 3</span><span class="arrow" aria-hidden="true">←</span></a></li>
+        <li><a href="lesson-1/exercise-4.html"><span>תרגיל 4</span><span class="arrow" aria-hidden="true">←</span></a></li>
+        <li><a href="lesson-1/exercise-5.html"><span>תרגיל 5</span><span class="arrow" aria-hidden="true">←</span></a></li>
+        <li class="questionnaire">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKx-q5yI_Lu801rqHGRZEIH_sketJPofAL9HIEB4-YGyf-0Q/viewform">
+            <span>שאלון סיכום והרחבה<small>לסיום השיעור או להמשך עבודה</small></span>
+            <span class="arrow" aria-hidden="true">←</span>
+          </a>
         </li>
       </ul>
     </section>
