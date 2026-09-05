@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>סיכום שיעור 1 – לתלמידים</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f5f5f5; color: #202124; font-family: Arial, sans-serif; line-height: 1.65; }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 40px 64px; background: #fff; }
+    header { border-bottom: 3px solid #315f86; padding-bottom: 16px; margin-bottom: 24px; }
+    h1 { margin: 0 0 6px; color: #17365d; font-size: 2rem; }
+    h2 { margin-top: 34px; color: #24557a; border-bottom: 1px solid #ccd6df; padding-bottom: 5px; }
+    .subtitle { margin: 0; color: #5b6573; }
+    .callout { border-right: 5px solid #315f86; background: #eef4fa; padding: 12px 16px; margin: 18px 0; }
+    .success { border-right-color: #397453; background: #edf7f1; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; }
+    th, td { border: 1px solid #cbd4dc; padding: 9px 11px; vertical-align: top; }
+    th { background: #e8eef5; color: #17365d; }
+    ol, ul { padding-right: 24px; }
+    .exercise-widget { border: 1px solid #aab5bf; padding: 16px; margin: 12px 0 18px; background: #fff; }
+    .widget-board, .widget-target { display: flex; align-items: flex-start; justify-content: center; gap: 12px; direction: ltr; overflow-x: auto; padding: 12px 0; }
+    .widget-lamp-wrap { min-width: 58px; text-align: center; }
+    .widget-lamp { display: block; width: 50px; height: 50px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    button.widget-lamp { cursor: pointer; }
+    button.widget-lamp.last { cursor: default; }
+    button.widget-lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
+    .widget-lamp.on { background: #ffd84d; }
+    .widget-number { margin-top: 5px; font-size: 0.9rem; }
+    .widget-status { min-height: 1.5em; font-weight: bold; }
+    .widget-reset { padding: 8px 14px; font: inherit; cursor: pointer; }
+    .name-line { margin-top: 35px; color: #5b6573; }
+    footer { margin-top: 42px; padding-top: 15px; border-top: 1px solid #ccd6df; color: #5b6573; font-size: 0.9rem; }
+    @media (max-width: 720px) {
+      main { padding: 22px 18px 48px; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { max-width: none; padding: 0; }
+      h2 { break-after: avoid; }
+      table, .callout, .exercise-widget { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>שיעור 1: מה נחשב טיעון משכנע?</h1>
+    <p class="subtitle">בעיה שאפשר לפתור, בעיה שאי אפשר לפתור, ורעיון אחד שנשמר</p>
+  </header>
+
+  <div class="callout"><strong>כלל המשחק:</strong> יש שמונה נורות בשורה. לחיצה על נורה הופכת אותה ואת הנורה שמימינה. לחיצה על נורה 8 אינה משנה דבר.</div>
+
+  <h2>האתגר הראשון: להראות שאפשר</h2>
+  <p>התחלנו כשכל הנורות כבויות, ורצינו להגיע למצב שבו רק נורות 2 ו־7 דולקות.</p>
+  <div class="exercise-widget" data-goal="01000010" data-success="הצלחתם! הגעתם ליעד.">
+    <p><strong>לחצו ישירות על נורה.</strong> הלחיצה הופכת אותה ואת הנורה שמימינה; נורה 8 אינה משנה דבר.</p>
+    <div class="widget-board" data-board aria-label="מצב הנורות הנוכחי"></div>
+    <p><strong>מצב היעד</strong></p>
+    <div class="widget-target" data-target aria-label="מצב היעד"></div>
+    <p>מספר צעדים: <span data-moves>0</span></p>
+    <p class="widget-status" data-status aria-live="polite">התחילו לנסות.</p>
+    <button class="widget-reset" data-reset type="button">התחלה מחדש</button>
+  </div>
+  <p><strong>רצף שעובד:</strong> לחיצה על נורות 2, 3, 4, 5, 6 — לפי הסדר.</p>
+  <div class="callout success"><strong>למה זה משכנע?</strong> כל לחיצה חוקית והרצף מגיע בדיוק ליעד. כדי להוכיח שטענה מסוג “אפשר להגיע” נכונה, דוגמה אחת שבאמת עובדת מספיקה.</div>
+
+  <h2>האתגר השני: האם אפשר?</h2>
+  <p>שוב התחלנו כשכל הנורות כבויות, והפעם רצינו שרק נורות 2, 5 ו־8 ידלקו.</p>
+  <div class="exercise-widget" data-goal="01001001" data-success="הגעתם ליעד.">
+    <p><strong>לחצו ישירות על נורה.</strong> הלחיצה הופכת אותה ואת הנורה שמימינה; נורה 8 אינה משנה דבר.</p>
+    <div class="widget-board" data-board aria-label="מצב הנורות הנוכחי"></div>
+    <p><strong>מצב היעד</strong></p>
+    <div class="widget-target" data-target aria-label="מצב היעד"></div>
+    <p>מספר צעדים: <span data-moves>0</span></p>
+    <p class="widget-status" data-status aria-live="polite">התחילו לנסות.</p>
+    <button class="widget-reset" data-reset type="button">התחלה מחדש</button>
+  </div>
+  <p>גם אם ניסינו פעמים רבות ולא הצלחנו, עדיין ייתכן שפשוט לא מצאנו את הרצף הנכון. חיפוש שלא הצליח אינו הוכחה שאין פתרון.</p>
+
+  <h2>התכונה שנשמרת: זוגיות</h2>
+  <p>במקום לעקוב אחרי המיקום של כל נורה, נספור כמה נורות דולקות:</p>
+  <table>
+    <thead><tr><th>המצב לפני הלחיצה</th><th>השינוי במספר הנורות הדולקות</th></tr></thead>
+    <tbody>
+      <tr><td>שתי הנורות כבויות</td><td>המספר גדל ב־2</td></tr>
+      <tr><td>שתי הנורות דולקות</td><td>המספר קטן ב־2</td></tr>
+      <tr><td>אחת דולקת ואחת כבויה</td><td>המספר אינו משתנה</td></tr>
+      <tr><td>לחיצה על נורה 8</td><td>לא משתנה דבר</td></tr>
+    </tbody>
+  </table>
+  <p>בכל מקרה, מספר זוגי של נורות דולקות נשאר זוגי.</p>
+  <div class="callout success"><strong>ההוכחה:</strong> בהתחלה דולקות 0 נורות — מספר זוגי. הזוגיות נשמרת בכל לחיצה. ביעד השני דולקות 3 נורות — מספר אי־זוגי. לכן אין שום רצף לחיצות שמגיע ליעד.</div>
+
+  <h2>שני כלים שכדאי לזכור</h2>
+  <ol>
+    <li><strong>כדי להוכיח שאפשר:</strong> מציגים רצף צעדים חוקיים שמגיע ליעד.</li>
+    <li><strong>כדי להוכיח שאי אפשר:</strong> מוצאים מגבלה או תכונה שנשמרת בכל צעד, ומראים שהיעד מפר אותה.</li>
+  </ol>
+  <p>תכונה שנשמרת לאורך כל התהליך נקראת <strong>אינווריאנט</strong>.</p>
+
+  <h2>בדקו את עצמכם</h2>
+  <ul>
+    <li>מדוע דוגמה אחת מספיקה כדי להוכיח שאפשר להגיע ליעד?</li>
+    <li>מדוע אלף ניסיונות שלא הצליחו עדיין אינם בהכרח הוכחה שאי אפשר?</li>
+    <li>התחלנו עם שתי נורות דולקות. האם נוכל להגיע למצב שבו דולקות חמש נורות? הסבירו בלי לנסות את כל האפשרויות.</li>
+  </ul>
+
+  <p class="name-line">שם: ____________________ &nbsp;&nbsp;&nbsp; תאריך: ____________________</p>
+  <footer>תוכנית פסגה | שיעור 1 | סיכום לתלמידים</footer>
+</main>
+<script>
+  document.querySelectorAll('.exercise-widget').forEach((root) => {
+    const goal = root.dataset.goal.split('').map((value) => value === '1');
+    let state = Array(goal.length).fill(false);
+    let moveCount = 0;
+    const board = root.querySelector('[data-board]');
+    const target = root.querySelector('[data-target]');
+    const moves = root.querySelector('[data-moves]');
+    const status = root.querySelector('[data-status]');
+
+    function lampElement(on, index, interactive) {
+      const wrap = document.createElement('div');
+      wrap.className = 'widget-lamp-wrap';
+      const lamp = document.createElement(interactive ? 'button' : 'div');
+      if (interactive) {
+        lamp.type = 'button';
+        lamp.setAttribute('aria-pressed', String(on));
+        lamp.addEventListener('click', () => flip(index));
+      } else {
+        lamp.setAttribute('role', 'img');
+      }
+      lamp.className = 'widget-lamp' + (on ? ' on' : '') + (interactive && index === state.length - 1 ? ' last' : '');
+      lamp.setAttribute('aria-label', interactive
+        ? `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}. ${index === state.length - 1 ? 'לחיצה אינה משנה דבר' : `לחיצה תהפוך גם את נורה ${index + 2}`}`
+        : `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}`);
+      const number = document.createElement('div');
+      number.className = 'widget-number';
+      number.textContent = index + 1;
+      wrap.append(lamp, number);
+      return wrap;
+    }
+
+    function render() {
+      board.replaceChildren(...state.map((on, index) => lampElement(on, index, true)));
+      moves.textContent = moveCount;
+      const solved = state.every((value, index) => value === goal[index]);
+      status.textContent = solved ? `${root.dataset.success} מספר צעדים: ${moveCount}.` : `נורות דולקות כעת: ${state.filter(Boolean).length}.`;
+    }
+
+    function flip(index) {
+      if (index === state.length - 1) return;
+      state[index] = !state[index];
+      state[index + 1] = !state[index + 1];
+      moveCount += 1;
+      render();
+    }
+
+    target.replaceChildren(...goal.map((on, index) => lampElement(on, index, false)));
+    root.querySelector('[data-reset]').addEventListener('click', () => {
+      state = Array(goal.length).fill(false);
+      moveCount = 0;
+      render();
+    });
+    render();
+  });
+</script>
+</body>
+</html>
+
