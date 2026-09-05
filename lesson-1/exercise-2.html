@@ -6,12 +6,12 @@
   <title>תרגיל 2 – האם אפשר להגיע ליעד?</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
+    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
     h1 { font-size: 1.55rem; margin-bottom: 8px; }
     .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
-    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 12px; direction: ltr; overflow-x: auto; padding: 12px 0; }
-    .lamp-wrap { min-width: 58px; text-align: center; }
-    .lamp { display: block; width: 50px; height: 50px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 10px; direction: ltr; overflow-x: auto; padding: 12px 0; }
+    .lamp-wrap { min-width: 54px; text-align: center; }
+    .lamp { display: block; width: 46px; height: 46px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
     button.lamp { cursor: pointer; }
     button.lamp.last { cursor: default; }
     button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
@@ -24,9 +24,9 @@
 </head>
 <body>
   <h1>תרגיל 2: האם תוכלו להגיע ליעד?</h1>
-  <p>יש שמונה נורות בשורה. בתחילת המשחק כולן כבויות.</p>
+  <p>יש עשר נורות בשורה. בתחילת המשחק כולן כבויות.</p>
   <p><strong>הכלל:</strong> לחיצה על נורה הופכת אותה ואת הנורה שמימינה. לחיצה על הנורה הימנית ביותר אינה משנה דבר.</p>
-  <p><strong>המטרה:</strong> להגיע למצב שבו רק נורות 2, 5 ו־8 דולקות.</p>
+  <p><strong>המטרה:</strong> להגיע למצב שבו רק נורות 1, 3, 4, 7 ו־10 דולקות.</p>
 
   <div class="panel">
     <p class="key"><strong>מצב נוכחי</strong> — לחצו ישירות על אחת הנורות.</p>
@@ -39,8 +39,8 @@
   </div>
 
   <script>
-    const start = [false, false, false, false, false, false, false, false];
-    const goal =  [false, true,  false, false, true,  false, false, true ];
+    const start = Array(10).fill(false);
+    const goal = [true, false, true, true, false, false, true, false, false, true];
     let state = [...start];
     let moveCount = 0;
 
