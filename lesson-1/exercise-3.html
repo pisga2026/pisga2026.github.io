@@ -6,20 +6,40 @@
   <title>תרגיל 3 - כיבוי הנורות</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; }
-    h1 { font-size: 1.55rem; margin-bottom: 8px; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; overflow-wrap: break-word; }
+    h1 { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; }
     .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
     .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 10px; direction: ltr; overflow-x: auto; padding: 12px 0; }
     .lamp-wrap { min-width: 54px; text-align: center; }
     .lamp { display: block; width: 46px; height: 46px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
+    button { touch-action: manipulation; }
     button.lamp { cursor: pointer; }
     button.lamp.selected { outline: 4px solid #2463a6; outline-offset: 3px; }
     button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
     .lamp.on { background: #ffd84d; }
     .number { margin-top: 5px; font-size: 0.9rem; }
-    #reset { padding: 8px 14px; font: inherit; cursor: pointer; }
+    #reset { min-height: 44px; padding: 8px 14px; font: inherit; cursor: pointer; }
     #status { min-height: 1.5em; font-weight: bold; }
     .key { margin-top: 0; }
+    @media (max-width: 640px) {
+      body { margin: 0 auto; padding: 18px max(12px, env(safe-area-inset-right)) 32px max(12px, env(safe-area-inset-left)); }
+      h1 { font-size: clamp(1.35rem, 7vw, 1.55rem); }
+      .panel { margin-top: 14px; padding: 12px 10px; }
+      .board, .target {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(44px, 46px));
+        gap: 10px clamp(4px, 2vw, 10px);
+        overflow-x: visible;
+        padding: 10px 0;
+      }
+      .lamp-wrap { min-width: 0; }
+    }
+    @media (max-width: 360px) {
+      body { padding-right: max(8px, env(safe-area-inset-right)); padding-left: max(8px, env(safe-area-inset-left)); }
+      .panel { padding-inline: 6px; }
+      .board, .target { grid-template-columns: repeat(5, 44px); column-gap: 4px; }
+    }
   </style>
 </head>
 <body>
