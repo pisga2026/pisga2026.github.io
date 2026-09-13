@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>תרגיל 5 - איך בונים מעגל אוילר?</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M8 30L20 8L32 30Z' stroke='%23555' fill='none' stroke-width='3'/%3E%3Cg fill='%23ffd84d' stroke='%23555'%3E%3Ccircle cx='8' cy='30' r='5'/%3E%3Ccircle cx='20' cy='8' r='5'/%3E%3Ccircle cx='32' cy='30' r='5'/%3E%3C/g%3E%3C/svg%3E"><style>
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; background: #fff; line-height: 1.5; overflow-wrap: break-word; }
+h1 { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; }
+.panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
+.key { margin-top: 0; }
+.board { max-width: 820px; margin: 0 auto; }
+.graph-scroll { max-width: 100%; overflow-x: auto; direction: ltr; }
+.large-board { min-width: 700px; }
+.mobile-note { display: none; }
+.pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.example { min-width: 0; }
+.example h3 { font-size: 1.1rem; margin: 10px 0; }
+.group-title { font-size: 1.25rem; margin: 26px 0 8px; }
+.inspect-status { min-height: 3em; margin: 6px 0; font-size: .95rem; }
+textarea, input[type="text"] { display: block; width: 100%; font: inherit; margin: 6px 0 16px; padding: 8px; border: 1px solid #999; }
+textarea { resize: vertical; min-height: 90px; }
+fieldset { border: 1px solid #aaa; margin: 12px 0; }
+fieldset label { display: block; margin: 8px 0; }
+input[type="radio"] { width: 18px; height: 18px; vertical-align: middle; }
+.feedback { min-height: 1.5em; font-weight: bold; }
+svg { display: block; width: 100%; height: auto; }
+svg text { font-family: Arial, sans-serif; pointer-events: none; user-select: none; }
+svg [role="button"] { cursor: pointer; outline: none; }
+svg [role="button"]:focus-visible .node-face { stroke: #2463a6; stroke-width: 6; }
+svg [role="button"]:focus-visible .road { stroke: #bd6505; stroke-width: 12; }
+button { min-height: 44px; padding: 8px 14px; font: inherit; cursor: pointer; touch-action: manipulation; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
+button:disabled { cursor: default; opacity: .5; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.controls label { display: flex; align-items: center; gap: 6px; min-height: 44px; }
+input[type="checkbox"] { width: 18px; height: 18px; accent-color: #2463a6; }
+#status { min-height: 1.5em; font-weight: bold; }
+.path { direction: ltr; text-align: right; unicode-bidi: isolate; overflow-wrap: anywhere; font-family: Arial, sans-serif; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+.muted { color: #555; font-size: .95rem; }
+.degrees { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.degrees span { white-space: nowrap; }
+.new { color: #a2530b; }
+[hidden] { display: none !important; }
+@media (max-width: 640px) {
+  body { margin: 0 auto; padding: 18px max(12px, env(safe-area-inset-right)) 32px max(12px, env(safe-area-inset-left)); }
+  h1 { font-size: clamp(1.35rem, 7vw, 1.55rem); }
+  ol, ul { padding-right: 1.35rem; }
+  .panel { margin-top: 14px; padding: 12px 10px; }
+  svg text { font-size: 24px; }
+  .pair { grid-template-columns: 1fr; }
+  .mobile-note { display: block; }
+}
+@media print { .controls { display: none; } .panel { break-inside: avoid; } }
+
+.route-status { min-height: 3em; font-weight: bold; }
+.demo-message { min-height: 3em; font-weight: bold; }
+.old { color: #2463a6; }
+.example .key { font-size: .95rem; }
+
+/* Keep each working area together at classroom projector sizes. */
+.route-info p, .demo-info p { margin: 8px 0; }
+.path-label { margin-bottom: 0 !important; }
+.demo-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 8px 0; }
+.discussion-panel .group-title { margin-top: 0; }
+.discussion-map .board { min-width: 0; max-width: 540px; }
+.discussion-map .graph-scroll { overflow: visible; }
+.discussion-map svg { pointer-events: none; }
+
+@media (min-width: 900px) {
+  body { max-width: 1220px; margin: 12px auto; padding: 0 18px; line-height: 1.4; }
+  h1 { font-size: 1.5rem; margin: 0 0 8px; }
+  body > p { margin: 8px 0; }
+  body > ol { margin: 8px 0 12px; }
+  .panel { padding: 12px; margin-top: 12px; }
+  .controls { gap: 8px; }
+  button { min-height: 40px; padding: 6px 12px; }
+  .route-panel, .demo-panel, .discussion-panel { display: grid; align-items: center; gap: 18px; }
+  .route-panel { grid-template-columns: minmax(0, 1fr) 350px; }
+  .route-map .board { min-width: 0; max-width: calc(clamp(290px, 100svh - 230px, 470px) * 1.26154); }
+  .route-map .graph-scroll, .demo-map .graph-scroll { overflow: visible; }
+  .route-panel svg text { font-size: 27px; }
+  .route-info .path { min-height: 1.4em; }
+  .route-status { min-height: 2.8em; }
+  .demo-panel { grid-template-columns: minmax(0, 1fr) minmax(400px, .84fr); }
+  .demo-map .board { min-width: 0; max-width: calc(clamp(300px, 100svh - 190px, 470px) * 1.2); }
+  .demo-map svg text, .discussion-map svg text { font-size: 27px; }
+  .demo-steps { margin: 0 0 12px; padding-right: 1.3rem; }
+  .demo-message { min-height: 4.2em; }
+  .demo-info .path { min-height: 1.4em; }
+  #demo-route { min-height: 2.8em; }
+  .discussion-panel { grid-template-columns: minmax(0, 1fr) minmax(320px, .8fr); }
+  .examples-page .pair { gap: 16px; align-items: start; }
+  .example-intro { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .example-intro > p { margin: 4px 0; }
+  .examples-page .example { margin-top: 4px; }
+  .example .route-map .board { max-width: 400px; }
+  .example svg text { font-size: 24px; }
+  .example .route-info { font-size: 1rem; }
+  .example .route-info p { margin: 4px 0; }
+  .example .key { margin-top: 0; }
+  .example .path { min-height: 1.4em; }
+  .example .route-status { min-height: 2.8em; }
+  .example h3 { margin: 0 0 4px; }
+  .examples-page .group-title { margin-top: 8px; }
+}
+
+@media (min-width: 900px) and (max-height: 670px) {
+  .example .route-map .board { max-width: 340px; }
+  .example .route-info p { margin: 4px 0; }
+  .demo-info { line-height: 1.3; }
+  .demo-info p { margin: 6px 0; }
+  .demo-steps { margin-bottom: 8px; }
+  .demo-message { min-height: 3.9em; }
+}
+
+@media (max-width: 899px) {
+  .route-info, .demo-info { margin-top: 12px; }
+  .discussion-panel .group-title { margin-top: 16px; }
+}
+
+</style></head><body class="demo-page">
+<h1>תרגיל 5: איך בונים מעגל אוילר?</h1><p>הגרף מחובר וכל הדרגות בו זוגיות. נחבר מעגלים למעגל אחד שעובר בכל קשת בדיוק פעם אחת.</p><section class="panel demo-panel" aria-label="הדגמת בניית מעגל אוילר"><div class="demo-map"><div class="graph-scroll"><div class="board large-board"><svg id="demo-board" viewBox="0 0 780 650" role="group" aria-label="גרף אינטראקטיבי"></svg></div></div><p class="mobile-note muted">במסך צר אפשר לגלול את הגרף אופקית.</p></div><div class="demo-info"><ol class="demo-steps"><li>בונים מעגל בקשתות שטרם נוצלו.</li><li>בוחרים בו צומת שממנו יוצאת קשת שטרם נוצלה.</li><li>בונים ממנו מעגל נוסף ומשלבים אותו בקודם.</li><li>ממשיכים עד שכל הקשתות נכללות.</li></ol><div class="controls"><button id="demo-prev" type="button">צעד אחורה</button><button id="demo-next" type="button">הצעד הבא</button><button id="demo-reset" type="button">התחלה מחדש</button></div><div class="demo-meta"><span id="demo-counter"></span><span id="demo-count"></span></div><p id="demo-message" class="demo-message" aria-live="polite"></p><p class="key"><span class="old">כחול — המעגל שכבר בנינו.</span><br><span class="new">כתום — הסיבוב החדש.</span> צהוב — המיקום הנוכחי.</p><p class="path-label">הסיבוב החדש:</p><p id="demo-segment" class="path new"></p><p class="path-label">המעגל המחובר (התוספת מודגשת בכתום):</p><p id="demo-route" class="path old"></p></div></section><section class="demo-explanation"><h2 class="group-title">למה השיטה עובדת?</h2><p>בכל צומת שאינו ההתחלה, כניסה משאירה אפשרות ליציאה: הקשתות מגיעות בזוגות. לכן אי אפשר להיתקע שם. חוזרים לנקודת ההתחלה ונסגר מעגל.</p><p>הוצאת קשתותיו של מעגל משאירה בכל צומת מספר זוגי של קשתות. אם נשארו קשתות, החיבור של הגרף מבטיח שיש צומת במעגל שכבר בנינו שממנו אפשר להמשיך. כל סיבוב מוסיף קשתות חדשות, ולכן בסוף כולן ייכללו.</p></section><section class="panel discussion-panel"><div class="discussion-map"><div class="graph-scroll"><div class="board "><svg id="open-board" viewBox="0 0 780 650" role="group" aria-label="גרף אינטראקטיבי"></svg></div></div></div><div><h2 class="group-title">ומה אם חסרה קשת?</h2><p>זה אותו הגרף, לאחר שהסרנו את הקשת בין 1 ל־2. הגרף עדיין מחובר.</p><p><strong>שאלה לדיון:</strong> איך אפשר להשתמש בשיטה למציאת מעגל אוילר כדי למצוא כאן מסלול אוילר שאינו סגור?</p></div></section>
+<script>
+function analyse(g){const d=g.v.map(()=>0),adj=g.v.map(()=>[]);g.e.forEach(([a,b])=>{d[a]++;d[b]++;adj[a].push(b);adj[b].push(a)});const active=d.map((n,i)=>n?i:-1).filter(i=>i>=0),seen=new Set(),todo=active.length?[active[0]]:[];while(todo.length){const u=todo.pop();if(seen.has(u))continue;seen.add(u);todo.push(...adj[u].filter(v=>!seen.has(v)))}const odd=d.map((n,i)=>n%2?i:-1).filter(i=>i>=0);return{d,odd,connected:active.length>0&&seen.size===active.length,kind:seen.size!==active.length||!active.length||odd.length>2?'none':odd.length===2?'open':'closed'}}
+
+'use strict';
+const $=id=>document.getElementById(id);
+function draw(id,g,opts={}){
+ const svg=$(id),active=document.activeElement,focus=svg.contains(active)?(active.hasAttribute('data-node')?'[data-node="'+active.dataset.node+'"]':active.hasAttribute('data-edge')?'[data-edge="'+active.dataset.edge+'"]':null):null,d=analyse(g).d;
+ svg.setAttribute('viewBox','0 0 '+g.width+' '+g.height);let html='';
+ g.e.forEach(([a,b],i)=>{const[x1,y1]=g.v[a],[x2,y2]=g.v[b],fresh=opts.fresh?.includes(i),highlight=fresh||opts.used?.includes(i)||a===opts.selected||b===opts.selected,color=fresh?'#a84e00':highlight?'#2463a6':'#999';
+ html+='<g data-edge="'+i+'" '+(opts.routes?'role="button" tabindex="0"':'')+' aria-label="רחוב בין צומת '+(a+1)+' לצומת '+(b+1)+(opts.used?.includes(i)?', כבר נוקה':'')+'"><rect x="'+(Math.min(x1,x2)-12)+'" y="'+(Math.min(y1,y2)-12)+'" width="'+(Math.abs(x2-x1)+24)+'" height="'+(Math.abs(y2-y1)+24)+'" fill="transparent" pointer-events="none"/><path d="M '+x1+' '+y1+' L '+x2+' '+y2+'" fill="none" stroke="transparent" stroke-width="26"/><path class="road" d="M '+x1+' '+y1+' L '+x2+' '+y2+'" fill="none" stroke="'+color+'" stroke-width="'+(highlight?6:4)+'" stroke-linecap="round"/></g>';
+ });
+ g.v.forEach(([x,y],i)=>{html+='<g data-node="'+i+'" '+(opts.static?'':'role="button" tabindex="0"')+' aria-label="צומת '+(i+1)+(opts.degrees?', דרגה '+d[i]:'')+'"><circle cx="'+x+'" cy="'+y+'" r="28" fill="transparent"/><circle class="node-face" cx="'+x+'" cy="'+y+'" r="21" fill="'+(i===opts.current||i===opts.selected?'#ffd84d':'#fff')+'" stroke="#555" stroke-width="2"/><text x="'+x+'" y="'+(y+7)+'" text-anchor="middle" font-size="20" fill="#222">'+(i+1)+'</text>'+(opts.degrees?'<rect x="'+(x-36)+'" y="'+(y+27)+'" width="72" height="25" fill="white"/><text x="'+x+'" y="'+(y+46)+'" text-anchor="middle" font-size="18" fill="#444">דרגה '+d[i]+'</text>':'')+'</g>'});
+ svg.innerHTML=html;if(focus)svg.querySelector(focus)?.focus({preventScroll:true});
+}
+function wire(id,onNode,onEdge=()=>{}){const act=e=>{const el=e.target.closest('[data-node],[data-edge]');if(!el)return;if(e.type==='keydown'&&!['Enter',' '].includes(e.key))return;if(e.type==='keydown')e.preventDefault();if(el.hasAttribute('data-node'))onNode(+el.dataset.node);else onEdge(+el.dataset.edge)};$(id).addEventListener('click',act);$(id).addEventListener('keydown',act)}
+function initRoute(config){const g=config.graph,prefix=config.prefix||'', $=id=>document.getElementById(prefix+id);let nodes=[],edges=[];
+ function render(message){const u=nodes.at(-1),done=edges.length===g.e.length;draw(prefix+'board',g,{used:edges,current:u,routes:true,degrees:document.getElementById('show-degrees')?.checked});$('cleaned').textContent=edges.length;$('total').textContent=g.e.length;$('path').textContent=nodes.length?nodes.map(n=>n+1).join(' → '):'—';$('undo').disabled=!nodes.length;let status=u===undefined?'בחרו צומת התחלה.':'בחרו רחוב שיוצא מהמיקום הצהוב, או לחצו על הצומת שבקצהו.';if(done&&(!config.closed||nodes[0]===u))status='הצלחתם! כל '+g.e.length+' הרחובות נוקו בדיוק פעם אחת'+(nodes[0]===u?', וחזרתם להתחלה.':'. התחלתם בצומת '+(nodes[0]+1)+' וסיימתם בצומת '+(u+1)+'.');else if(done)status='כל הרחובות נוקו, אבל לא חזרתם לנקודת ההתחלה.';else if(u!==undefined&&!g.e.some(([a,b],i)=>(a===u||b===u)&&!edges.includes(i)))status=config.known?'הניסיון נעצר, אך ידוע שקיים מסלול מתאים. נסו לשנות את הדרך או את נקודת ההתחלה.':'הניסיון נעצר. האם כדאי לשנות את הדרך, או שיש סיבה שכל ניסיון ייכשל?';$('status').textContent=message||status}
+ function move(i){const u=nodes.at(-1);if(u===undefined){render('בחרו קודם צומת התחלה.');return}const[a,b]=g.e[i];if(a!==u&&b!==u){render('אפשר לנסוע רק ברחוב שמחובר למיקום הנוכחי.');return}if(edges.includes(i)){render('ברחוב הזה כבר עברתם. בחרו רחוב אחר.');return}edges.push(i);nodes.push(a===u?b:a);render()}
+ function node(i){if(!nodes.length){nodes=[i];render();return}const u=nodes.at(-1),idx=g.e.findIndex(([a,b])=>(a===u&&b===i)||(b===u&&a===i));if(idx<0){render('בחרו צומת המחובר אליכם ברחוב.');return}move(idx)}
+ $('reset').onclick=()=>{nodes=[];edges=[];render()};$('undo').onclick=()=>{nodes.pop();edges.pop();render()};wire(prefix+'board',node,move);document.getElementById('show-degrees')?.addEventListener('change',()=>render());render();
+}
+function initExamples(config){config.examples.forEach((x,i)=>initRoute({graph:x.graph,prefix:'g'+i+'-',closed:x.kind==='closed',known:x.kind!=='none'}))}
+function registerPageTool(){const context=document.modelContext;if(!context?.registerTool)return;const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});try{Promise.resolve(context.registerTool({name:'reset_graph_exercise',title:'איפוס התרגיל',description:'Reset the route or graph highlights in the current exercise, preserving written answers.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length)throw Error('Expected an empty object');document.querySelectorAll('button[id$="reset"]').forEach(button=>button.click());return{exercise:document.title,reset:true}}},{signal:lifecycle.signal})).catch(()=>{})}catch{}}
+
+'use strict';
+function cycleFrames(g){
+ const used=new Set(),frames=[];let route=[],segment=[],fresh=[],current=0,insertAt=0;
+ const add=(phase,message,range=null)=>frames.push({phase,message,route:[...route],segment:[...segment],fresh:[...fresh],used:[...used],current,insertAt,range});
+ const available=u=>g.e.findIndex(([a,b],i)=>!used.has(i)&&(a===u||b===u));
+ add('start','כל הדרגות זוגיות והגרף מחובר. נתחיל בצומת 1 ונבנה מעגל ראשון.');
+ while(used.size<g.e.length){
+  insertAt=route.length?route.findIndex(u=>available(u)>=0):0;
+  if(insertAt<0)throw Error('Unused edges are disconnected from the route');
+  current=route.length?route[insertAt]:0;const start=current;
+  segment=[start];fresh=[];
+  add('choose',route.length?'בצומת '+(start+1)+' שבמעגל נשארה קשת שלא נוצלה. נצא ממנו למעגל נוסף.':'מתחילים בצומת 1. בכל צעד נבחר קשת שטרם עברנו בה.');
+  do{
+   const i=available(current);if(i<0)throw Error('The walk stopped before returning to its start');
+   const [a,b]=g.e[i],from=current;used.add(i);fresh.push(i);current=a===current?b:a;segment.push(current);
+   add('walk','עוברים מצומת '+(from+1)+' לצומת '+(current+1)+'. הקשת החדשה מצטרפת למעגל הכתום.');
+  }while(current!==start);
+  add('closed','חזרנו לצומת '+(start+1)+'. המעגל הכתום נסגר; לא חזרנו על אף קשת.');
+  const first=!route.length;
+  route=first?[...segment]:[...route.slice(0,insertAt),...segment,...route.slice(insertAt+1)];
+  add('merge',first?'המעגל הראשון מוכן. האם הוא כולל כבר את כל הקשתות?':'כשמגיעים לצומת '+(start+1)+', עושים את הסיבוב הכתום, חוזרים אליו וממשיכים בדרך הקודמת. כך מתקבל מעגל אחד ארוך יותר.',[insertAt,insertAt+segment.length-1]);
+  fresh=[];segment=[];
+ }
+ current=route[0];add('done','הושלם מעגל אוילר: כל '+g.e.length+' הקשתות מופיעות בדיוק פעם אחת, וההתחלה והסיום באותו צומת.');
+ return frames;
+}
+function initDemo(config){
+ const g=config.graph,frames=cycleFrames(g);let step=0;
+ const sequence=xs=>xs.length?xs.map(n=>n+1).join(' → '):'—';
+ function render(){const f=frames[step];
+  draw('demo-board',g,{used:f.used,fresh:f.fresh,current:f.current,static:true});
+  $('demo-message').textContent=f.message;$('demo-counter').textContent='שלב '+(step+1)+' מתוך '+frames.length;
+  $('demo-count').textContent=f.used.length+' מתוך '+g.e.length+' קשתות';
+  $('demo-segment').textContent=sequence(f.segment);
+  $('demo-route').innerHTML=f.route.length?f.route.map((n,i)=>{const label=String(n+1);return f.range&&i>=f.range[0]&&i<=f.range[1]?'<strong class="new">'+label+'</strong>':label}).join(' → '):'—';
+  $('demo-prev').disabled=step===0;$('demo-next').disabled=step===frames.length-1;
+  $('demo-next').textContent=f.phase==='closed'?'חיבור המעגלים':'הצעד הבא';
+ }
+ $('demo-next').onclick=()=>{if(step<frames.length-1)step++;render()};
+ $('demo-prev').onclick=()=>{if(step>0)step--;render()};
+ $('demo-reset').onclick=()=>{step=0;render()};render();
+ draw('open-board',config.openGraph,{static:true});
+ $('open-board').setAttribute('role','img');
+ $('open-board').setAttribute('aria-label','אותו גרף ללא הקשת בין צומת 1 לצומת 2');
+}
+if(typeof module!=='undefined')module.exports={cycleFrames};
+
+const config={"graph":{"width":780,"height":650,"v":[[220,150],[460,150],[460,390],[220,390],[640,65],[690,260],[65,480],[55,235],[690,490],[530,580]],"e":[[0,1],[1,2],[2,3],[3,0],[1,4],[4,5],[5,1],[2,8],[8,9],[9,2],[3,6],[6,7],[7,3]]},"openGraph":{"width":780,"height":650,"v":[[220,150],[460,150],[460,390],[220,390],[640,65],[690,260],[65,480],[55,235],[690,490],[530,580]],"e":[[1,2],[2,3],[3,0],[1,4],[4,5],[5,1],[2,8],[8,9],[9,2],[3,6],[6,7],[7,3]]}};
+initDemo(config);registerPageTool();
+</script></body></html>
