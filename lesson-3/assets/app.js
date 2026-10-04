@@ -7,7 +7,8 @@
   function geometry(g,a,b){
     const [x,y]=g.v[a],[ex,ey]=g.v[b],r=26;
     if(a===b){
-      const dx=x-300,dy=y-210,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,px=-uy,py=ux;
+      const [centerX,centerY]=g.centers?.[a]||[300,210];
+      const dx=x-centerX,dy=y-centerY,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,px=-uy,py=ux;
       const p=(out,side)=>[x+ux*out+px*side,y+uy*out+py*side];
       const s=p(15,21),c1=p(90,67),c2=p(90,-67),t=p(15,-21),label=p(77,0);
       return {d:`M${s} C${c1} ${c2} ${t}`,label};
@@ -29,7 +30,7 @@
     const interactive=host.dataset.static!=='true';
     const route=[],used=[];let showDegrees=false;
     const map=el('div','graph-map'),info=el('div','graph-info');
-    const svg=make('svg',{viewBox:'0 0 600 420',role:'group','aria-label':host.dataset.title||'גרף'});
+    const svg=make('svg',{viewBox:g.viewBox||'0 0 600 420',role:'group','aria-label':host.dataset.title||'גרף'});
     map.append(svg);host.append(map,info);
     const degreeLabel=el('label','degree-toggle'),degreeBox=document.createElement('input');degreeBox.type='checkbox';degreeLabel.append(degreeBox,document.createTextNode(g.directed?'הצגת כניסות ויציאות':'הצגת דרגות'));
     info.append(degreeLabel);
@@ -62,10 +63,10 @@
         const geom=geometry(g,a,b),group=make('g',{'data-edge':i});
         const label=g.directed?`קשת מ־${a+1} אל ${b+1}`:`קשת בין ${a+1} ל־${b+1}`;
         group.append(make('title',{},label));
-        if(interactive){group.setAttribute('role','button');group.setAttribute('tabindex','0');group.setAttribute('aria-label',label+(taken?' — נוצלה':''));group.addEventListener('click',()=>step(i));group.addEventListener('keydown',e=>keyboard(e,()=>step(i)));}
+        if(interactive){group.setAttribute('role','button');group.setAttribute('tabindex','0');group.setAttribute('aria-label',label+(taken?' - נוצלה':''));group.addEventListener('click',()=>step(i));group.addEventListener('keydown',e=>keyboard(e,()=>step(i)));}
         group.append(make('path',{d:geom.d,class:'edge-hit'}));
         const line=make('path',{d:geom.d,class:'edge-line',stroke:color,'stroke-dasharray':taken?'8 4':'none'});if(g.directed)line.setAttribute('marker-end',`url(#${markerId})`);group.append(line);
-        if(g.lock){const [lx,ly]=geom.label;group.append(make('text',{x:lx,y:ly+6,'text-anchor':'middle','font-size':18,fill:color,stroke:'#fff','stroke-width':5,'paint-order':'stroke',direction:'ltr'},`${a+1}${b+1}`));}
+        if(g.lock&&!g.hideEdgeLabels){const [lx,ly]=geom.label;group.append(make('text',{x:lx,y:ly+6,'text-anchor':'middle','font-size':18,fill:color,stroke:'#fff','stroke-width':5,'paint-order':'stroke',direction:'ltr'},`${a+1}${b+1}`));}
         svg.append(group);
       });
       g.v.forEach(([x,y],v)=>{
@@ -76,55 +77,53 @@
         svg.append(group);
       });
       counter.textContent=`קשתות שנוצלו: ${used.length} מתוך ${g.e.length}`;
-      path.textContent=route.length?route.map(v=>v+1).join(' → '):'—';
+      path.textContent=route.length?route.map(v=>v+1).join(' → '):'-';
       undo.disabled=!route.length;reset.disabled=!route.length;
       if(!route.length)message('בחרו צומת התחלה.');
       else if(used.length===g.e.length)message(route[0]===route.at(-1)?'הצלחתם: עברתם בכל הקשתות וחזרתם להתחלה.':'הצלחתם: עברתם בכל הקשתות וסיימתם בצומת אחר.');
       else if(!g.e.some(([a,b],i)=>!used.includes(i)&&(a===route.at(-1)||(!g.directed&&b===route.at(-1)))))message('הניסיון הזה נעצר ונשארו קשתות. האם בחירה אחרת תעזור?');
       else message('המשיכו בקשת שטרם נוצלה.');
-      if(host.dataset.trace){document.getElementById(host.dataset.trace).textContent=route.length?route.map(v=>v+1).join(''):'—';}
+      if(host.dataset.trace){document.getElementById(host.dataset.trace).textContent=route.length?route.map(v=>v+1).join(''):'-';const length=document.getElementById(host.dataset.trace+'-length');if(length)length.textContent=route.length;}
       if(focusedNode!==null)svg.querySelector(`[data-node="${focusedNode}"]`)?.focus({preventScroll:true});
       else if(focusedEdge!==null)svg.querySelector(`[data-edge="${focusedEdge}"]`)?.focus({preventScroll:true});
     }
     undo.addEventListener('click',()=>{route.pop();used.pop();render();});reset.addEventListener('click',()=>{route.length=used.length=0;render();});degreeBox.addEventListener('change',()=>{showDegrees=degreeBox.checked;render();});
     render();
   });
+
   document.querySelectorAll('[data-lock]').forEach(host=>{
-    let n=Number(host.dataset.lock);const digits=[];
-    host.classList.add('lock');
-    const display=el('div','lock-display','––');display.setAttribute('aria-label','שתי הספרות האחרונות');
-    const sequence=el('div','lock-sequence','\u00a0');sequence.setAttribute('aria-label','רצף הלחיצות');
-    const keys=el('div','lock-keys');keys.setAttribute('aria-label','כפתורי המנעול');
-    const stats=el('div','lock-stats'),progress=el('span','lock-code-count'),count=el('span');stats.append(progress,count);
-    const codes=el('div','lock-codes');codes.setAttribute('aria-label','קודים שנבדקו');
+    let model=LessonLock.createModel(host.dataset.lock);
+    host.classList.add('lock-activity');
+    const panel=el('section','lock'),list=el('section','lock-list');
+    panel.setAttribute('aria-label','מנעול');list.setAttribute('aria-label','הקודים שצריך לבדוק');
+    const display=el('div','lock-display','--'),sequence=el('div','lock-sequence','\u00a0');
+    display.setAttribute('aria-label','שתי הספרות האחרונות');sequence.setAttribute('aria-label','רצף הלחיצות');
+    const keys=el('div','lock-keys'),stats=el('div','lock-stats'),progress=el('span','lock-code-count'),count=el('span');stats.append(progress,count);
+    const codes=el('div','lock-codes');
     const actions=el('div','lock-actions'),undo=el('button','','ביטול לחיצה'),reset=el('button','','איפוס');undo.type=reset.type='button';actions.append(undo,reset);
     const status=el('p','lock-status');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
-    host.append(display,sequence,keys,stats,codes,actions,status);
+    panel.append(display,sequence,keys,stats,status,actions);
+    list.append(el('h3','','הקודים שצריך לבדוק'),codes,el('p','muted','ירוק עם סימון ✓ - קוד שכבר נבדק. מסגרת - הקוד האחרון.'),el('p','muted','גם לחיצה שיוצרת קוד שאינו ברשימה נספרת.'));host.append(panel,list);
     const cells=new Map();
-    function press(v){digits.push(v);render();}
+    function render(state){
+      display.textContent=state.sequence.slice(-2).padStart(2,'-');sequence.textContent=state.sequence||'\u00a0';sequence.scrollTop=sequence.scrollHeight;
+      progress.textContent=state.covered+' מתוך '+state.total+' קודים';count.textContent=state.presses+' לחיצות';
+      const seen=new Set(state.checked);
+      for(const[code,cell]of cells){cell.classList.toggle('seen',seen.has(code));cell.classList.toggle('current',code===state.current);cell.setAttribute('aria-label',code+(seen.has(code)?' - נבדק':' - טרם נבדק'));}
+      const messages={empty:'בחרו ספרה להתחלה.',first:'עוד לחיצה תיצור את הקוד הראשון.',new:'קוד חדש נבדק.',repeat:'הקוד הזה כבר נבדק.',invalid:'הקוד הזה אינו ברשימה.',complete:'כל הקודים נבדקו ב־'+state.presses+' לחיצות.'};
+      status.textContent=messages[state.kind];status.dataset.kind=state.kind;undo.disabled=reset.disabled=state.presses===0;
+    }
     function setup(){
-      keys.replaceChildren();codes.replaceChildren();cells.clear();keys.style.gridTemplateColumns=`repeat(${n<=3?n:n<=6?3:4},minmax(0,1fr))`;codes.style.gridTemplateColumns=`repeat(${n},minmax(0,1fr))`;
-      for(let a=1;a<=n;a++){
-        const button=el('button','',String(a));button.type='button';button.dataset.digit=a;button.setAttribute('aria-label',`ספרה ${a}`);button.addEventListener('click',()=>press(String(a)));keys.append(button);
-        for(let b=1;b<=n;b++){const code=''+a+b,cell=el('div','lock-code',code);cells.set(code,cell);codes.append(cell);}
-      }
-      render();
+      keys.replaceChildren();codes.replaceChildren();cells.clear();keys.style.gridTemplateColumns='repeat('+(model.keys.length===10?5:4)+',minmax(0,1fr))';
+      for(const digit of model.keys){const button=el('button','',digit);button.type='button';button.setAttribute('aria-label','ספרה '+digit);button.addEventListener('click',()=>render(model.press(digit)));keys.append(button);}
+      for(const code of model.codes){const cell=el('div','lock-code',code);cells.set(code,cell);codes.append(cell);}render(model.snapshot());
     }
-    function render(){
-      const seen=new Set();for(let i=1;i<digits.length;i++)seen.add(digits[i-1]+digits[i]);
-      const current=digits.length>=2?digits.slice(-2).join(''):'';
-      display.textContent=digits.slice(-2).join('').padStart(2,'–');sequence.textContent=digits.join('')||'\u00a0';sequence.scrollTop=sequence.scrollHeight;
-      progress.textContent=`${seen.size} מתוך ${n*n} קודים`;count.textContent=digits.length+' לחיצות';
-      for(const[code,cell]of cells){cell.classList.toggle('seen',seen.has(code));cell.classList.toggle('current',code===current);cell.setAttribute('aria-label',code+(seen.has(code)?' — נבדק':' — טרם נבדק'));}
-      undo.disabled=reset.disabled=!digits.length;
-      status.textContent=seen.size===n*n?'כל הקודים נבדקו.':'';
-    }
-    undo.addEventListener('click',()=>{digits.pop();render();});reset.addEventListener('click',()=>{digits.length=0;render();});
-    if(host.dataset.select){document.getElementById(host.dataset.select).addEventListener('change',e=>{n=Number(e.target.value);digits.length=0;setup();});}
+    undo.addEventListener('click',()=>render(model.undo()));reset.addEventListener('click',()=>render(model.reset()));
+    if(host.dataset.select)document.getElementById(host.dataset.select).addEventListener('change',event=>{model=LessonLock.createModel(event.target.value);setup();});
     document.addEventListener('keydown',event=>{
       if(event.ctrlKey||event.metaKey||event.altKey||event.repeat||/^(INPUT|SELECT|TEXTAREA)$/.test(event.target.tagName)||event.target.isContentEditable||!host.getClientRects().length)return;
-      if(/^[1-9]$/.test(event.key)&&Number(event.key)<=n){event.preventDefault();press(event.key);}
-      if(event.key==='Backspace'){event.preventDefault();digits.pop();render();}
+      if(model.keys.includes(event.key)){event.preventDefault();render(model.press(event.key));}
+      if(event.key==='Backspace'){event.preventDefault();render(model.undo());}
     });setup();
   });
 })();

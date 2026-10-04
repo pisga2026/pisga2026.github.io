@@ -1,13 +1,14 @@
 <!doctype html>
-<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>מהמנעול לגרף מכוון — שיעור 3</title><link rel="icon" href="data:,"><link rel="stylesheet" href="assets/style.css"><script src="assets/graphs.js" defer></script><script src="assets/app.js" defer></script></head>
-<body><main class=""><a class="top-link" href="../index.html#lesson-3">שיעור 3 · תוכן העניינים</a><header><p class="eyebrow">תוכנית פסגה · גרפים מכוונים ובעיית המנעול</p><h1>תרגיל 6: מהמנעול לגרף מכוון</h1></header>
-<div class="prompt">הציגו את דרכי התיעוד שמצאתם. איך אפשר לייצג את בעיית המנעול בגרף מכוון כך שהמשימה תהיה לעבור בכל קשת בדיוק פעם אחת?</div>
-<ol><li>מה ייצג צומת? מה תייצג קשת? הסבירו את הבחירה שלכם.</li><li>איך תייצגו את הקודים <bdi dir="ltr" class="symbol">12</bdi>, <bdi dir="ltr" class="symbol">21</bdi> ו־<bdi dir="ltr" class="symbol">11</bdi>?</li><li>ציירו את הגרף ובדקו את דרגות הכניסה והיציאה. האם יש מסלול אוילר? נמקו.</li><li>האם המסלול חייב להסתיים באותו צומת שבו התחיל? האם זו דרישה של המנעול, או מסקנה ממבנה הגרף?</li><li>כיצד מתרגמים מעבר בקשת ללחיצה? איזו לחיצה נחוצה עוד לפני המעבר בקשת הראשונה?</li></ol>
-<details><summary>רמז לייצוג</summary><div>חשבו מה צריך לזכור אחרי לחיצה אחת כדי לדעת איזה קוד תבדוק הלחיצה הבאה.</div></details>
-<details id="representation"><summary>אחרי שהצעתם ייצוג — פתחו את הגרף לבדיקה</summary><div>
-<p>צומת מייצג את הספרה האחרונה. קשת מכוונת מ־<bdi dir="ltr" class="symbol">a</bdi> ל־<bdi dir="ltr" class="symbol">b</bdi> מייצגת את הקוד <bdi dir="ltr" class="symbol">ab</bdi>. גם לולאה היא קוד שצריך לבדוק.</p>
-<div class="representation"><section class="graph-card " data-graph="lock3" data-title="גרף הקודים של המנעול" data-trace="lock-trace" aria-label="גרף הקודים של המנעול"></section><p>רצף הלחיצות המתאים למסלול שלכם:</p><p id="lock-trace" class="code-trace">—</p></div>
-<p>מצאו מסלול אוילר וקראו את רצף הלחיצות המתקבל. השוו את אורכו לחסם שמצאתם.</p>
-</div></details>
-<div class="prompt">סכמו את ההוכחה בשני חלקים: מדוע אי אפשר בפחות לחיצות, ומדוע הרצף שמצאתם מספיק.</div>
-<nav class="nav" aria-label="ניווט בין התרגילים"><a href="exercise-5.html">לתרגיל הקודם</a><a href="exercise-7.html">לתרגיל הבא</a></nav></main></body></html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>הרחבה: יותר כפתורים - שיעור 3</title><link rel="icon" href="data:,"><link rel="stylesheet" href="assets/style.css"><script src="assets/lock-model.js" defer></script><script src="assets/graphs.js" defer></script><script src="assets/app.js" defer></script></head>
+<body><main class=""><a class="top-link" href="../index.html#lesson-3">לתוכן העניינים של הקורס</a><header><p class="eyebrow">תוכנית פסגה · גרפים מכוונים ובעיית המנעול</p><h1>תרגיל 6: הרחבה: יותר כפתורים</h1></header>
+<p>מגדילים את המנעול לעשרה כפתורים, הספרות 0-9. הקוד נשאר בן <strong>שתי ספרות</strong>. גם 0 יכול להופיע בתחילת קוד.</p>
+<div class="panel"><p>הקבוצה הראשונה היא <bdi dir="ltr" class="symbol">{0, 1, 4, 6, 7}</bdi>; הקבוצה השנייה היא <bdi dir="ltr" class="symbol">{2, 3, 5, 8, 9}</bdi>.</p><p>כל זוג ספרות מאותה קבוצה הוא קוד תקף, כולל ספרות זהות. הקוד <bdi dir="ltr" class="symbol">72</bdi> הוא הקוד התקף היחיד שמחבר בין הקבוצות.</p></div>
+<h2>תחילה חושבים - בלי לפתוח את המנעול</h2>
+<ol><li>כמה קודים תקפים יש במנעול החדש? חשבו בלי לרשום את כולם.</li><li>כמה לחיצות נחוצות לפחות? הסבירו את החסם.</li><li>כיצד משתנה הגרף? מהן דרגות הכניסה והיציאה, והיכן חייב להתחיל ולהסתיים מסלול אוילר?</li><li>האם אפשר להשיג את החסם? נמקו באמצעות הגרף, ואז מצאו רצף ובדקו אותו.</li></ol>
+<details id="extension-lock"><summary>אחרי החישוב - פתיחת המנעול</summary><div><label class="lock-key-options" for="button-count">גרסת המנעול <select id="button-count"><option value="open10">10 כפתורים</option><option value="open8">8 כפתורים - האתגר המקורי</option></select></label><p class="muted">שינוי הגרסה מתחיל ניסיון חדש.</p><div data-lock="open10" data-select="button-count" aria-label="מנעול ההרחבה"></div></div></details>
+<h2>כשכבר לא כדאי לספור אחד־אחד</h2>
+<p>בכל גרסה יש שתי קבוצות זרות, בכל אחת אותו מספר כפתורים. כל זוג סימנים מאותה קבוצה תקף, ויש קוד תקף אחד נוסף מהקבוצה הראשונה לשנייה, ללא קוד בכיוון ההפוך.</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">כפתורים בכל קבוצה</th><th scope="col">סך הכפתורים</th><th scope="col">מספר הקודים התקפים</th><th scope="col">מינימום לחיצות - ונימוק</th></tr></thead><tbody><tr><td>5</td><td>10</td><td>?</td><td>?</td></tr><tr><td>10</td><td>20</td><td>?</td><td>?</td></tr><tr><td><bdi dir="ltr" class="symbol">m</bdi></td><td><bdi dir="ltr" class="symbol">2m</bdi></td><td>?</td><td>?</td></tr></tbody></table></div>
+<div class="prompt">נסחו כלל לכל מספר חיובי m של כפתורים בכל קבוצה. הסבירו מדוע אי אפשר בפחות לחיצות ומדוע אפשר להשיג את החסם, בלי לרשום את כל הקודים או את רצף הלחיצות.</div>
+<p class="muted">במנעולים הגדולים כל כפתור נושא סימן שונה - אפשר להשתמש גם באותיות. קוד נשאר באורך שני סימנים בלבד.</p>
+<nav class="nav" aria-label="ניווט בין התרגילים"><a href="exercise-5.html">לתרגיל הקודם</a><a href="../index.html#lesson-3">לתוכן העניינים</a></nav></main></body></html>

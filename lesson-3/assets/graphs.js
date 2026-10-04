@@ -21,6 +21,13 @@
     return {v,e:Array.from({length:n},(_,a)=>Array.from({length:n},(_,b)=>[a,b])).flat(),directed:true,lock:true};
   }
   graphs.lock3=lockGraph(3);graphs.lock4=lockGraph(4);
+  const lockData=typeof module!=='undefined'?require('./lock-model.js'):root.LessonLock;
+  graphs.openLock={
+    v:[[100,170],[730,170],[1000,170],[100,430],[1000,430],[370,430],[370,170],[730,430]],
+    e:lockData.config('open8').codes.map(code=>[Number(code[0])-1,Number(code[1])-1]),
+    directed:true,lock:true,hideEdgeLabels:true,viewBox:'0 0 1100 600',
+    centers:[[235,300],[865,300],[865,300],[235,300],[865,300],[235,300],[235,300],[865,300]]
+  };
   function analyse(g){
     const incoming=g.v.map(()=>0),outgoing=g.v.map(()=>0),degree=g.v.map(()=>0);
     g.e.forEach(([a,b])=>{outgoing[a]++;incoming[b]++;degree[a]++;degree[b]++;});

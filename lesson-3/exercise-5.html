@@ -1,10 +1,14 @@
 <!doctype html>
-<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>המנעול — חיפוש רצף קצר — שיעור 3</title><link rel="icon" href="data:,"><link rel="stylesheet" href="assets/style.css"><script src="assets/graphs.js" defer></script><script src="assets/app.js" defer></script></head>
-<body><main class=""><a class="top-link" href="../index.html#lesson-3">שיעור 3 · תוכן העניינים</a><header><p class="eyebrow">תוכנית פסגה · גרפים מכוונים ובעיית המנעול</p><h1>תרגיל 5: המנעול — חיפוש רצף קצר</h1></header>
-<p>מצאו רצף שבודק את כל הקודים בכמה שפחות לחיצות. נסו להגיע לחסם התחתון שמצאתם.</p>
-<div class="lock-layout"><div data-lock="3" aria-label="מנעול בעל שלושה כפתורים"></div><div>
-<ol><li>רשמו רצף שהצליח ואת מספר הלחיצות שלו.</li><li>שפרו את הרצף. אילו לחיצות בדקו קוד שכבר הופיע?</li><li>בחרו דרך לתעד את הניסיון ולדעת אילו קודים עוד חסרים: רשימה, טבלה, ציור או דרך אחרת.</li><li>אם הגעתם לחסם — הסבירו מדוע הפתרון שלכם מיטבי. אם לא — מה עדיין לא ידוע?</li></ol>
-<div class="prompt">אל תסתפקו ברצף מוצלח: הכינו הסבר כיצד מצאתם אותו וכיצד בדקתם שלא חסר קוד.</div>
-<p class="muted">אפשר להקליד גם במקשי 1–3. קוד שסומן בירוק כבר נבדק; המסגרת מציינת את הקוד האחרון.</p>
-</div></div>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>מהמנעול לגרף מכוון - שיעור 3</title><link rel="icon" href="data:,"><link rel="stylesheet" href="assets/style.css"><script src="assets/lock-model.js" defer></script><script src="assets/graphs.js" defer></script><script src="assets/app.js" defer></script></head>
+<body><main class=""><a class="top-link" href="../index.html#lesson-3">לתוכן העניינים של הקורס</a><header><p class="eyebrow">תוכנית פסגה · גרפים מכוונים ובעיית המנעול</p><h1>תרגיל 5: מהמנעול לגרף מכוון</h1></header>
+<div class="prompt">איך אפשר לייצג את בעיית המנעול בגרף מכוון כך שהמשימה תהיה לעבור בכל קשת בדיוק פעם אחת?</div>
+<ol><li>מה ייצג צומת? מה תייצג קשת? הסבירו את הבחירה שלכם.</li><li>איך תייצגו את הקודים <bdi dir="ltr" class="symbol">14</bdi>, <bdi dir="ltr" class="symbol">41</bdi> ו־<bdi dir="ltr" class="symbol">11</bdi>? האם <bdi dir="ltr" class="symbol">12</bdi> צריך להיות קשת בגרף?</li><li>ציירו את הגרף ובדקו את דרגות הכניסה והיציאה. באיזה צומת חייב מסלול אוילר להתחיל, ובאיזה צומת עליו להסתיים? נמקו.</li></ol>
+<ul class="code-list" aria-label="רשימת הקודים התקפים"><li>35</li><li>71</li><li>22</li><li>64</li><li>58</li><li>17</li><li>33</li><li>46</li><li>82</li><li>11</li><li>53</li><li>77</li><li>28</li><li>61</li><li>44</li><li>85</li><li>14</li><li>32</li><li>67</li><li>55</li><li>41</li><li>88</li><li>76</li><li>23</li><li>47</li><li>52</li><li>16</li><li>83</li><li>66</li><li>25</li><li>74</li><li>38</li><li>72</li></ul>
+<details id="representation"><summary>אחרי שהצעתם ייצוג - פתחו את הגרף לבדיקה</summary><div>
+<p>צומת מייצג את הספרה האחרונה. קשת מכוונת מ־<bdi dir="ltr" class="symbol">a</bdi> ל־<bdi dir="ltr" class="symbol">b</bdi> מייצגת את הקוד התקף <bdi dir="ltr" class="symbol">ab</bdi>. קוד שאינו ברשימה אינו קשת בגרף.</p>
+<p class="muted">בחרו צומת התחלה ואז לחצו על הצמתים הבאים. לחיצה נוספת על אותו צומת משתמשת בלולאה, אם עדיין לא נוצלה. במסך צר אפשר לגלול את הגרף הצדה.</p>
+<div class="representation"><section class="graph-card " data-graph="openLock" data-title="גרף הקודים התקפים של המנעול" data-trace="lock-trace" aria-label="גרף הקודים התקפים של המנעול"></section><p>רצף הלחיצות המתאים למסלול שלכם:</p><p id="lock-trace" class="code-trace">-</p><p>אורך רצף הלחיצות: <strong id="lock-trace-length" aria-live="polite">0</strong></p></div>
+<p>מצאו מסלול אוילר וקראו את רצף הלחיצות המתקבל. השוו את אורכו לחסם שמצאתם.</p>
+</div></details>
+<div class="prompt">סכמו את ההוכחה בשני חלקים: מדוע אי אפשר בפחות לחיצות, ומדוע הרצף שמצאתם מספיק.</div>
 <nav class="nav" aria-label="ניווט בין התרגילים"><a href="exercise-4.html">לתרגיל הקודם</a><a href="exercise-6.html">לתרגיל הבא</a></nav></main></body></html>
