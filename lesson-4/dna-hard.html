@@ -97,6 +97,7 @@
     });
     $('pool').append(b);
   });
+  $('pool').insertBefore($('part-1'), $('part-0'));
   $('undo').addEventListener('click',()=>{order.pop();save();render();});
   $('highlight').addEventListener('change',e=>{highlight=e.target.checked;save();render();});
   $('reset').addEventListener('click',()=>{$('reset-dialog').showModal();});
