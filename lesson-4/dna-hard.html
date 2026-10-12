@@ -14,7 +14,6 @@
   <h1>מרכיבים רצף · האתגר הגדול</h1>
   <p class="intro">הרכיבו רצף שמשתמש בכל המקטעים בדיוק פעם אחת. בין כל שני מקטעים עוקבים צריכה להיות חפיפה של שתי אותיות.</p>
   <p class="rule">הרצף נקרא משמאל לימין. לחצו על מקטע כדי לצרף אותו לקצה הימני. מספרי הכרטיסים מזהים עותקים נפרדים; הם אינם מציינים סדר.</p>
-  <p class="rule" id="start-rule"></p>
   <section class="board" aria-label="הרצף שבניתם">
     <div class="bar"><h2>הרצף שלכם</h2><span class="count" id="count"></span></div>
     <div id="sequence" class="sequence"></div>
@@ -34,10 +33,15 @@
 <script>
 (() => {
   'use strict';
-  const config = {"key":"hard","title":"מרכיבים רצף · האתגר הגדול","start":"AT","parts":["ATC","CCC","TCT","ACA","AGC","AGC","CTA","CTC","TCT","CTG","GAC","GCA","TCT","AAG","TTC","CTT","CAG","CTT","AGA","ACA","GCG","TTC","ACT","GAT","AAC","CGA","TAC","CAA","TCG","CCA","ATC","CAG","CGC","GCT","TCC","CAA"]};
+  const config = {"key":"hard","title":"מרכיבים רצף · האתגר הגדול","start":"","parts":["ATC","CCC","TCT","ACA","AGC","AGC","CTA","CTC","TCT","CTG","GAC","GCA","TCT","AAG","TTC","CTT","CAG","CTT","AGA","ACA","GCG","TTC","ACT","GAT","AAC","CGA","TAC","CAA","TCG","CCA","ATC","CAG","CGC","GCT","TCC","CAA"]};
   const root = document.getElementById('dna-app');
   const $ = id => root.querySelector('#'+id);
   const parts = config.parts;
+  // Keep stored fragment IDs stable while placing AT cards among the middle cards.
+  const displayOrder = parts.map((_, i) => i).filter(i => i !== 0 && i !== 30);
+  displayOrder.splice(16, 0, 0);
+  displayOrder.splice(21, 0, 30);
+  const displayNumber = new Map(displayOrder.map((i, n) => [i, n + 1]));
   let order = [], highlight = false;
   const key = 'dna-assembly-v1-' + config.key;
   const validOrder = a => {
@@ -67,8 +71,8 @@
     $('chain').replaceChildren();
     order.forEach((i,n)=>{
       const tile=document.createElement('span');tile.className='tile';
-      tile.setAttribute('aria-label','מקום '+(n+1)+', מקטע '+(i+1)+': '+parts[i]);
-      const id=document.createElement('span');id.className='id';id.textContent='#'+(i+1);
+      tile.setAttribute('aria-label','מקום '+(n+1)+', מקטע '+displayNumber.get(i)+': '+parts[i]);
+      const id=document.createElement('span');id.className='id';id.textContent='#'+displayNumber.get(i);
       const text=document.createElement('span');text.textContent=parts[i];
       tile.append(id,text);$('chain').append(tile);
     });
@@ -77,17 +81,16 @@
       const b=$('part-'+i), used=order.includes(i);
       b.disabled=used;
       b.className='tile'+(used?' used':highlight&&options.includes(i)?' match':'');
-      b.setAttribute('aria-label','מקטע '+(i+1)+': '+p+(used?', כבר בשימוש':highlight&&options.includes(i)?', מתאים לקצה הנוכחי':''));
+      b.setAttribute('aria-label','מקטע '+displayNumber.get(i)+': '+p+(used?', כבר בשימוש':highlight&&options.includes(i)?', מתאים לקצה הנוכחי':''));
     });
     if(order.length===parts.length)message('הצלחתם! כל המקטעים שובצו פעם אחת, וכל החפיפות תקינות.','success');
     else if(!options.length)message('מבוי סתום: נותרו מקטעים, אבל אף אחד מהם לא מתאים לקצה. אפשר לחזור אחורה ולנסות בחירה אחרת.','error');
     else if(tail())message('הקצה הנוכחי: '+tail()+'. המקטע הבא צריך להתחיל באותן שתי אותיות.');
     else message('אפשר להתחיל מכל מקטע.');
   }
-  $('start-rule').textContent=config.start ? 'רמז פתיחה לאתגר: ידוע שהרצף מתחיל באותיות '+config.start+'. בחרו מקטע ראשון שמתחיל בהן.' : 'שימו לב: ATG מופיע פעמיים בכוונה. יש להשתמש בשני העותקים.';
   parts.forEach((p,i)=>{
     const b=document.createElement('button');b.type='button';b.id='part-'+i;b.className='tile';
-    const id=document.createElement('span');id.className='id';id.textContent='#'+(i+1);
+    const id=document.createElement('span');id.className='id';id.textContent='#'+displayNumber.get(i);
     const text=document.createElement('span');text.textContent=p;b.append(id,text);
     b.addEventListener('click',()=>{
       if(order.includes(i))return;
@@ -97,7 +100,7 @@
     });
     $('pool').append(b);
   });
-  $('pool').insertBefore($('part-1'), $('part-0'));
+  displayOrder.forEach(i => $('pool').append($('part-'+i)));
   $('undo').addEventListener('click',()=>{order.pop();save();render();});
   $('highlight').addEventListener('change',e=>{highlight=e.target.checked;save();render();});
   $('reset').addEventListener('click',()=>{$('reset-dialog').showModal();});
