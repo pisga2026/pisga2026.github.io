@@ -3,124 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>תרגיל 2 - האם אפשר להגיע ליעד?</title>
+  <title>האתר עבר לכתובת חדשה</title>
+  <link rel="canonical" href="https://ron828.top/pisga-2026/lesson-1/exercise-2.html">
+  <meta http-equiv="refresh" content="0; url=https://ron828.top/pisga-2026/lesson-1/exercise-2.html">
+  <script>window.location.replace("https://ron828.top/pisga-2026/lesson-1/exercise-2.html" + window.location.search + window.location.hash);</script>
   <style>
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body { font-family: Arial, sans-serif; max-width: 980px; margin: 28px auto; padding: 0 18px; color: #222; line-height: 1.5; overflow-wrap: break-word; }
-    h1 { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; }
-    .panel { border: 1px solid #aaa; padding: 16px; margin-top: 18px; }
-    .board, .target { display: flex; align-items: flex-start; justify-content: center; gap: 10px; direction: ltr; overflow-x: auto; padding: 12px 0; }
-    .lamp-wrap { min-width: 54px; text-align: center; }
-    .lamp { display: block; width: 46px; height: 46px; margin: auto; padding: 0; border: 2px solid #555; border-radius: 50%; background: #ddd; appearance: none; }
-    button { touch-action: manipulation; }
-    button.lamp { cursor: pointer; }
-    button.lamp.last { cursor: default; }
-    button.lamp:focus-visible { outline: 3px solid #2463a6; outline-offset: 3px; }
-    .lamp.on { background: #ffd84d; }
-    .number { margin-top: 5px; font-size: 0.9rem; }
-    #reset { min-height: 44px; padding: 8px 14px; font: inherit; cursor: pointer; }
-    #status { min-height: 1.5em; font-weight: bold; }
-    .key { margin-top: 0; }
-    @media (max-width: 640px) {
-      body { margin: 0 auto; padding: 18px max(12px, env(safe-area-inset-right)) 32px max(12px, env(safe-area-inset-left)); }
-      h1 { font-size: clamp(1.35rem, 7vw, 1.55rem); }
-      .panel { margin-top: 14px; padding: 12px 10px; }
-      .board, .target {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(44px, 46px));
-        gap: 10px clamp(4px, 2vw, 10px);
-        overflow-x: visible;
-        padding: 10px 0;
-      }
-      .lamp-wrap { min-width: 0; }
-    }
-    @media (max-width: 360px) {
-      body { padding-right: max(8px, env(safe-area-inset-right)); padding-left: max(8px, env(safe-area-inset-left)); }
-      .panel { padding-inline: 6px; }
-      .board, .target { grid-template-columns: repeat(5, 44px); column-gap: 4px; }
-    }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: white; color: black; font: 20px/1.5 Arial, sans-serif; }
+    main { padding: 24px; text-align: center; }
+    a { color: #0645ad; text-underline-offset: 4px; }
   </style>
 </head>
 <body>
-  <h1>תרגיל 2: האם תוכלו להגיע ליעד?</h1>
-  <p>יש עשר נורות בשורה. בתחילת המשחק כולן כבויות.</p>
-  <p><strong>הכלל:</strong> לחיצה על נורה הופכת אותה ואת הנורה שמימינה. לחיצה על הנורה הימנית ביותר אינה משנה דבר.</p>
-  <p><strong>המטרה:</strong> להגיע למצב שבו רק נורות 1, 3, 4, 7 ו־10 דולקות.</p>
-
-  <div class="panel">
-    <p class="key"><strong>מצב נוכחי</strong> - לחצו ישירות על אחת הנורות.</p>
-    <div id="board" class="board" aria-label="מצב הנורות הנוכחי"></div>
-    <p><strong>מצב היעד</strong></p>
-    <div id="target" class="target" aria-label="מצב היעד"></div>
-    <p>מספר צעדים: <span id="moves">0</span></p>
-    <p id="status" aria-live="polite">התחילו לנסות.</p>
-    <button id="reset" type="button">התחלה מחדש</button>
-  </div>
-
-  <script>
-    const start = Array(10).fill(false);
-    const goal = [true, false, true, true, false, false, true, false, false, true];
-    let state = [...start];
-    let moveCount = 0;
-
-    function lampElement(on, index, interactive) {
-      const wrap = document.createElement('div');
-      wrap.className = 'lamp-wrap';
-      const lamp = document.createElement(interactive ? 'button' : 'div');
-      if (interactive) {
-        lamp.type = 'button';
-        lamp.setAttribute('aria-pressed', String(on));
-        lamp.addEventListener('click', () => flip(index));
-      } else {
-        lamp.setAttribute('role', 'img');
-      }
-      lamp.className = 'lamp' + (on ? ' on' : '') + (interactive && index === state.length - 1 ? ' last' : '');
-      lamp.setAttribute('aria-label', interactive
-        ? `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}. ${index === state.length - 1 ? 'לחיצה אינה משנה דבר' : `לחיצה תהפוך גם את נורה ${index + 2}`}`
-        : `נורה ${index + 1}: ${on ? 'דולקת' : 'כבויה'}`);
-      const number = document.createElement('div');
-      number.className = 'number';
-      number.textContent = index + 1;
-      wrap.append(lamp, number);
-      return wrap;
-    }
-
-    function renderTarget() {
-      document.getElementById('target').replaceChildren(
-        ...goal.map((on, index) => lampElement(on, index, false))
-      );
-    }
-
-    function render() {
-      document.getElementById('board').replaceChildren(
-        ...state.map((on, index) => lampElement(on, index, true))
-      );
-      document.getElementById('moves').textContent = moveCount;
-      const solved = state.every((value, index) => value === goal[index]);
-      const onCount = state.filter(Boolean).length;
-      document.getElementById('status').textContent = solved
-        ? `הגעתם ליעד ב-${moveCount} צעדים.`
-        : `נורות דולקות כעת: ${onCount}.`;
-    }
-
-    function flip(index) {
-      if (index === state.length - 1) return;
-      state[index] = !state[index];
-      state[index + 1] = !state[index + 1];
-      moveCount += 1;
-      render();
-    }
-
-    document.getElementById('reset').addEventListener('click', () => {
-      state = [...start];
-      moveCount = 0;
-      render();
-    });
-
-    renderTarget();
-    render();
-  </script>
+  <main><a href="https://ron828.top/pisga-2026/lesson-1/exercise-2.html">האתר עבר לכתובת חדשה</a></main>
 </body>
 </html>
-
