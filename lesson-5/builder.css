@@ -1,0 +1,45 @@
+/* Fit the editing workspace to the available projector area. */
+.pisga.builder-page{padding:0 18px 10px}
+.builder-page .course-header{max-width:1440px;padding:9px 0 8px;margin:0 auto 8px;border-bottom-width:2px}
+.builder-page .course-brand{font-size:20px}
+.builder-page main.lesson-main{max-width:1440px!important;margin:0 auto;padding:0;display:flex;flex-direction:column;gap:10px}
+.builder-page main>.builder-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0}
+.builder-page .lesson-tabs{margin:0;flex-wrap:nowrap}
+.builder-page .lesson-tabs a{white-space:nowrap}
+.builder-page h1,.builder-page h2,.builder-page h3,.builder-page button,.builder-page select,.builder-page .feedback,.builder-page .course-home,.builder-page .lesson-tabs a{font-weight:700}
+.builder-page h1{font-size:26px;letter-spacing:0}
+.builder-page .workspace-taskbar{gap:12px}
+.builder-page #fullscreen{flex-shrink:0;font-size:16px;min-height:40px;padding:6px 10px}
+.builder-page .graph-workspace{display:flex;flex-direction:column;min-height:0}
+.builder-page .workspace-canvas{min-height:0}
+.builder-page .workspace-toolbar button{font-size:16px!important}
+.builder-page .workspace-rule{font-size:15px}
+.builder-page .workspace-taskbar .fragment{font-size:20px}
+.builder-page .workspace-bottom .feedback{font-size:16px}
+.builder-page .builder-footer{margin:0;min-height:28px}
+.builder-page .builder-footer a{min-height:28px}
+@media(min-width:1000px) and (min-height:580px){
+ .builder-page main.lesson-main{height:calc(100dvh - 72px)}
+ .builder-page .builder-heading{flex:0 0 36px}
+ .builder-page .graph-workspace{flex:1}
+ .builder-page .workspace-canvas{flex:1}
+ .builder-page .workspace-canvas .graph-svg{height:100%;min-height:0}
+ .builder-page .workspace-toolbar{margin:4px 0 10px}
+ .builder-page .workspace-taskbar .tiles{gap:6px}
+ .builder-page .workspace-taskbar .fragment{padding:4px 7px;font-size:19px}
+ .builder-page .task-picker{flex-basis:230px}
+}
+@media(max-width:999px){
+ .builder-page main>.builder-heading{flex-wrap:wrap;gap:8px}
+ .builder-page .workspace-taskbar{flex-wrap:wrap}
+ .builder-page .workspace-taskbar .tiles{order:3;flex-basis:100%}
+ .builder-page #fullscreen{margin-inline-start:auto}
+}
+@media(max-width:700px){
+ .pisga.builder-page{padding:0 12px 16px}
+ .builder-page .workspace-taskbar{flex-direction:row}
+ .builder-page .task-picker{flex:1;min-width:160px}
+ .builder-page .workspace-toolbar button{font-size:14px!important}
+ .builder-page h1{font-size:24px}
+ .builder-page .workspace-bottom .feedback{font-size:14px}
+}

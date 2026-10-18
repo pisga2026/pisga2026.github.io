@@ -1,19 +1,16 @@
 <!doctype html>
-<html lang="he" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>האתר עבר לכתובת חדשה</title>
-  <link rel="canonical" href="https://ron828.top/pisga-2026/lesson-3/exercise-6.html">
-  <meta http-equiv="refresh" content="0; url=https://ron828.top/pisga-2026/lesson-3/exercise-6.html">
-  <script>window.location.replace("https://ron828.top/pisga-2026/lesson-3/exercise-6.html" + window.location.search + window.location.hash);</script>
-  <style>
-    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: white; color: black; font: 20px/1.5 Arial, sans-serif; }
-    main { padding: 24px; text-align: center; }
-    a { color: #0645ad; text-underline-offset: 4px; }
-  </style>
-</head>
-<body>
-  <main><a href="https://ron828.top/pisga-2026/lesson-3/exercise-6.html">האתר עבר לכתובת חדשה</a></main>
-</body>
-</html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>הרחבה: יותר כפתורים - שיעור 3</title><link rel="stylesheet" href="assets/style.css"><script src="assets/lock-model.js" defer></script><script src="assets/graphs.js" defer></script><script src="assets/app.js" defer></script><meta name="theme-color" content="#4bbded"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/theme.css"></head>
+<body class="pisga lesson-3 ">
+<header class="course-header"><a class="course-brand" href="/" aria-label="RON828 — עמוד הבית">RON828</a><a class="course-home" href="/">פסגה ז 2026</a></header>
+<main class=""><a class="course-back" href="/#lesson-3">→ לתוכן העניינים · שיעור 3</a><header><p class="eyebrow">תוכנית פסגה · גרפים מכוונים ובעיית המנעול</p><h1>תרגיל 6: הרחבה: יותר כפתורים</h1></header>
+<p>מגדילים את המנעול לעשרה כפתורים, הספרות 0-9. הקוד נשאר בן <strong>שתי ספרות</strong>. גם 0 יכול להופיע בתחילת קוד.</p>
+<div class="panel"><p>הקבוצה הראשונה היא <bdi dir="ltr" class="symbol">{0, 1, 4, 6, 7}</bdi>; הקבוצה השנייה היא <bdi dir="ltr" class="symbol">{2, 3, 5, 8, 9}</bdi>.</p><p>כל זוג ספרות מאותה קבוצה הוא קוד תקף, כולל ספרות זהות. הקוד <bdi dir="ltr" class="symbol">72</bdi> הוא הקוד התקף היחיד שמחבר בין הקבוצות.</p></div>
+<h2>תחילה חושבים - בלי לפתוח את המנעול</h2>
+<ol><li>כמה קודים תקפים יש במנעול החדש? חשבו בלי לרשום את כולם.</li><li>כמה לחיצות נחוצות לפחות? הסבירו את החסם.</li><li>כיצד משתנה הגרף? מהן דרגות הכניסה והיציאה, והיכן חייב להתחיל ולהסתיים מסלול אוילר?</li><li>האם אפשר להשיג את החסם? נמקו באמצעות הגרף, ואז מצאו רצף ובדקו אותו.</li></ol>
+<details id="extension-lock"><summary>אחרי החישוב - פתיחת המנעול</summary><div><label class="lock-key-options" for="button-count">גרסת המנעול <select id="button-count"><option value="open10">10 כפתורים</option><option value="open8">8 כפתורים - האתגר המקורי</option></select></label><p class="muted">שינוי הגרסה מתחיל ניסיון חדש.</p><div data-lock="open10" data-select="button-count" aria-label="מנעול ההרחבה"></div></div></details>
+<h2>כשכבר לא כדאי לספור אחד־אחד</h2>
+<p>בכל גרסה יש שתי קבוצות זרות, בכל אחת אותו מספר כפתורים. כל זוג סימנים מאותה קבוצה תקף, ויש קוד תקף אחד נוסף מהקבוצה הראשונה לשנייה, ללא קוד בכיוון ההפוך.</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">כפתורים בכל קבוצה</th><th scope="col">סך הכפתורים</th><th scope="col">מספר הקודים התקפים</th><th scope="col">מינימום לחיצות - ונימוק</th></tr></thead><tbody><tr><td>5</td><td>10</td><td>?</td><td>?</td></tr><tr><td>10</td><td>20</td><td>?</td><td>?</td></tr><tr><td><bdi dir="ltr" class="symbol">m</bdi></td><td><bdi dir="ltr" class="symbol">2m</bdi></td><td>?</td><td>?</td></tr></tbody></table></div>
+<div class="prompt">נסחו כלל לכל מספר חיובי m של כפתורים בכל קבוצה. הסבירו מדוע אי אפשר בפחות לחיצות ומדוע אפשר להשיג את החסם, בלי לרשום את כל הקודים או את רצף הלחיצות.</div>
+<p class="muted">במנעולים הגדולים כל כפתור נושא סימן שונה - אפשר להשתמש גם באותיות. קוד נשאר באורך שני סימנים בלבד.</p>
+<nav class="nav" aria-label="ניווט בין התרגילים"><a href="exercise-5.html">לתרגיל הקודם</a><a href="../index.html#lesson-3">לתוכן העניינים</a></nav></main></body></html>

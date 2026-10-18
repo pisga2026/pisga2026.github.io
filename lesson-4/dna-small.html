@@ -1,19 +1,111 @@
 <!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>האתר עבר לכתובת חדשה</title>
-  <link rel="canonical" href="https://ron828.top/pisga-2026/lesson-4/dna-small.html">
-  <meta http-equiv="refresh" content="0; url=https://ron828.top/pisga-2026/lesson-4/dna-small.html">
-  <script>window.location.replace("https://ron828.top/pisga-2026/lesson-4/dna-small.html" + window.location.search + window.location.hash);</script>
-  <style>
-    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: white; color: black; font: 20px/1.5 Arial, sans-serif; }
-    main { padding: 24px; text-align: center; }
-    a { color: #0645ad; text-underline-offset: 4px; }
-  </style>
-</head>
-<body>
-  <main><a href="https://ron828.top/pisga-2026/lesson-4/dna-small.html">האתר עבר לכתובת חדשה</a></main>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מרכיבים רצף · התנסות ראשונה</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#15283b;font-family:Arial,"Noto Sans Hebrew",sans-serif;line-height:1.6}main{max-width:1000px;margin:auto;padding:28px 22px 40px}.eyebrow{color:#53677c;font-size:14px;letter-spacing:.03em}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;margin:6px 0 14px}p{margin:8px 0}.intro{max-width:760px}.rule{color:#455a70;font-size:15px}.board{background:#fff;border:1px solid #d9e3ed;border-radius:18px;padding:22px;margin-top:22px}h2{font-size:19px;margin:0 0 12px}.bar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.count{font-variant-numeric:tabular-nums;color:#455a70}.sequence{direction:ltr;text-align:left;unicode-bidi:isolate;font-family:Consolas,monospace;font-size:clamp(20px,4vw,30px);letter-spacing:.09em;overflow-wrap:anywhere;background:#edf4fb;border-radius:10px;padding:14px;min-height:66px;margin:12px 0}.empty{font-family:Arial,sans-serif;font-size:16px;direction:rtl;text-align:right;letter-spacing:0;color:#52677d}.pool,.chain{display:flex;gap:9px;flex-wrap:wrap;direction:ltr;justify-content:flex-start}.chain{margin:16px 0}.tile{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:9px 12px;font-family:Consolas,monospace;font-size:21px;background:#fff;border:1px solid #b9cadd;border-radius:10px;color:#15283b}.id{font:12px Arial,sans-serif;color:#52677d}.tile.used{opacity:.5;background:#edf0f4;text-decoration:line-through}.tile.match{border:2px solid #26667b;background:#eff9fa;padding:8px 11px}.chain .tile{background:#edf4fb;min-height:40px;font-size:17px;padding:5px 9px}.tile b{color:#1c6275}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}button{font:inherit;cursor:pointer}button.action{padding:10px 16px;border:1px solid #bacbdb;border-radius:9px;background:#fff;color:#203b54;min-height:44px}button.action.primary{background:#203b54;color:white;border-color:#203b54}button:focus-visible{outline:3px solid #ac5e0d;outline-offset:3px}button:disabled{cursor:default}.status{min-height:30px;margin:12px 0 0;font-weight:600}.status.error{color:#a42c23}.status.success{color:#146346}.tip{font-size:14px;color:#52677d}.options{display:flex;align-items:center;gap:8px;margin:14px 0}input[type=checkbox]{width:19px;height:19px}.footer{margin-top:22px;color:#52677d;font-size:14px}dialog{max-width:380px;border:1px solid #bdcbd8;border-radius:14px;padding:22px}dialog::backdrop{background:#15283b60}@media(max-width:480px){main{padding:20px 12px}.board{padding:16px}.tile{padding:8px 10px;font-size:20px}.tile.match{padding:7px 9px}}
+</style>
+<meta name="theme-color" content="#4bbded"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/theme.css"></head>
+<body class="pisga lesson-4 ">
+<header class="course-header"><a class="course-brand" href="/" aria-label="RON828 — עמוד הבית">RON828</a><a class="course-home" href="/">פסגה ז 2026</a></header>
+
+<main id="dna-app"><a class="course-back" href="/#lesson-4">→ לתוכן העניינים · שיעור 4</a>
+  <div class="eyebrow">פסגה · מעבדת רצפים</div>
+  <h1>מרכיבים רצף · התנסות ראשונה</h1>
+  <p class="intro">הרכיבו רצף שמשתמש בכל המקטעים בדיוק פעם אחת. בין כל שני מקטעים עוקבים צריכה להיות חפיפה של שתי אותיות.</p>
+  <p class="rule">הרצף נקרא משמאל לימין. לחצו על מקטע כדי לצרף אותו לקצה הימני. מספרי הכרטיסים מזהים עותקים נפרדים; הם אינם מציינים סדר.</p>
+  <p class="rule" id="start-rule"></p>
+  <section class="board" aria-label="הרצף שבניתם">
+    <div class="bar"><h2>הרצף שלכם</h2><span class="count" id="count"></span></div>
+    <div id="sequence" class="sequence"></div>
+    <div class="chain" id="chain" aria-label="סדר המקטעים שנבחרו"></div>
+    <div class="actions"><button class="action primary" type="button" id="undo">צעד אחד אחורה</button><button class="action" type="button" id="reset">התחלה מחדש</button></div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <section class="board" aria-label="המקטעים לבחירה">
+    <div class="bar"><h2>המקטעים</h2><span id="remaining" class="count"></span></div>
+    <label class="options"><input type="checkbox" id="highlight">הדגשת מקטעים שמתאימים לקצה הנוכחי</label>
+    <div class="pool" id="pool"></div>
+    <p class="tip">מקטע שמתאים עכשיו אינו בהכרח בחירה שתאפשר להשלים את הרצף.</p>
+  </section>
+  <p class="footer">זהו מודל מפושט: כל המקטעים באורך 3, הכיוון ידוע, אין שגיאות או מקטעים חסרים, ומספר העותקים נתון. בריצוף אמיתי התנאים מורכבים יותר.</p>
+  <dialog id="reset-dialog"><p>למחוק את הרצף שבניתם ולהתחיל מחדש?</p><div class="actions"><button type="button" class="action" id="cancel-reset">להמשיך ברצף</button><button type="button" class="action primary" id="confirm-reset">להתחיל מחדש</button></div></dialog>
+<nav class="course-nav" aria-label="ניווט בין הפעילויות"><a href="dna-hard.html">לתרגיל הבא ←</a></nav></main>
+<script>
+(() => {
+  'use strict';
+  const config = {"key":"small","title":"מרכיבים רצף · התנסות ראשונה","start":"","parts":["TGC","ATG","GCA","GAT","TGA","ATG"]};
+  const root = document.getElementById('dna-app');
+  const $ = id => root.querySelector('#'+id);
+  const parts = config.parts;
+  let order = [], highlight = false;
+  const key = 'dna-assembly-v1-' + config.key;
+  const validOrder = a => {
+    if(!Array.isArray(a) || new Set(a).size!==a.length) return false;
+    let tail=config.start;
+    for(const i of a) {
+      if(!Number.isInteger(i)||i<0||i>=parts.length||(tail&&parts[i].slice(0,2)!==tail))return false;
+      tail=parts[i].slice(1);
+    }
+    return true;
+  };
+  try {
+    const saved=JSON.parse(localStorage.getItem(key));
+    if(saved && validOrder(saved.order)){order=saved.order;highlight=!!saved.highlight;}
+  } catch(e) { /* Private browsers can disable local storage. */ }
+  const tail = () => order.length ? parts[order[order.length-1]].slice(1) : config.start;
+  const possible = () => parts.map((p,i)=>!order.includes(i)&&(!tail()||p.slice(0,2)===tail())?i:-1).filter(i=>i>=0);
+  const sequence = () => order.length ? parts[order[0]] + order.slice(1).map(i=>parts[i][2]).join('') : '';
+  function save(){try{localStorage.setItem(key,JSON.stringify({order,highlight}));}catch(e){}}
+  function message(text,kind=''){const el=$('status');el.textContent=text;el.className='status '+kind;}
+  function render() {
+    $('highlight').checked=highlight;
+    $('count').textContent=order.length+' מתוך '+parts.length+' מקטעים';
+    $('remaining').textContent=(parts.length-order.length)+' נותרו';
+    $('undo').disabled=!order.length; $('reset').disabled=!order.length;
+    const seq=$('sequence');seq.textContent=sequence()||'בחרו מקטע ראשון';seq.className='sequence'+(order.length?'':' empty');
+    $('chain').replaceChildren();
+    order.forEach((i,n)=>{
+      const tile=document.createElement('span');tile.className='tile';
+      tile.setAttribute('aria-label','מקום '+(n+1)+', מקטע '+(i+1)+': '+parts[i]);
+      const id=document.createElement('span');id.className='id';id.textContent='#'+(i+1);
+      const text=document.createElement('span');text.textContent=parts[i];
+      tile.append(id,text);$('chain').append(tile);
+    });
+    const options=possible();
+    parts.forEach((p,i)=>{
+      const b=$('part-'+i), used=order.includes(i);
+      b.disabled=used;
+      b.className='tile'+(used?' used':highlight&&options.includes(i)?' match':'');
+      b.setAttribute('aria-label','מקטע '+(i+1)+': '+p+(used?', כבר בשימוש':highlight&&options.includes(i)?', מתאים לקצה הנוכחי':''));
+    });
+    if(order.length===parts.length)message('הצלחתם! כל המקטעים שובצו פעם אחת, וכל החפיפות תקינות.','success');
+    else if(!options.length)message('מבוי סתום: נותרו מקטעים, אבל אף אחד מהם לא מתאים לקצה. אפשר לחזור אחורה ולנסות בחירה אחרת.','error');
+    else if(tail())message('הקצה הנוכחי: '+tail()+'. המקטע הבא צריך להתחיל באותן שתי אותיות.');
+    else message('אפשר להתחיל מכל מקטע.');
+  }
+  $('start-rule').textContent=config.start ? 'רמז פתיחה לאתגר: ידוע שהרצף מתחיל באותיות '+config.start+'. בחרו מקטע ראשון שמתחיל בהן.' : 'שימו לב: ATG מופיע פעמיים בכוונה. יש להשתמש בשני העותקים.';
+  parts.forEach((p,i)=>{
+    const b=document.createElement('button');b.type='button';b.id='part-'+i;b.className='tile';
+    const id=document.createElement('span');id.className='id';id.textContent='#'+(i+1);
+    const text=document.createElement('span');text.textContent=p;b.append(id,text);
+    b.addEventListener('click',()=>{
+      if(order.includes(i))return;
+      if(tail()&&p.slice(0,2)!==tail()) {message('המקטע '+p+' מתחיל ב־'+p.slice(0,2)+', אבל הקצה דורש '+tail()+'. בחרו מקטע אחר.','error');return;}
+      order.push(i);save();render();
+      if(order.length<parts.length)$('undo').focus();
+    });
+    $('pool').append(b);
+  });
+  $('undo').addEventListener('click',()=>{order.pop();save();render();});
+  $('highlight').addEventListener('change',e=>{highlight=e.target.checked;save();render();});
+  $('reset').addEventListener('click',()=>{$('reset-dialog').showModal();});
+  $('cancel-reset').addEventListener('click',()=>{$('reset-dialog').close();});
+  $('confirm-reset').addEventListener('click',()=>{order=[];save();render();$('reset-dialog').close();});
+  render();
+})();
+</script>
 </body>
 </html>
