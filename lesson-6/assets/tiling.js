@@ -116,7 +116,7 @@
     }
     function renderCounts(){
       const total=cfg.rows*cfg.cols-state.holes.length, covered=state.pieces.length*cfg.size;
-      ui.stats.innerHTML=`<span class="stat">חלקים על הלוח: <b>${state.pieces.length} / ${cfg.limit}</b></span><span class="stat">משבצות פנויות: <b>${total-covered}</b></span>`;
+      ui.stats.innerHTML=`<span class="stat">חלקים על הלוח: <bdi>${state.pieces.length} / ${cfg.limit}</bdi></span><span class="stat">משבצות פנויות: <b>${total-covered}</b></span>`;
       ui.counts.hidden=state.mode==='plain';if(state.mode==='plain'){ui.counts.innerHTML='';return;}
       const counts=colors.map(()=>({total:0,covered:0}));let blank=0;
       for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++){if(hole(r,c))continue;const color=cellColor(r,c);if(color<0){blank++;continue;}counts[color].total++;if(owner(r,c))counts[color].covered++;}

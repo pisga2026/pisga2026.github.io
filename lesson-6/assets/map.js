@@ -345,7 +345,7 @@
     return {
       setMode(next) {
         mode = next; demo = null; pending = null; preview = null; pointerStart = null; showConflicts = false; tool = mode === 'free' ? 'paint' : 'line';
-        feedback = mode === 'free' ? 'בחרו אחד משני הצבעים וצבעו את האזורים. אפשר לבדוק את הצביעה בכל שלב.' : mode === 'suggested' ? 'התבוננו בצבעי האזורים. אפשר להוסיף קווים ולבחון מה משתנה.' : 'מפה ללא צביעה. אפשר להוסיף קווים ולחשוב כמה צבעים דרושים.';
+        feedback = mode === 'free' ? 'בחרו אחד משני הצבעים וצבעו את האזורים. אפשר לבדוק את הצביעה בכל שלב.' : mode === 'suggested' ? 'המפה מוצגת בשני צבעים. אפשר להוסיף קווים.' : 'מפה ללא צביעה. אפשר להוסיף קווים ולחשוב כמה צבעים דרושים.';
         render();
       },
       reset,

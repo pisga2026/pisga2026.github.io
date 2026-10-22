@@ -1,46 +1,42 @@
-/* Lesson 6: a quieter canvas, keeping the course's blue and dark outlines. */
-body.coloring-lesson{background:#eaf7fb;background-image:radial-gradient(#15274b13 .8px,transparent .8px);background-size:18px 18px;padding-bottom:28px}
-.coloring-lesson .course-header{border-bottom:2px solid #15274b24;padding:22px 0 18px}
-.coloring-lesson .lab-heading{margin:28px 0 24px}
-.coloring-lesson h1{font-size:clamp(25px,3.5vw,37px);letter-spacing:-.7px}
-.coloring-lesson .eyebrow{letter-spacing:.3px;margin-bottom:8px}
-.coloring-lesson .lab-subtitle{font-weight:500}
-.coloring-lesson .lesson-count{background:#fff;border:1px solid #15274b26;border-radius:999px;padding:4px 12px}
-.coloring-lesson .problem-nav{gap:8px;padding:4px 3px 12px;margin-bottom:24px}
-.coloring-lesson .problem-button{text-decoration:none;background:#ffffffb3;border:1.5px solid #15274b35;border-radius:10px;box-shadow:none;font-size:14px;min-height:47px}
-.coloring-lesson .problem-button:hover{background:#d4f0fa;border-color:#15274b}
-.coloring-lesson .problem-button[aria-current=page]{background:#15274b;color:white;box-shadow:0 4px 10px #15274b20;border-color:#15274b}
-.coloring-lesson .problem-page{background:#ffffffd9;border:1px solid #15274b24;border-radius:20px;padding:26px;box-shadow:0 10px 30px #15274b08}
-.coloring-lesson .problem-heading{gap:15px;margin-bottom:18px;align-items:center}
-.coloring-lesson .problem-badge{border:0;border-radius:13px;background:#d5effb;box-shadow:none;color:#17436d;width:52px;height:52px}
-.coloring-lesson .problem-heading h2{font-size:clamp(22px,2.7vw,29px)}
-.coloring-lesson .problem-kicker{font-weight:700;margin-bottom:5px}
-.coloring-lesson .problem-question{background:#f1f8fc;border:0;border-inline-start:4px solid #62bfe9;border-radius:10px;padding:16px 20px;font-weight:500;line-height:1.8;margin-bottom:22px}
-.coloring-lesson .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:10px;max-width:680px}
-.coloring-lesson .stage-button{background:#f5f8fb;border:1.5px solid #15274b30;border-radius:11px;box-shadow:none;font-size:16px;min-height:56px;font-weight:700}
-.coloring-lesson .stage-button[aria-pressed=true]{background:#15274b;color:white;border-color:#15274b;box-shadow:0 3px 8px #15274b15}
-.coloring-lesson .stage-button[data-mode=suggested][aria-pressed=true]{background:#fff0d5;color:#684513;border-color:#d8a24d}
-.stage-icon{font-size:25px;line-height:1}.hint-icon{color:#d89e42}
-.coloring-lesson .stage-guidance{font-weight:500;margin:10px 2px 18px;min-height:25px}
-.coloring-lesson .widget-panel{background:#f7fbfd;border:1px solid #15274b2c;border-radius:14px;padding:22px;box-shadow:none}
-.coloring-lesson .btn,.coloring-lesson .widget-panel button:not(.tl-cell):not(.pg-ant-cell):not(.pg-card):not(.pg-door):not(.swatch){border-width:2px;border-radius:8px;box-shadow:0 2px 0 #15274b25;text-decoration:none}
-.coloring-lesson .btn.secondary,.coloring-lesson button.secondary{background:#e7f0f6!important;box-shadow:0 2px 0 #15274b20!important}
-.coloring-lesson .tl-board-shell{border-radius:8px;box-shadow:0 5px 14px #15274b16}
-.coloring-lesson .stat,.coloring-lesson .tl-color-stat{border:1px solid #15274b2b;border-radius:7px;background:#fff}
-.coloring-lesson .live-status,.coloring-lesson .pg-status{border:1px solid #99b9c7;background:#eaf4f7;border-radius:9px;font-weight:500}
-.coloring-lesson .pg-player{border-radius:10px;border-width:1.5px;background:#edf3f7}
-.coloring-lesson .pg-player.pg-current{box-shadow:0 3px 0 #15274b20;background:#d7f3e3}
-.coloring-lesson .pg-card{border-radius:9px;border-width:2px;box-shadow:0 3px 0 #15274b30}
-.coloring-lesson .pg-color-stats{background:white;border:1px solid #15274b30;border-radius:9px}
-.coloring-lesson .reflection{background:#f7fafb;border:1px solid #15274b22;border-radius:11px;margin-top:22px;padding:16px 18px}
-.coloring-lesson .reflection[open] summary{margin-bottom:14px}
-.coloring-lesson .reflection textarea{background:white;border:1px solid #9bb4c6;border-radius:8px}
-.coloring-lesson .reflection label{font-weight:500}
-.coloring-lesson .page-footer{border-top:0;margin:22px 0;padding-top:0}
-.footer-home{font-size:13px;color:#345773}.nav-placeholder{min-width:150px}
-.coloring-lesson .site-footer{padding-top:16px;border-top:1px solid #15274b20}
-.coloring-lesson dialog{background:#f5fbfe;border-radius:16px;border-width:2px;box-shadow:0 20px 80px #15274b33}
-.coloring-lesson .map-paper-wrap{border-radius:9px;overflow:hidden}
-@media(max-width:720px){body.coloring-lesson{padding-inline:13px}.coloring-lesson .lab-heading{margin:21px 0;gap:10px}.coloring-lesson .problem-page{padding:17px;border-radius:15px}.coloring-lesson .problem-nav{margin-bottom:16px}.coloring-lesson .widget-panel{padding:13px}.coloring-lesson .problem-question{padding:13px 15px}.coloring-lesson .stage-button{font-size:14px;gap:7px}.coloring-lesson .page-footer{flex-wrap:wrap}.footer-home{font-size:12px}.nav-placeholder{min-width:50px}}
-@media(max-width:420px){.coloring-lesson .lab-heading{align-items:flex-start}.coloring-lesson .heading-actions{gap:8px}.coloring-lesson .heading-actions .btn{font-size:12px;padding:6px 9px}.coloring-lesson .problem-page{padding:13px}.coloring-lesson .stage-button{flex-direction:row;min-height:60px;font-size:13px}.stage-icon{font-size:21px}.coloring-lesson .stage-guidance{font-size:12px}.coloring-lesson .page-footer .btn{font-size:11px;padding:8px}.coloring-lesson .footer-home{font-size:11px}.coloring-lesson .problem-badge{width:43px;height:43px}.coloring-lesson .lab-heading h1{font-size:24px}}
-@media print{body.coloring-lesson{background:white}.coloring-lesson .problem-page{border:0;box-shadow:none;padding:0}.coloring-lesson .widget-panel{background:white}.coloring-lesson .reflection{break-inside:avoid}}
+/* Compact layout; the shared course theme supplies the visual style. */
+.pisga .course-header{padding:15px 0 13px;margin-bottom:12px}
+.pisga main{margin-top:0}
+.pisga .course-back{margin-bottom:8px;font-size:13px}
+.pisga .lab-heading{align-items:center;gap:16px;margin-bottom:14px}
+.pisga .lab-heading h1{font-size:28px;margin:2px 0 0}
+.pisga .lab-heading .eyebrow{font-size:13px;margin:0 0 3px}
+.pisga .lab-heading .btn{flex-shrink:0;font-size:14px;min-height:40px;padding:7px 12px}
+.pisga .problem-question{font-size:16px;line-height:1.55;padding:10px 14px;margin-bottom:14px}
+.pisga .problem-question p{margin:0}
+.pisga .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);max-width:560px;margin-bottom:14px;gap:10px}
+.pisga .stage-button{background:var(--amber);box-shadow:inset 2px 2px 0 #fff0ca,inset -2px -2px 0 #b17f61,3px 3px 0 var(--navy);font-size:15px;min-height:44px;padding:7px 12px}
+.pisga .stage-button[aria-pressed=true]{background:var(--green);box-shadow:inset 2px 2px 0 #d4ffe5,inset -2px -2px 0 #389c79,3px 3px 0 var(--navy);outline:2px solid var(--navy);outline-offset:2px}
+.pisga .widget-panel{padding:14px}
+.pisga .widget-panel .tool-row{margin-bottom:10px}
+.pisga .widget-panel .live-status{padding:7px 11px;min-height:38px;margin-top:10px;font-size:14px}
+.pisga .widget-panel .widget-note{font-size:13px;margin:7px 0}
+.pisga .widget-panel .stats-row{margin:8px 0;gap:7px}
+.pisga .widget-panel .stat{padding:4px 8px;font-size:13px}
+.pisga .tl-widget .tl-board-shell{--tl-max:352px!important}
+.pisga .tl-widget .tl-stage{gap:22px;padding:0}
+.pisga .tl-widget .tl-tools{margin-bottom:10px}
+.pisga .tl-widget .tl-color-counts{margin:8px 0;gap:7px}
+.pisga .tl-widget .tl-color-stat{padding:4px 7px;font-size:12px}
+.pisga .pg-games .pg-scoreboard{margin:8px 0 15px;gap:12px}
+.pisga .pg-games .pg-player{padding:8px 12px;min-height:64px}
+.pisga .pg-games .pg-card{min-height:96px}
+.pisga .pg-games .pg-color-stats{padding:8px 12px;margin-top:12px;font-size:14px}
+.pisga .pg-fox .pg-door{min-height:150px}
+.pisga .pg-fox .pg-door-inset{min-height:62px}
+.pisga .pg-fox .pg-fox-day{margin:7px auto}
+.pisga .pg-fox .pg-fox-history{margin-top:12px;padding-top:8px}
+.pisga .pg-games .pg-ant-board-wrap{max-width:330px}
+.pisga .map-widget .map-paper-wrap{max-width:620px;margin:10px auto}
+.pisga .course-nav{align-items:center;margin-top:18px;padding-top:12px}
+.pisga .widget-panel .tl-cell:hover,.pisga .widget-panel .pg-ant-cell:hover{transform:none}
+html:fullscreen .course-back,html:fullscreen .course-nav{display:none}
+html:fullscreen .lab-heading{justify-content:flex-end;margin:8px 0}
+@media(min-width:900px){.pisga .tl-widget{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-items:start}.pisga .tl-widget .tl-tools{grid-column:2;grid-row:1;max-width:270px;align-self:start}.pisga .tl-widget .tl-stage{grid-column:1;grid-row:1/5;flex-direction:row-reverse;justify-content:flex-end}.pisga .tl-widget .tl-piece-area{flex-basis:175px;min-width:125px}.pisga .tl-widget .tl-stats{grid-column:2;grid-row:2;max-width:270px;margin-top:8px}.pisga .tl-widget .tl-color-counts{grid-column:2;grid-row:3;max-width:270px}.pisga .tl-widget .tl-status{grid-column:2;grid-row:4;max-width:270px;margin-top:8px}}
+@media(min-width:900px){.pisga .pg-ants{display:grid;grid-template-columns:350px minmax(0,1fr);column-gap:20px;align-items:start}.pisga .pg-ants .pg-ant-board-wrap{grid-column:1;grid-row:1/6;width:100%}.pisga .pg-ants .pg-actions{grid-column:2;grid-row:1;margin-bottom:7px}.pisga .pg-ants .pg-ant-top{grid-column:2;grid-row:2;justify-content:flex-start;margin:7px 0;gap:10px}.pisga .pg-ants .pg-color-stats{grid-column:2;grid-row:3;margin:7px 0}.pisga .pg-ants .pg-status{grid-column:2;grid-row:4;margin:7px 0}.pisga .pg-ants .pg-note{grid-column:2;grid-row:5;margin:7px 0}.pisga .map-widget{display:grid;grid-template-columns:minmax(0,1fr) 280px;column-gap:18px;align-items:start}.pisga .map-widget .map-paper-wrap{grid-column:1;grid-row:1/5;width:100%;margin:0 auto}.pisga .map-widget .map-toolbar{grid-column:2;grid-row:1;gap:8px;margin-bottom:8px}.pisga .map-widget .map-toolbar button{font-size:14px;padding:7px 10px}.pisga .map-widget .map-stats{grid-column:2;grid-row:2;justify-content:flex-start}.pisga .map-widget .map-feedback{grid-column:2;grid-row:3;margin:8px 0}.pisga .map-widget .map-footnote{grid-column:2;grid-row:4;margin:8px 0}}
+@media(max-width:600px){.pisga .lab-heading{gap:10px}.pisga .lab-heading h1{font-size:24px}.pisga .stage-button{font-size:14px;padding:8px 6px}.pisga .stage-strip{gap:8px}.pisga .widget-panel{padding:11px}.pisga .problem-question{font-size:15px}.pisga .course-header{padding-top:15px}.pisga .tl-widget .tl-stage{gap:10px}.pisga .tl-widget .tl-piece{min-height:49px}.pisga .tl-widget .tl-piece-instruction{margin:8px 0 0}}
+@media(max-width:400px){.pisga .stage-button{flex-direction:row;min-height:44px}}

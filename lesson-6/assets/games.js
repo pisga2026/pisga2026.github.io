@@ -45,7 +45,7 @@
       const totals = [0, 0]; owned.forEach((p, i) => { if (p >= 0) totals[p] += s.values[i]; });
       const done = !remaining.length;
       const paints = s.values.map((_, i) => colorIndex(s.mode, s.free, i, j => j % 2));
-      let message = done ? (totals[0] === totals[1] ? 'תיקו! לכל שחקן ' + totals[0] + ' נקודות.' : 'שחקן ' + (totals[0] > totals[1] ? '1' : '2') + ' ניצח. נסו להסביר מה עזר לו.') : 'תור שחקן ' + (turn + 1) + ' · בחרו קלף מאחד הקצוות.';
+      let message = done ? (totals[0] === totals[1] ? 'תיקו! לכל שחקן ' + totals[0] + ' נקודות.' : 'שחקן ' + (totals[0] > totals[1] ? '1' : '2') + ' ניצח.') : 'תור שחקן ' + (turn + 1) + ' · בחרו קלף מאחד הקצוות.';
       if (s.mode === 'free' && s.paint) message = 'בחרו צבע ולחצו על קלפים. גם קלפים שכבר נאספו שומרים על מקומם המקורי.';
       host.innerHTML = '<div class="tool-row pg-actions"><button type="button" class="btn secondary" data-coin="undo" ' + (!s.picks.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-coin="reset">משחק מחדש</button><button type="button" class="btn secondary" data-coin="random">שורה אקראית</button><button type="button" class="btn secondary" data-coin="example">הדוגמה המקורית</button></div>' +
         painter(s.mode, s.paint, s.ink, colors, names) +

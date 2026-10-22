@@ -17,20 +17,10 @@
     mode = next;
     controller.setMode(mode);
     document.querySelectorAll('[data-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
-    document.getElementById('stage-guidance').textContent = mode === 'plain'
-      ? 'נסו לפתור את הבעיה. כשתרצו, אפשר להיעזר ברמז שבצבעים.'
-      : 'התבוננו בצביעה והמשיכו להתנסות. מה אתם מבחינים?';
+    announcer.textContent = mode === 'plain' ? 'הצביעה מוסתרת.' : 'הצביעה מוצגת.';
     document.body.classList.toggle('hint-visible', mode === 'suggested');
   }
   document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
-  const notes = document.getElementById('notes-' + id);
-  const saved = document.querySelector('.save-note');
-  const key = 'pisga-coloring-notes-v1-' + id;
-  try { notes.value = localStorage.getItem(key) || ''; } catch (_) { saved.textContent = 'הכתיבה זמינה כל עוד הדף פתוח.'; }
-  notes.addEventListener('input', () => {
-    try { localStorage.setItem(key, notes.value); }
-    catch (_) { saved.textContent = 'הכתיבה זמינה כל עוד הדף פתוח.'; }
-  });
   const full = document.getElementById('full-screen');
   if (!document.documentElement.requestFullscreen) full.hidden = true;
   full.addEventListener('click', async () => {
