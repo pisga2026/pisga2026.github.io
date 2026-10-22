@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4bbded">
+  <title>סיכום שיעור 5 - מרכיבים DNA בעזרת גרפים · פסגה ז 2026</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="lesson.css">
+  <style>
+    .summary-page{max-width:960px!important}.summary-page>section{margin:32px 0}.summary-page h2{line-height:1.4}.summary-page li{margin:8px 0}.summary-page .answer{margin:18px 0}.summary-page .table-wrap{margin:18px 0}.summary-page table{width:100%}.summary-page caption{text-align:right;font-weight:800;margin-bottom:10px}.summary-page .route{display:block;direction:ltr;unicode-bidi:isolate;font:700 clamp(17px,3vw,24px)/1.9 Consolas,"Courier New",monospace;overflow-wrap:anywhere;text-align:left}.summary-page .sequence{font-weight:900;font-size:clamp(23px,4vw,34px)}.summary-page .summary-graph{margin:20px 0}.summary-page .summary-graph svg{display:block;width:100%;height:auto;background:#e0f8f8;border:2px solid var(--navy)}.summary-graph text{font-family:Consolas,"Courier New",monospace;direction:ltr;unicode-bidi:isolate;fill:#15274b;font-weight:800}.summary-graph figcaption{font-size:14px;margin-top:8px}.summary-page details{border:2px solid var(--navy);padding:12px 16px;background:#ffffff45}.summary-page summary{cursor:pointer}.summary-page details p:last-child{margin-bottom:0}.summary-page .lesson-tabs{margin-bottom:24px}.summary-page .table-wrap:focus-visible{outline:3px dashed var(--navy);outline-offset:3px}@media(max-width:600px){.summary-page .route{letter-spacing:0}.summary-page .summary-graph{margin-inline:0}.summary-page td,.summary-page th{font-size:15px}.summary-page details{padding:10px 12px}}@media print{.summary-page .summary-graph,.summary-page .table-wrap,.summary-page .answer{break-inside:avoid}.summary-page details{break-inside:avoid}.summary-page .lesson-tabs{display:none}.summary-page h2{break-after:avoid}}
+  </style>
+</head>
+<body class="pisga course-summary">
+  <header class="course-header"><a class="course-brand" href="../" aria-label="RON828 — עמוד הבית">RON828</a><a class="course-home" href="../">פסגה ז 2026</a></header>
+  <main class="lesson-main summary-page">
+    <a class="course-back" href="../#lesson-5">→ לתוכן העניינים · שיעור 5</a>
+    <header><p class="eyebrow">תוכנית פסגה · מביולוגיה לגרפים</p><h1>סיכום שיעור 5 - מרכיבים DNA בעזרת גרפים</h1></header>
+    <p class="intro">איך מחברים מקטעי DNA לרצף ארוך? בשיעור תרגמנו חפיפות בין מקטעים לגרף מכוון, והשתמשנו במסלול אוילר כדי לעבור בכל מקטע בדיוק פעם אחת.</p>
+    <nav class="lesson-tabs" aria-label="פעילויות שיעור 5"><a href="research.html">סיכום החקר</a><a href="builder.html">מעבדת הגרפים</a><a href="demo.html">הדגמת ההרכבה</a><a href="summary.html" aria-current="page">סיכום השיעור</a></nav>
+
+    <section aria-labelledby="reading-title">
+      <h2 id="reading-title">1. מה מקבלים, ומה רוצים לגלות?</h2>
+      <p>האותיות <bdi class="dna" dir="ltr">A, T, C, G</bdi> מסמנות את ארבעת הבסיסים ב־DNA. <strong>ריצוף</strong> קובע את סדר האותיות במקטע; <strong>קריאה</strong> היא רצף האותיות שהתקבל; <strong>הרכבה</strong> מחפשת כיצד קריאות מתחברות לרצף ארוך יותר.</p>
+      <p>בכרטיסים שלנו האותיות כבר ידועות, אבל סדר הכרטיסים אינו ידוע. מחברים בעזרת <strong>חפיפה</strong>: סוף המקטע הראשון זהה לתחילת הבא.</p>
+      <div class="answer"><span class="route">A<strong class="overlap">TG</strong> + <strong class="overlap">TG</strong>C → ATGC</span><p>החלק המשותף נכתב פעם אחת בלבד. כל הרצפים והחצים בסיכום נקראים משמאל לימין.</p></div>
+      <p><strong>המודל של השיעור:</strong> כל כרטיס מכיל 3 אותיות, החפיפה בין כרטיסים עוקבים היא של 2 אותיות, ומשתמשים בכל כרטיס בדיוק פעם אחת. מניחים שהקריאות מדויקות, שהכיוון ידוע ושאין מידע חסר. במציאות גם שגיאות, חזרות ומקטעים חסרים מקשים על ההרכבה.</p>
+    </section>
+
+    <section aria-labelledby="graph-title">
+      <h2 id="graph-title">2. מהמקטעים לגרף</h2>
+      <p>במעבדה הצענו ייצוגים ובדקנו איזה מידע הם שומרים. בהדגמה השתמשנו בייצוג הבא:</p>
+      <ul><li><strong>צומת הוא זוג אותיות</strong> שמופיע בתחילת מקטע או בסופו.</li><li><strong>כל כרטיס הוא קשת מכוונת</strong> מהזוג הראשון שלו לזוג האחרון. שם הקשת הוא המקטע כולו.</li><li>זוג זהה מופיע כצומת משותף אחד. שני כרטיסים זהים יוצרים <strong>שתי קשתות נפרדות</strong>, גם אם הן מחברות את אותם צמתים.</li></ul>
+      <div class="table-wrap" role="region" aria-label="המרת ששת הכרטיסים לקשתות" tabindex="0"><table><caption>ששת הכרטיסים מהאתגר</caption><thead><tr><th scope="col">מקטע</th><th scope="col">קשת מכוונת</th><th scope="col">מספר כרטיסים / קשתות</th></tr></thead><tbody>
+        <tr><td><bdi class="dna" dir="ltr">ATG</bdi></td><td><bdi class="dna" dir="ltr">AT → TG</bdi></td><td>2</td></tr>
+        <tr><td><bdi class="dna" dir="ltr">TGA</bdi></td><td><bdi class="dna" dir="ltr">TG → GA</bdi></td><td>1</td></tr>
+        <tr><td><bdi class="dna" dir="ltr">GAT</bdi></td><td><bdi class="dna" dir="ltr">GA → AT</bdi></td><td>1</td></tr>
+        <tr><td><bdi class="dna" dir="ltr">TGC</bdi></td><td><bdi class="dna" dir="ltr">TG → GC</bdi></td><td>1</td></tr>
+        <tr><td><bdi class="dna" dir="ltr">GCA</bdi></td><td><bdi class="dna" dir="ltr">GC → CA</bdi></td><td>1</td></tr>
+      </tbody></table></div>
+      <figure class="summary-graph"><svg viewBox="0 0 800 380" role="img" aria-labelledby="graph-caption graph-description">
+        <title id="graph-caption">גרף ששת המקטעים</title><desc id="graph-description">שתי קשתות ATG מצומת AT לצומת TG; קשת TGA מ־TG ל־GA; קשת GAT מ־GA ל־AT; קשת TGC מ־TG ל־GC; קשת GCA מ־GC ל־CA. חמשת הצמתים ושש הקשתות מופיעים גם בטבלה.</desc>
+        <defs><marker id="summary-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#15274b"/></marker></defs>
+        <g fill="none" stroke="#15274b" stroke-width="3" marker-end="url(#summary-arrow)"><path d="M179 88 Q270 10 367 88"/><path d="M181 122 Q275 174 367 122"/><path d="M431 105 H616"/><path d="M650 139 V266"/><path d="M379 132 L292 270"/><path d="M249 274 L165 136"/></g>
+        <g font-size="22" text-anchor="middle"><text x="275" y="49">ATG</text><text x="275" y="171">ATG</text><text x="522" y="89">TGC</text><text x="695" y="215">GCA</text><text x="372" y="224">TGA</text><text x="167" y="224">GAT</text></g>
+        <g fill="#ffd19a" stroke="#15274b" stroke-width="3"><circle cx="150" cy="105" r="33"/><circle cx="400" cy="105" r="33"/><circle cx="650" cy="105" r="33"/><circle cx="275" cy="300" r="33"/><circle cx="650" cy="300" r="33"/></g>
+        <g font-size="26" text-anchor="middle" dominant-baseline="central"><text x="150" y="105">AT</text><text x="400" y="105">TG</text><text x="650" y="105">GC</text><text x="275" y="300">GA</text><text x="650" y="300">CA</text></g>
+      </svg><figcaption>5 צמתים ו־6 קשתות. שתי קשתות <bdi class="dna" dir="ltr">ATG</bdi> שומרות את שני המופעים של אותו מקטע.</figcaption></figure>
+      <p><strong>למה זה עובד?</strong> שתי קשתות מתחברות למסלול בדיוק כשהזוג האחרון במקטע הראשון שווה לזוג הראשון במקטע הבא. החפיפה הפכה לצומת משותף.</p>
+      <p>אם מקטע מתחיל ומסתיים באותו זוג, נוצרת לולאה. למשל <bdi class="dna" dir="ltr">CCC: CC → CC</bdi>. גם לולאה היא קשת שיש לנצל, והיא מוסיפה כניסה אחת ויציאה אחת.</p>
+    </section>
+
+    <section aria-labelledby="euler-title">
+      <h2 id="euler-title">3. מה מחפשים בגרף?</h2>
+      <p>כדי להשתמש בכל כרטיס פעם אחת מחפשים <strong>מסלול אוילר מכוון</strong>: עוברים בכל קשת בדיוק פעם אחת ובכיוון החץ. מותר לבקר באותו צומת כמה פעמים.</p>
+      <div class="key-idea"><p><strong>קודם בודקים חיבור:</strong> כל הקשתות צריכות להשתייך לאותו חלק מחובר כשמתעלמים מהכיוונים. לאחר מכן בודקים כניסות ויציאות:</p><ul><li><strong>מסלול פתוח:</strong> בצומת ההתחלה יש יציאה אחת יותר מכניסה; בצומת הסיום יש כניסה אחת יותר מיציאה; בשאר הצמתים יש שוויון.</li><li><strong>מעגל אוילר:</strong> בכל צומת מספר הכניסות שווה למספר היציאות. אפשר להתחיל בצומת כלשהו שיש בו קשתות ולחזור אליו.</li></ul><p>אם תנאי החיבור או תנאי הדרגות אינם מתקיימים, אין מסלול אוילר לכל הקשתות.</p></div>
+      <p>הנימוק הוא התאמה בין כניסות ליציאות: בכל ביקור פנימי נכנסים ואז יוצאים. במסלול פתוח רק ביציאה הראשונה ובכניסה האחרונה אין בן זוג.</p>
+      <div class="table-wrap" role="region" aria-label="כניסות ויציאות בגרף ששת המקטעים" tabindex="0"><table><caption>בחירת ההתחלה והסיום בדוגמה</caption><thead><tr><th scope="col">צומת</th><th scope="col">כניסות</th><th scope="col">יציאות</th><th scope="col">מסקנה</th></tr></thead><tbody>
+        <tr><td><bdi class="dna" dir="ltr">AT</bdi></td><td>1</td><td>2</td><td>כאן מתחילים</td></tr><tr><td><bdi class="dna" dir="ltr">TG</bdi></td><td>2</td><td>2</td><td>מאוזן</td></tr><tr><td><bdi class="dna" dir="ltr">GA</bdi></td><td>1</td><td>1</td><td>מאוזן</td></tr><tr><td><bdi class="dna" dir="ltr">GC</bdi></td><td>1</td><td>1</td><td>מאוזן</td></tr><tr><td><bdi class="dna" dir="ltr">CA</bdi></td><td>1</td><td>0</td><td>כאן מסיימים</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section aria-labelledby="assembly-title">
+      <h2 id="assembly-title">4. מהגרף בחזרה לרצף</h2>
+      <p>מסלול הצמתים:</p><p class="route">AT → TG → GA → AT → TG → GC → CA</p>
+      <p>סדר הכרטיסים המתאים:</p><p class="route">ATG → TGA → GAT → ATG → TGC → GCA</p>
+      <p>כותבים את המקטע הראשון במלואו. כל מקטע נוסף מוסיף רק את האות האחרונה, כי שתי האותיות הראשונות שלו כבר נכתבו בחפיפה.</p>
+      <div class="answer"><p class="route">ATG + A + T + G + C + A</p><p class="route sequence">ATGATGCA</p><p>יש 6 מקטעים, ולכן אורך הרצף הוא <bdi class="dna" dir="ltr">3 + 5 = 8</bdi> אותיות. ששת החלונות באורך 3 ברצף הם בדיוק הכרטיסים שקיבלנו, כולל שני מופעי <bdi class="dna" dir="ltr">ATG</bdi>.</p></div>
+      <h3>למה לא לבחור מיד ב־<bdi class="dna" dir="ltr">TGC</bdi>?</h3>
+      <p>אחרי <bdi class="dna" dir="ltr">ATG</bdi> מגיעים ל־<bdi class="dna" dir="ltr">TG</bdi>. אם עוברים מיד ל־<bdi class="dna" dir="ltr">GC</bdi> ואז ל־<bdi class="dna" dir="ltr">CA</bdi>, נתקעים כשנשארו כרטיסים. כל חיבור שביצענו היה חוקי, אבל הבחירה אינה מאפשרת להשלים את המשימה.</p>
+      <p>לכן משלימים תחילה את הסיבוב <bdi class="dna" dir="ltr">TG → GA → AT → TG</bdi>, ורק אחר כך יוצאים לכיוון הסיום. זהו הרעיון של שילוב מעגלים במסלול: מנצלים את הקשתות בלי להשאיר חלק שאי אפשר לחזור אליו.</p>
+    </section>
+
+    <section aria-labelledby="scale-title">
+      <h2 id="scale-title">5. אותו רעיון עובד גם כשיש יותר מקטעים</h2>
+      <ul><li>בדוגמה הקטנה במעבדה, ארבעת המקטעים מסתדרים כך: <span class="route">TGA → GAT → ATG → TGC</span>ומתקבל <bdi class="dna" dir="ltr">TGATGC</bdi>.</li><li>באתגר הגדול יש <strong>36 קשתות ו־14 צמתים</strong>. מתחילים ב־<bdi class="dna" dir="ltr">AT</bdi>, מסיימים ב־<bdi class="dna" dir="ltr">TG</bdi>, ומקבלים רצף באורך <bdi class="dna" dir="ltr">36 + 2 = 38</bdi> אותיות. אפשר לעקוב אחר הבנייה ב<a href="demo.html?example=hard">הדגמת האתגר הגדול</a>.</li></ul>
+      <p>יש רק 4 אפשרויות לכל אות, ולכן יש לכל היותר <bdi class="dna" dir="ltr">4 × 4 = 16</bdi> צמתים שונים של זוגות אותיות. מקטע נוסף תמיד מוסיף קשת, אך אינו חייב להוסיף צומת: ייתכן ששני הזוגות שלו כבר קיימים.</p>
+      <div class="key-idea"><p><strong>הכללה:</strong> למקטעים באורך <bdi class="dna" dir="ltr">k</bdi> עם חפיפה של <bdi class="dna" dir="ltr">k − 1</bdi> אותיות, הצמתים הם רצפים באורך <bdi class="dna" dir="ltr">k − 1</bdi>. מסלול שמשתמש ב־<bdi class="dna" dir="ltr">m</bdi> מקטעים כותב רצף באורך <bdi class="dna" dir="ltr">m + k − 1</bdi>: המקטע הראשון תורם <bdi class="dna" dir="ltr">k</bdi> אותיות, וכל אחד מהבאים תורם אות אחת.</p></div>
+      <p><strong>קיום פתרון אינו מבטיח שהוא יחיד.</strong> בנתונים אחרים ייתכנו כמה רצפים שמסבירים את אותם מקטעים. הגרף מייצג את הנתונים ואת כללי המודל; הוא אינו מבטיח לבדו שחזור יחיד של DNA אמיתי.</p>
+    </section>
+
+    <section aria-labelledby="check-title"><h2 id="check-title">בדיקת הבנה</h2>
+      <details><summary>למה אסור למחוק את אחת משתי קשתות ATG?</summary><p>כל קשת מייצגת כרטיס נפרד. מחיקה תחליף את המשימה של שישה כרטיסים במשימה של חמישה, ותאבד מידע על מספר המופעים.</p></details>
+      <details><summary>האם חזרה לצומת שכבר ביקרנו בו פוסלת את המסלול?</summary><p>לא. במסלול אוילר אסור להשתמש באותה קשת פעמיים, אבל מותר לחזור לצומת. בדוגמה חוזרים גם ל־<bdi class="dna" dir="ltr">AT</bdi> וגם ל־<bdi class="dna" dir="ltr">TG</bdi>.</p></details>
+      <details><summary>האם חיבור חוקי של שני מקטעים מבטיח שאפשר להשלים את כולם?</summary><p>לא. התאמה מקומית בודקת רק את החפיפה הנוכחית. בחירה מוקדמת ב־<bdi class="dna" dir="ltr">TGC</bdi> בדוגמה מובילה לסיום לפני ניצול כל הקשתות.</p></details>
+      <details><summary>איך בודקים שהרצף הסופי באמת מתאים לנתונים?</summary><p>קוראים את כל החלונות באורך 3, בהזזה של אות אחת בכל פעם, ומשווים לכרטיסים. צריך לקבל בדיוק את אותם מקטעים ובאותו מספר מופעים לכל מקטע, גם כשיש כפילויות.</p></details>
+    </section>
+    <nav class="course-nav" aria-label="ניווט בין הפעילויות"><a href="demo.html">→ בחזרה להדגמה</a><a href="../#lesson-5">לתוכן העניינים ←</a></nav>
+    <footer>תוכנית פסגה | שיעור 5 | סיכום לתלמידים · מבוסס על החקר, מעבדת הגרפים והדגמות השיעור.</footer>
+  </main>
+</body>
+</html>
