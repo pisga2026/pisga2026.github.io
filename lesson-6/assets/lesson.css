@@ -1,0 +1,46 @@
+/* Lesson 6: a quieter canvas, keeping the course's blue and dark outlines. */
+body.coloring-lesson{background:#eaf7fb;background-image:radial-gradient(#15274b13 .8px,transparent .8px);background-size:18px 18px;padding-bottom:28px}
+.coloring-lesson .course-header{border-bottom:2px solid #15274b24;padding:22px 0 18px}
+.coloring-lesson .lab-heading{margin:28px 0 24px}
+.coloring-lesson h1{font-size:clamp(25px,3.5vw,37px);letter-spacing:-.7px}
+.coloring-lesson .eyebrow{letter-spacing:.3px;margin-bottom:8px}
+.coloring-lesson .lab-subtitle{font-weight:500}
+.coloring-lesson .lesson-count{background:#fff;border:1px solid #15274b26;border-radius:999px;padding:4px 12px}
+.coloring-lesson .problem-nav{gap:8px;padding:4px 3px 12px;margin-bottom:24px}
+.coloring-lesson .problem-button{text-decoration:none;background:#ffffffb3;border:1.5px solid #15274b35;border-radius:10px;box-shadow:none;font-size:14px;min-height:47px}
+.coloring-lesson .problem-button:hover{background:#d4f0fa;border-color:#15274b}
+.coloring-lesson .problem-button[aria-current=page]{background:#15274b;color:white;box-shadow:0 4px 10px #15274b20;border-color:#15274b}
+.coloring-lesson .problem-page{background:#ffffffd9;border:1px solid #15274b24;border-radius:20px;padding:26px;box-shadow:0 10px 30px #15274b08}
+.coloring-lesson .problem-heading{gap:15px;margin-bottom:18px;align-items:center}
+.coloring-lesson .problem-badge{border:0;border-radius:13px;background:#d5effb;box-shadow:none;color:#17436d;width:52px;height:52px}
+.coloring-lesson .problem-heading h2{font-size:clamp(22px,2.7vw,29px)}
+.coloring-lesson .problem-kicker{font-weight:700;margin-bottom:5px}
+.coloring-lesson .problem-question{background:#f1f8fc;border:0;border-inline-start:4px solid #62bfe9;border-radius:10px;padding:16px 20px;font-weight:500;line-height:1.8;margin-bottom:22px}
+.coloring-lesson .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:10px;max-width:680px}
+.coloring-lesson .stage-button{background:#f5f8fb;border:1.5px solid #15274b30;border-radius:11px;box-shadow:none;font-size:16px;min-height:56px;font-weight:700}
+.coloring-lesson .stage-button[aria-pressed=true]{background:#15274b;color:white;border-color:#15274b;box-shadow:0 3px 8px #15274b15}
+.coloring-lesson .stage-button[data-mode=suggested][aria-pressed=true]{background:#fff0d5;color:#684513;border-color:#d8a24d}
+.stage-icon{font-size:25px;line-height:1}.hint-icon{color:#d89e42}
+.coloring-lesson .stage-guidance{font-weight:500;margin:10px 2px 18px;min-height:25px}
+.coloring-lesson .widget-panel{background:#f7fbfd;border:1px solid #15274b2c;border-radius:14px;padding:22px;box-shadow:none}
+.coloring-lesson .btn,.coloring-lesson .widget-panel button:not(.tl-cell):not(.pg-ant-cell):not(.pg-card):not(.pg-door):not(.swatch){border-width:2px;border-radius:8px;box-shadow:0 2px 0 #15274b25;text-decoration:none}
+.coloring-lesson .btn.secondary,.coloring-lesson button.secondary{background:#e7f0f6!important;box-shadow:0 2px 0 #15274b20!important}
+.coloring-lesson .tl-board-shell{border-radius:8px;box-shadow:0 5px 14px #15274b16}
+.coloring-lesson .stat,.coloring-lesson .tl-color-stat{border:1px solid #15274b2b;border-radius:7px;background:#fff}
+.coloring-lesson .live-status,.coloring-lesson .pg-status{border:1px solid #99b9c7;background:#eaf4f7;border-radius:9px;font-weight:500}
+.coloring-lesson .pg-player{border-radius:10px;border-width:1.5px;background:#edf3f7}
+.coloring-lesson .pg-player.pg-current{box-shadow:0 3px 0 #15274b20;background:#d7f3e3}
+.coloring-lesson .pg-card{border-radius:9px;border-width:2px;box-shadow:0 3px 0 #15274b30}
+.coloring-lesson .pg-color-stats{background:white;border:1px solid #15274b30;border-radius:9px}
+.coloring-lesson .reflection{background:#f7fafb;border:1px solid #15274b22;border-radius:11px;margin-top:22px;padding:16px 18px}
+.coloring-lesson .reflection[open] summary{margin-bottom:14px}
+.coloring-lesson .reflection textarea{background:white;border:1px solid #9bb4c6;border-radius:8px}
+.coloring-lesson .reflection label{font-weight:500}
+.coloring-lesson .page-footer{border-top:0;margin:22px 0;padding-top:0}
+.footer-home{font-size:13px;color:#345773}.nav-placeholder{min-width:150px}
+.coloring-lesson .site-footer{padding-top:16px;border-top:1px solid #15274b20}
+.coloring-lesson dialog{background:#f5fbfe;border-radius:16px;border-width:2px;box-shadow:0 20px 80px #15274b33}
+.coloring-lesson .map-paper-wrap{border-radius:9px;overflow:hidden}
+@media(max-width:720px){body.coloring-lesson{padding-inline:13px}.coloring-lesson .lab-heading{margin:21px 0;gap:10px}.coloring-lesson .problem-page{padding:17px;border-radius:15px}.coloring-lesson .problem-nav{margin-bottom:16px}.coloring-lesson .widget-panel{padding:13px}.coloring-lesson .problem-question{padding:13px 15px}.coloring-lesson .stage-button{font-size:14px;gap:7px}.coloring-lesson .page-footer{flex-wrap:wrap}.footer-home{font-size:12px}.nav-placeholder{min-width:50px}}
+@media(max-width:420px){.coloring-lesson .lab-heading{align-items:flex-start}.coloring-lesson .heading-actions{gap:8px}.coloring-lesson .heading-actions .btn{font-size:12px;padding:6px 9px}.coloring-lesson .problem-page{padding:13px}.coloring-lesson .stage-button{flex-direction:row;min-height:60px;font-size:13px}.stage-icon{font-size:21px}.coloring-lesson .stage-guidance{font-size:12px}.coloring-lesson .page-footer .btn{font-size:11px;padding:8px}.coloring-lesson .footer-home{font-size:11px}.coloring-lesson .problem-badge{width:43px;height:43px}.coloring-lesson .lab-heading h1{font-size:24px}}
+@media print{body.coloring-lesson{background:white}.coloring-lesson .problem-page{border:0;box-shadow:none;padding:0}.coloring-lesson .widget-panel{background:white}.coloring-lesson .reflection{break-inside:avoid}}
