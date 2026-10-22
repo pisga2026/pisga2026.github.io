@@ -93,10 +93,18 @@
       let html='';
       for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++){
         const removed=hole(r,c),color=cellColor(r,c),piece=owner(r,c),first=piece&&isSame(piece.cells[0],[r,c]);
-        const label=`שורה ${r+1}, עמודה ${c+1}${removed?', משבצת חסרה':color<0?', ללא צבע':', '+names[color]}${piece?', חלק '+piece.uid:''}`;
+        const label=`שורה ${r+1}, עמודה ${c+1}${removed?', משבצת חסרה'+(color<0?'':', צבע מקורי: '+names[color]):color<0?', ללא צבע':', '+names[color]}${piece?', חלק '+piece.uid:''}`;
         html+=`<button type="button" class="tl-cell${removed?' tl-hole-cell':''}${piece?' tl-occupied':''}" data-r="${r}" data-c="${c}" style="background:${removed?'#7997a3':color<0?'#f4fbf8':colors[color]}" aria-label="${label}" ${removed?'disabled':''}>${removed?'<span aria-hidden="true">×</span>':first?`<span class="tl-piece-num" aria-hidden="true">${piece.uid}</span>`:''}</button>`;
       }
       ui.grid.innerHTML=html;
+      if(state.mode==='suggested')ui.grid.querySelectorAll('.tl-hole-cell').forEach(cell=>{
+        const originalColor=cellColor(Number(cell.dataset.r),Number(cell.dataset.c));
+        // Keep removed squares disabled and marked while revealing their original color.
+        // Inline priority overrides the gray hatch used for holes in the base problem.
+        cell.style.setProperty('background',colors[originalColor],'important');
+        cell.style.outline='2px dashed #15274b';
+        cell.style.outlineOffset='-5px';
+      });
       ui.grid.querySelectorAll('.tl-cell:not(:disabled)').forEach(b=>{
         const r=Number(b.dataset.r),c=Number(b.dataset.c);
         b.onclick=()=>{const hadFocus=document.activeElement===b;if(state.mode==='free'&&state.action==='paint')paintCell(r,c);else place(r,c);if(hadFocus)ui.grid.querySelector(`[data-r="${r}"][data-c="${c}"]`)?.focus({preventScroll:true});};
