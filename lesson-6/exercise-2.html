@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#4bbded">
-  <meta name="description" content="תרגיל 2: משחק הקצוות — שיעור 6, בעיות צביעה. התנסות אינטראקטיבית ורמז בצבעים.">
+  <meta name="description" content="תרגיל 7: משחק הקצוות — שיעור 6, בעיות צביעה. התנסות אינטראקטיבית ורמז בצבעים.">
   <title>משחק הקצוות · שיעור 6 – בעיות צביעה · פסגה ז 2026</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261022-course">
-  <script src="assets/games.js?v=20261022-course" defer></script>
-  <script src="assets/app.js?v=20261022-course" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261023-variants">
+  <script src="assets/games.js?v=20261023-variants" defer></script>
+  <script src="assets/app.js?v=20261023-variants" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="coin">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -22,20 +22,22 @@
   <main id="main">
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
-      <div><p class="eyebrow">שיעור 6 – בעיות צביעה</p><h1 id="problem-title">תרגיל 2: משחק הקצוות</h1></div>
+      <div><p class="eyebrow">שיעור 6 – בעיות צביעה</p><h1 id="problem-title">תרגיל 7: משחק הקצוות</h1></div>
       <button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p>שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. כל שחקן צובר את המספרים שלקח. מי שסכומו גדול יותר מנצח. האם השחקן הראשון יכול להבטיח שלא יפסיד, בכל שורה עם מספר זוגי של קלפים?</p></div>
+      <div class="problem-question"><p><strong>א · מתחילים:</strong> שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. כל שחקן צובר את המספרים שלקח, ומי שסכומו גדול יותר מנצח. התחילו בארבעה קלפים: מה כדאי לשחקן הראשון לקחת? שחקו בשני הצדדים ובדקו תגובות שונות.</p><p><strong>ב · מרחיבים ומכלילים:</strong> עברו לשמונה קלפים ונסו גם סידורים חדשים. האם לשחקן הראשון יש דרך להבטיח לפחות תיקו בכל שורה עם מספר זוגי של קלפים, בלי קשר לתגובות היריב?</p><p class="investigation-prompt">נסחו אסטרטגיה והסבירו מדוע היא פועלת מול כל תגובה של היריב.</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
-        <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-coin">בעיית בסיס</button>
+        <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-coin">ללא צביעה</button>
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-coin">רמז – צביעה של הבעיה</button>
       </div>
       <div id="widget-coin" class="widget-panel" aria-label="התנסות: משחק הקצוות"></div>
+      <div class="reasoning-notes"><details><summary>שאלה מנחה</summary><p>צבעו את הקלפים לסירוגין לפי מיקומם המקורי, וסכמו כל צבע. האם השחקן הראשון יכול לקחת את כל הקלפים בצבע שסכומו גדול יותר?</p></details><details><summary>הסבר — פותחים אחרי שמנסים</summary><p>הראשון בוחר מראש את קבוצת המיקומים המקוריים — זוגיים או אי־זוגיים — שסכומה גדול יותר, או אחת מהן אם הסכומים שווים. בתחילת כל תור שלו נשארת שורה באורך זוגי שקצותיה בצבעים שונים, ולכן הוא יכול לקחת את הצבע שבחר. אחר כך שני הקצוות הם בצבע השני: כל תגובה של היריב מסירה קלף מהצבע השני ומחזירה את המצב הקודם. כך הראשון מקבל את כל הקלפים בצבע שבחר, שסכומם לפחות מחצית הסכום הכולל. לכן הוא מבטיח לפחות תיקו. אין משנים את צבעי הקלפים בעקבות לקיחה.</p><p><strong>ממשיכים לחשוב:</strong> האם תמיד כדאי לקחת את הקלף הגדול יותר מבין שני הקצוות? בדקו למשל את השורה <bdi>8, 15, 3, 7</bdi>. ההבטחה היא לפחות תיקו; לא בהכרח ניצחון בכל סידור.</p></details></div>
     </section>
+    <nav class="exercise-nav" aria-label="רצף התרגילים"><a href="exercise-6.html">→ 6. אריחים באורך שלוש</a><a href="../#lesson-6">לתוכן העניינים ←</a></nav>
     <footer class="course-nav"><a href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a><button id="about-button" class="secondary" type="button">מקורות</button></footer>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">David Ginat — Problem Solving of Mathematical Games</a></li><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Harvey Mudd College — דומינו על לוח שחמט</a></li><li><a href="https://www.math.toronto.edu/rafi/Teaching/24W-MAT199/Problem-Set-V.pdf" target="_blank" rel="noopener">University of Toronto — בעיות צביעה וטטרומינו</a></li><li><a href="https://nrich.maths.org/problems/trominoes" target="_blank" rel="noopener">NRICH — אריחי טרומינו</a></li><li><a href="https://www.amsi.org.au/teacher_modules/pdfs/Maths_delivers/Induction5.pdf" target="_blank" rel="noopener">AMSI — צביעת מפות</a></li></ul></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">David Ginat — Problem Solving of Mathematical Games</a></li><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Harvey Mudd College — דומינו על לוח שחמט</a></li><li><a href="https://www.math.toronto.edu/rafi/Teaching/24W-MAT199/Problem-Set-V.pdf" target="_blank" rel="noopener">University of Toronto — בעיות צביעה וטטרומינו</a></li><li><a href="https://nrich.maths.org/problems/trominoes" target="_blank" rel="noopener">NRICH — אריחי טרומינו</a></li></ul></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>

@@ -3,7 +3,8 @@
   window.Widgets = window.Widgets || {};
   window.Widgets.knight = function (host, options) {
     const size = 5, total = size * size;
-    let mode = options.mode, route = [], closed = false;
+    let mode = options.mode, route = [], closed = false, goal = 'open';
+    const example = [0,7,4,13,24,17,20,11,18,21,10,1,8,19,22,15,6,3,14,23,16,5,12,9,2];
     host.classList.add('knight-widget');
     host.innerHTML = `
       <div class="knight-board" role="group" aria-label="לוח 5 על 5 — מסלול הפרש" dir="ltr">
@@ -11,6 +12,8 @@
         <svg class="knight-route" viewBox="0 0 500 500" aria-hidden="true"><polyline class="knight-route-edge"/><polyline class="knight-route-line"/></svg>
       </div>
       <div class="knight-controls">
+        <label class="variant-label">המשימה <select data-knight-goal aria-label="משימת הפרש"><option value="open">א · מסלול פתוח</option><option value="closed">ב · מוסיפים חזרה להתחלה</option></select></label>
+        <div class="knight-actions"><button type="button" class="btn secondary" data-action="start">עזרה: התחלת מסלול</button><button type="button" class="btn secondary" data-action="example">הצגת מסלול פתוח לדוגמה</button></div>
         <div class="knight-actions"><button type="button" class="btn secondary" data-action="undo">ביטול צעד</button><button type="button" class="btn secondary" data-action="reset">איפוס</button></div>
         <p class="knight-count">משבצות שבוקרו: <bdi><b data-count>0</b> / 25</bdi></p>
         <p class="knight-status live-status" role="status" aria-live="polite"></p>
@@ -26,7 +29,7 @@
       return (dr === 1 && dc === 2) || (dr === 2 && dc === 1);
     }
     function canVisit(cell) {
-      if (closed) return false;
+      if (closed || (goal === 'open' && route.length === total)) return false;
       if (!route.length) return true;
       if (!isJump(route.at(-1), cell)) return false;
       return !route.includes(cell) || (route.length === total && cell === route[0]);
@@ -56,10 +59,10 @@
       host.querySelectorAll('polyline').forEach(line => line.setAttribute('points', points));
       count.textContent = String(route.length);
       undo.disabled = resetButton.disabled = route.length === 0;
-      status.textContent = message || (closed ? 'המסלול הושלם.' : !route.length ? 'בחרו משבצת התחלה.' : route.length === total ? 'נותרה החזרה למשבצת ההתחלה.' : 'בחרו את המשבצת הבאה.');
+      status.textContent = message || (closed ? 'המסלול הושלם.' : !route.length ? 'בחרו משבצת התחלה.' : route.length === total ? goal === 'open' ? 'הצלחתם! ביקרתם ב־25 משבצות ב־24 קפיצות. כעת אפשר לעבור למשימה ב.' : 'ביקרתם בכל 25 המשבצות. האם אפשר להוסיף קפיצה חוקית להתחלה? האם מסלול אחר יעזור?' : 'בחרו את המשבצת הבאה.');
     }
     function visit(cell) {
-      if (closed) return;
+      if (closed || (goal === 'open' && route.length === total)) return;
       if (route.length && cell === route[0] && route.length < total) {
         render('יש לבקר בכל המשבצות לפני החזרה להתחלה.');
       } else if (route.includes(cell) && cell !== route[0]) {
@@ -89,11 +92,14 @@
     });
     function reset() { route = []; closed = false; render(); }
     resetButton.addEventListener('click', reset);
+    host.querySelector('[data-knight-goal]').addEventListener('change', event => { goal = event.target.value; closed = false; render(); });
+    host.querySelector('[data-action="start"]').addEventListener('click', () => { route = example.slice(0, 6); closed = false; render('הנה שש המשבצות הראשונות. המשיכו את המסלול; אפשר גם לפתוח דוגמה מלאה.'); });
+    host.querySelector('[data-action="example"]').addEventListener('click', () => { route = example.slice(); closed = false; render(); });
     render();
     return {
       setMode(next) { mode = next; render(); },
       reset,
-      getState() { return {mode, route: [...route], closed}; }
+      getState() { return {mode, route: [...route], closed, goal}; }
     };
   };
 })();
