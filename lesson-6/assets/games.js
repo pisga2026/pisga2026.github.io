@@ -49,7 +49,7 @@
       if (s.mode === 'free' && s.paint) message = 'בחרו צבע ולחצו על קלפים. גם קלפים שכבר נאספו שומרים על מקומם המקורי.';
       host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">מספר קלפים <select data-coin-size aria-label="מספר הקלפים"><option value="4" ' + (s.values.length === 4 ? 'selected' : '') + '>4</option><option value="8" ' + (s.values.length === 8 ? 'selected' : '') + '>8</option></select></label><button type="button" class="btn secondary" data-coin="undo" ' + (!s.picks.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-coin="reset">משחק מחדש</button><button type="button" class="btn secondary" data-coin="random">שורה אקראית</button><button type="button" class="btn secondary" data-coin="example">שורת דוגמה</button></div>' +
         painter(s.mode, s.paint, s.ink, colors, names) +
-        '<div class="pg-scoreboard">' + [0, 1].map(p => '<div class="pg-player ' + (!done && turn === p ? 'pg-current' : '') + '"><span>שחקן ' + (p + 1) + '</span><strong>' + totals[p] + '</strong><div class="pg-collected" dir="ltr">' + (s.picks.filter((_, k) => k % 2 === p).map(i => s.values[i]).join(' + ') || '—') + '</div></div>').join('') + '</div>' +
+        '<div class="pg-scoreboard">' + [0, 1].map(p => '<div class="pg-player ' + (!done && turn === p ? 'pg-current' : '') + '"><span>שחקן ' + (p + 1) + '</span><strong>' + totals[p] + '</strong><div class="pg-collected" dir="ltr">' + (s.picks.filter((_, k) => k % 2 === p).map(i => s.values[i]).join(' + ') || '-') + '</div></div>').join('') + '</div>' +
         '<div class="pg-card-row" style="grid-template-columns:repeat(' + s.values.length + ',minmax(0,1fr));max-width:' + (s.values.length === 4 ? '460' : '780') + 'px" dir="ltr" role="group" aria-label="שורת הקלפים, משמאל לימין">' + s.values.map((v, i) => {
           const paintEnabled = s.mode === 'free' && s.paint;
           const available = owned[i] < 0 && (i === first || i === last);
@@ -114,7 +114,7 @@
           const label = 'דלת ' + d + (s.reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
           return '<button type="button" class="pg-door ' + (s.reveal && !result.caught ? candidate ? 'pg-possible' : 'pg-impossible' : '') + (result.caught && d === lastDoor ? ' pg-caught' : '') + '" data-door="' + d + '" style="--door-color:' + (c < 0 ? neutral : colors[c]) + '" aria-label="' + label + '" ' + (result.caught && !paintEnabled ? 'disabled' : '') + '><span class="pg-door-number">' + d + '</span><span class="pg-door-inset">' + (result.caught && d === lastDoor ? foxSVG : '<span class="pg-door-handle"></span>') + '</span><span class="pg-door-candidate">' + (s.reveal && !result.caught && candidate ? 'אולי כאן' : '') + '</span></button>';
         }).join('') + '</div>' +
-        '<div class="pg-fox-history"><strong>הבדיקות שלכם:</strong><span dir="ltr">' + (s.history.join(' → ') || '—') + '</span></div>' +
+        '<div class="pg-fox-history"><strong>הבדיקות שלכם:</strong><span dir="ltr">' + (s.history.join(' → ') || '-') + '</span></div>' +
         (s.reveal && !result.caught ? '<div class="pg-possibility-note">לפני הבדיקה הבאה השועל יכול להיות בדלתות <b dir="ltr">' + result.possible.join(', ') + '</b>.</div>' : '') +
         '<p class="live-status pg-status" role="status" aria-live="polite">' + message + '</p>' +
         '<p class="widget-note pg-note"><strong>שועל חכם:</strong> כל עוד קיים מסלול חוקי שמתחמק מכל הבדיקות שלכם, השועל מתחמק. בכל לילה הוא חייב לעבור לדלת סמוכה.</p>';
@@ -173,7 +173,7 @@
           if (s.phase === 'result') label += ', ' + occupancy[i] + ' נמלים';
           else if (s.targets[i] !== null) label += ', כיוון ' + ({'↑':'למעלה','↓':'למטה','←':'שמאלה','→':'ימינה'}[arrow(i, s.targets[i])]);
           return '<button type="button" class="pg-ant-cell ' + (selected ? 'pg-selected ' : '') + (targetable ? 'pg-targetable ' : '') + (s.phase === 'result' && occupancy[i] > 1 ? 'pg-collision ' : '') + '" style="--cell-color:' + (c < 0 ? neutral : colors[c]) + '" data-ant-cell="' + i + '" aria-label="' + label + '" ' + (s.phase !== 'plan' && !paintEnabled ? 'disabled' : '') + '>' +
-            (s.phase === 'plan' ? '<span class="pg-ant-icon">' + antSVG + '</span><span class="pg-ant-arrow">' + arrow(i, s.targets[i]) + '</span>' : '<span class="pg-occupancy ' + (occupancy[i] > 1 ? 'pg-many' : '') + '">' + (s.phase === 'result' ? occupancy[i] === 0 ? '—' : occupancy[i] > 1 ? occupancy[i] : '' : '') + '</span>') + '</button>';
+            (s.phase === 'plan' ? '<span class="pg-ant-icon">' + antSVG + '</span><span class="pg-ant-arrow">' + arrow(i, s.targets[i]) + '</span>' : '<span class="pg-occupancy ' + (occupancy[i] > 1 ? 'pg-many' : '') + '">' + (s.phase === 'result' ? occupancy[i] === 0 ? '-' : occupancy[i] > 1 ? occupancy[i] : '' : '') + '</span>') + '</button>';
         }).join('') + '</div>' + (s.phase !== 'plan' ? '<div class="pg-ant-layer" aria-hidden="true">' + cells.map(i => {
           const dest = s.phase === 'moving' ? i : s.targets[i];
           return '<span class="pg-moving-ant" data-moving-ant="' + i + '" style="left:' + ((dest % s.n + .5) * 100 / s.n) + '%;top:' + ((Math.floor(dest / s.n) + .5) * 100 / s.n) + '%;--n:' + s.n + '">' + antSVG + '</span>';

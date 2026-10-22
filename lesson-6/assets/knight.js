@@ -7,7 +7,7 @@
     const example = [0,7,4,13,24,17,20,11,18,21,10,1,8,19,22,15,6,3,14,23,16,5,12,9,2];
     host.classList.add('knight-widget');
     host.innerHTML = `
-      <div class="knight-board" role="group" aria-label="לוח 5 על 5 — מסלול הפרש" dir="ltr">
+      <div class="knight-board" role="group" aria-label="לוח 5 על 5 - מסלול הפרש" dir="ltr">
         ${Array.from({length: total}, (_, cell) => `<button type="button" class="knight-cell" data-cell="${cell}"><span class="knight-step" aria-hidden="true"></span><span class="knight-piece" aria-hidden="true">♞</span></button>`).join('')}
         <svg class="knight-route" viewBox="0 0 500 500" aria-hidden="true"><polyline class="knight-route-edge"/><polyline class="knight-route-line"/></svg>
       </div>

@@ -129,13 +129,14 @@
     }
     function clearPreview(){ui.grid.querySelectorAll('.tl-preview,.tl-invalid').forEach(el=>el.classList.remove('tl-preview','tl-invalid'));}
     function preview(r,c){clearPreview();if(state.action==='paint'&&state.mode==='free'||owner(r,c))return;const cells=candidate(r,c),valid=allowed(cells);cells.forEach(([rr,cc])=>{const el=ui.grid.querySelector(`[data-r="${rr}"][data-c="${cc}"]`);if(el&&!hole(rr,cc))el.classList.add(valid?'tl-preview':'tl-invalid');});}
-    function miniShape(key){
-      const shape=rotate(cfg.shapes[key],key===state.selected?state.turns:0), rows=1+Math.max(...shape.map(p=>p[0])),cols=1+Math.max(...shape.map(p=>p[1]));
+    function miniShape(key,turns=key===state.selected?state.turns:0){
+      const shape=rotate(cfg.shapes[key],turns), rows=1+Math.max(...shape.map(p=>p[0])),cols=1+Math.max(...shape.map(p=>p[1]));
       return `<span class="tl-mini" style="grid-template-columns:repeat(${cols},13px);grid-template-rows:repeat(${rows},13px)" aria-hidden="true">${shape.map(([r,c],i)=>`<i class="${i===0?'tl-anchor':''}" style="grid-row:${r+1};grid-column:${c+1}"></i>`).join('')}</span>`;
     }
     function renderTools(){
-      ui.tools.innerHTML=`<label class="tl-hole-label">חלק בתרגיל <select class="tl-variant${type==='tromino'?' tl-hole':''}" aria-label="בחירת חלק בתרגיל">${variants[type].map(v=>`<option value="${v.key}" ${v.key===state.variant?'selected':''}>${v.label}</option>`).join('')}</select></label><button type="button" class="btn tl-rotate">סיבוב ↻</button><button type="button" class="btn secondary tl-undo" ${state.history.length?'':'disabled'}>צעד אחורה</button><button type="button" class="btn secondary tl-reset">ניקוי הלוח</button>${state.variant===variants[type][0].key?'<details class="tl-example"><summary>אחרי הניסיון: דוגמת כיסוי לחלק א׳</summary><p class="widget-note">הדוגמה תחליף את החלקים שעל הלוח. אפשר לחזור לניסיון שלכם בצעד אחורה.</p><button type="button" class="btn secondary tl-show-example">הצגת דוגמה</button></details>':''}`;
-      ui.tools.querySelector('.tl-rotate').onclick=()=>{state.turns=(state.turns+1)%4;renderPicker();clearPreview();status('החלק סובב. לחצו על משבצת להצבה בכיוון החדש.');};
+      ui.tools.innerHTML=`<label class="tl-hole-label">חלק בתרגיל <select class="tl-variant${type==='tromino'?' tl-hole':''}" aria-label="בחירת חלק בתרגיל">${variants[type].map(v=>`<option value="${v.key}" ${v.key===state.variant?'selected':''}>${v.label}</option>`).join('')}</select></label>${type==='domino'?'':'<button type="button" class="btn tl-rotate">סיבוב ↻</button>'}<button type="button" class="btn secondary tl-undo" ${state.history.length?'':'disabled'}>צעד אחורה</button><button type="button" class="btn secondary tl-reset">ניקוי הלוח</button>${state.variant===variants[type][0].key?'<details class="tl-example"><summary>אחרי הניסיון: דוגמת כיסוי לחלק א׳</summary><p class="widget-note">הדוגמה תחליף את החלקים שעל הלוח. אפשר לחזור לניסיון שלכם בצעד אחורה.</p><button type="button" class="btn secondary tl-show-example">הצגת דוגמה</button></details>':''}`;
+      const rotateButton=ui.tools.querySelector('.tl-rotate');
+      if(rotateButton)rotateButton.onclick=()=>{state.turns=(state.turns+1)%4;renderPicker();clearPreview();status('החלק סובב. לחצו על משבצת להצבה בכיוון החדש.');};
       ui.tools.querySelector('.tl-undo').onclick=()=>{const last=state.history.pop();if(!last)return;Object.assign(state,last);render();status('הצעד האחרון בוטל.');};
       ui.tools.querySelector('.tl-reset').onclick=reset;
       ui.tools.querySelector('.tl-variant').onchange=e=>setVariant(e.target.value);
@@ -151,10 +152,19 @@
       ui.paint.querySelector('.tl-clear').onclick=()=>{state.paint.fill(-1);renderBoard();renderCounts();status('הצביעה החופשית נוקתה. החלקים נשארו במקומם.');};
     }
     function renderPicker(){
-      ui.picker.innerHTML=Object.keys(cfg.shapes).map(key=>{const used=cfg.unique&&state.pieces.some(p=>p.key===key);return `<button type="button" draggable="${!used}" class="tl-piece btn ${key===state.selected?'tl-selected':''}" data-shape="${key}" ${used?'disabled':''} aria-pressed="${key===state.selected}" aria-label="${cfg.names[key]}${used?' — כבר על הלוח':''}">${miniShape(key)}<span>${cfg.short[key]}${used?' ✓':''}</span></button>`;}).join('');
+      if(type==='domino'){
+        ui.picker.innerHTML=[{turns:0,label:'אופקי'},{turns:1,label:'אנכי'}].map(({turns,label})=>`<button type="button" draggable="true" class="tl-piece btn ${state.turns%2===turns?'tl-selected':''}" data-shape="D" data-orientation="${turns}" aria-pressed="${state.turns%2===turns}" aria-label="דומינו ${label}">${miniShape('D',turns)}<span>${label}</span></button>`).join('');
+      }else{
+      ui.picker.innerHTML=Object.keys(cfg.shapes).map(key=>{const used=cfg.unique&&state.pieces.some(p=>p.key===key);return `<button type="button" draggable="${!used}" class="tl-piece btn ${key===state.selected?'tl-selected':''}" data-shape="${key}" ${used?'disabled':''} aria-pressed="${key===state.selected}" aria-label="${cfg.names[key]}${used?' - כבר על הלוח':''}">${miniShape(key)}<span>${cfg.short[key]}${used?' ✓':''}</span></button>`;}).join('');
+      }
+      function selectPiece(button){
+        if(type==='domino')state.turns=Number(button.dataset.orientation);
+        else if(state.selected!==button.dataset.shape)state.turns=0;
+        state.selected=button.dataset.shape;if(state.mode==='free')state.action='play';
+      }
       ui.picker.querySelectorAll('[data-shape]').forEach(b=>{
-        b.onclick=()=>{if(state.selected!==b.dataset.shape)state.turns=0;state.selected=b.dataset.shape;if(state.mode==='free')state.action='play';renderPicker();renderPaint();status('החלק נבחר. לחצו בלוח על המקום שאליו תגיע המשבצת המסומנת בנקודה לבנה.');};
-        b.ondragstart=e=>{if(state.selected!==b.dataset.shape)state.turns=0;state.selected=b.dataset.shape;if(state.mode==='free')state.action='play';e.dataTransfer.setData('text/plain',state.selected);e.dataTransfer.effectAllowed='copy';renderPaint();};
+        b.onclick=()=>{selectPiece(b);renderPicker();renderPaint();clearPreview();status('החלק נבחר. לחצו בלוח על המקום שאליו תגיע המשבצת המסומנת בנקודה לבנה.');};
+        b.ondragstart=e=>{selectPiece(b);e.dataTransfer.setData('text/plain',state.selected);e.dataTransfer.effectAllowed='copy';renderPaint();};
       });
       ui.instruction.textContent='בחרו חלק ולחצו בלוח במקום של המשבצת המסומנת בנקודה לבנה. אפשר גם לגרור מהמגש. לחיצה על חלק שהונח מחזירה אותו.';
     }

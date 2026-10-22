@@ -4,40 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#4bbded">
-  <meta name="description" content="תרגיל 4: חמשת חלקי הטטריס — שיעור 6, בעיות צביעה. התנסות אינטראקטיבית ורמז בצבעים.">
-  <title>חמשת חלקי הטטריס · שיעור 6 – בעיות צביעה · פסגה ז 2026</title>
+  <meta name="description" content="תרגיל 4: חמשת חלקי הטטריס - שיעור 6, בעיות צביעה. התנסות אינטראקטיבית ורמז בצבעים.">
+  <title>חמשת חלקי הטטריס · שיעור 6 - בעיות צביעה · פסגה ז 2026</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261023-variants">
-  <script src="assets/tiling.js?v=20261023-variants" defer></script>
-  <script src="assets/app.js?v=20261023-variants" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261023-classroom">
+  <script src="assets/tiling.js?v=20261023-classroom" defer></script>
+  <script src="assets/app.js?v=20261023-classroom" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="tetris">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
   <header class="course-header">
-    <a class="course-brand" href="../" aria-label="RON828 — עמוד הבית">RON828</a>
+    <a class="course-brand" href="../" aria-label="RON828 - עמוד הבית">RON828</a>
     <a class="course-home" href="../">פסגה ז 2026</a>
   </header>
   <main id="main">
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
-      <div><p class="eyebrow">שיעור 6 – בעיות צביעה</p><h1 id="problem-title">תרגיל 4: חמשת חלקי הטטריס</h1></div>
+      <div><p class="eyebrow">שיעור 6 - בעיות צביעה</p><h1 id="problem-title">תרגיל 4: חמשת חלקי הטטריס</h1></div>
       <button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p><strong>א · מתחילים:</strong> כסו מלבן <bdi>4 × 5</bdi> בחמשת החלקים <bdi>I, O, L, L, S</bdi>. לכל חלק ארבע משבצות. מותר לסובב; אין להפוך, לחפוף או לחרוג. שני חלקי ה־L נפרדים, ושניהם חייבים להשתתף.</p><p><strong>ב · משנים פרט ובודקים:</strong> החליפו בבורר רק את אחד מחלקי ה־L בחלק T. כעת החלקים הם <bdi>I, O, L, T, S</bdi>. האם אפשר לכסות את אותו מלבן?</p><p class="investigation-prompt">אם אפשר — הראו דרך. אם לא — הסבירו מדוע שום ניסיון לא יצליח.</p></div>
+      <div class="problem-question"><p><strong>א · מתחילים:</strong> כסו מלבן <bdi>4 × 5</bdi> בחמשת החלקים <bdi>I, O, L, L, S</bdi>. לכל חלק ארבע משבצות. מותר לסובב; אין להפוך, לחפוף או לחרוג. שני חלקי ה־L נפרדים, ושניהם חייבים להשתתף.</p><p><strong>ב · משנים פרט ובודקים:</strong> החליפו בבורר רק את אחד מחלקי ה־L בחלק T. כעת החלקים הם <bdi>I, O, L, T, S</bdi>. האם אפשר לכסות את אותו מלבן?</p><p class="investigation-prompt">אם אפשר - הראו דרך. אם לא - הסבירו מדוע שום ניסיון לא יצליח.</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-tetris">ללא צביעה</button>
-        <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-tetris">רמז – צביעה של הבעיה</button>
+        <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-tetris">רמז - צביעה של הבעיה</button>
       </div>
       <div id="widget-tetris" class="widget-panel" aria-label="התנסות: חמשת חלקי הטטריס"></div>
-      <div class="reasoning-notes"><details><summary>שאלה מנחה</summary><p>צבעו כמו לוח שחמט ובדקו כל חלק בנפרד. האם כל החלקים מכסים אותו מספר משבצות מכל צבע?</p></details><details><summary>הסבר — פותחים אחרי שמנסים</summary><p>לגרסה א׳ יש ריצוף ממשי שאפשר להציג במעבדה. במלבן יש 10 משבצות מכל צבע. החלקים I, O, L ו־S מכסים כל אחד שתי משבצות מכל צבע; ארבעתם יחד מכסים 8 ו־8. לעומתם T מכסה 3 משבצות מצבע אחד ורק אחת מהאחר, בכל סיבוב ובכל מיקום. בסך הכול נקבל 11 ו־9, ולכן גרסה ב׳ אינה אפשרית.</p><p><strong>ממשיכים לחשוב:</strong> מדוע סיבוב או הזזה של חלק T אינם פותרים את הבעיה?</p></details></div>
     </section>
     <nav class="exercise-nav" aria-label="רצף התרגילים"><a href="exercise-4.html">→ 3. הנמלים</a><a href="exercise-3.html">5. שלושת החיילים הקופצים ←</a></nav>
     <footer class="course-nav"><a href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a><button id="about-button" class="secondary" type="button">מקורות</button></footer>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">David Ginat — Problem Solving of Mathematical Games</a></li><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Harvey Mudd College — דומינו על לוח שחמט</a></li><li><a href="https://www.math.toronto.edu/rafi/Teaching/24W-MAT199/Problem-Set-V.pdf" target="_blank" rel="noopener">University of Toronto — בעיות צביעה וטטרומינו</a></li><li><a href="https://nrich.maths.org/problems/trominoes" target="_blank" rel="noopener">NRICH — אריחי טרומינו</a></li></ul></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">David Ginat - Problem Solving of Mathematical Games</a></li><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Harvey Mudd College - דומינו על לוח שחמט</a></li><li><a href="https://www.math.toronto.edu/rafi/Teaching/24W-MAT199/Problem-Set-V.pdf" target="_blank" rel="noopener">University of Toronto - בעיות צביעה וטטרומינו</a></li><li><a href="https://nrich.maths.org/problems/trominoes" target="_blank" rel="noopener">NRICH - אריחי טרומינו</a></li></ul></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>
