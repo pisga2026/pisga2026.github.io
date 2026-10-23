@@ -177,7 +177,7 @@
     function reset(){if(state.pieces.length)snapshot();state.pieces=[];state.nextId=1;state.selected=Object.keys(cfg.shapes)[0];state.turns=0;render();status('החלקים הוחזרו למגש. הצביעה והחלק הנבחר בתרגיל נשמרו.');}
     render();
     return {
-      setMode(mode){if(!['plain','free','suggested'].includes(mode))return;state.mode=mode;state.action=mode==='free'?'paint':'play';render();status(mode==='free'?'בחרו צבע וצבעו משבצות. אפשר לעבור להנחת חלקים בכל רגע.':mode==='suggested'?'הצביעה המוצעת מוצגת על הלוח. נסו להניח חלק ובדקו אילו צבעים הוא מכסה.':'הצבעים הוסתרו. נסו לכסות את הלוח.');},
+      setMode(mode){if(!['plain','free','suggested'].includes(mode))return;state.mode=mode;state.action=mode==='free'?'paint':'play';render();status(mode==='free'?'בחרו צבע וצבעו משבצות. אפשר לעבור להנחת חלקים בכל רגע.':mode==='suggested'?'הצביעה מוצגת.':'הצביעה הוסתרה.');},
       reset,
       setVariant,
       getState(){return {type,mode:state.mode,variant:state.variant,rows:cfg.rows,cols:cfg.cols,holes:copy(state.holes),pieces:copy(state.pieces),freeColors:state.paint.slice(),selected:state.selected,turns:state.turns,action:state.action,covered:state.pieces.length*cfg.size,remaining:cfg.rows*cfg.cols-state.holes.length-state.pieces.length*cfg.size};}
