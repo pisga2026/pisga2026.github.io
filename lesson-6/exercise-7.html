@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#4bbded">
-  <meta name="description" content="תרגיל 2: מסלול הפרש - שיעור 6, בעיות צביעה. התנסות אינטראקטיבית ורמז בצבעים.">
+  <meta name="description" content="תרגיל 3: מסלול הפרש - שיעור 6, בעיות צביעה. אנימציה של מסלול פתוח, שאלת מסלול סגור ורמז בצבעים.">
   <title>מסלול הפרש · שיעור 6 - בעיות צביעה · פסגה ז 2026</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
   <link rel="stylesheet" href="assets/lesson.css?v=20261023-lamps">
-  <link rel="stylesheet" href="assets/knight.css?v=20261023-lamps">
-  <script src="assets/knight.js?v=20261023-lamps" defer></script>
+  <link rel="stylesheet" href="assets/knight.css?v=20261023-knight-animation">
+  <script src="assets/knight.js?v=20261023-knight-animation" defer></script>
   <script src="assets/app.js?v=20261023-lamps" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="knight">
@@ -23,18 +23,18 @@
   <main id="main">
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
-      <div><p class="eyebrow">שיעור 6 - בעיות צביעה</p><h1 id="problem-title">תרגיל 2: מסלול הפרש</h1></div>
+      <div><p class="eyebrow">שיעור 6 - בעיות צביעה</p><h1 id="problem-title">תרגיל 3: מסלול הפרש</h1></div>
       <button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p><strong>א · מתחילים:</strong> בנו מסלול פתוח המבקר בכל 25 המשבצות בלוח <bdi>5 × 5</bdi> בדיוק פעם אחת. פרש קופץ שתי משבצות בכיוון אחד ומשבצת אחת בניצב לו. אין צורך לחזור להתחלה. אם החיפוש מתארך, השתמשו בהתחלת המסלול או בדוגמה.</p><p><strong>ב · משנים פרט ובודקים:</strong> באותו לוח מוסיפים דרישה אחת: אחרי הביקור האחרון, לחזור למשבצת ההתחלה בקפיצת פרש נוספת. האם זה אפשרי? אפשר לעבור בין המשימות בלי למחוק את המסלול.</p><p class="investigation-prompt">אם אפשר - הראו דרך. אם לא - הסבירו מדוע שום ניסיון לא יצליח.</p></div>
+      <div class="problem-question"><p><strong>א · צופים במסלול פתוח:</strong> באנימציה הפרש מבקר בכל 25 המשבצות בלוח <bdi>5 × 5</bdi> בדיוק פעם אחת. פרש קופץ שתי משבצות בכיוון אחד ומשבצת אחת בניצב לו. במסלול פתוח אין צורך לחזור להתחלה.</p><p><strong>ב · מסלול סגור:</strong> האם קיים באותו לוח מסלול המבקר בכל 25 המשבצות בדיוק פעם אחת, ואז חוזר למשבצת ההתחלה בקפיצת פרש נוספת? אפשר לבחור כל משבצת התחלה וכל מסלול.</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-knight">ללא צביעה</button>
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-knight">רמז - צביעה של הבעיה</button>
       </div>
-      <div id="widget-knight" class="widget-panel" aria-label="התנסות: מסלול הפרש"></div>
+      <div id="widget-knight" class="widget-panel" aria-label="אנימציה: מסלול הפרש"></div>
     </section>
-    <nav class="exercise-nav" aria-label="רצף התרגילים"><a href="exercise-1.html">→ 1. דומינו</a><a href="exercise-4.html">3. הנמלים ←</a></nav>
+    <nav class="exercise-nav" aria-label="רצף התרגילים"><a href="exercise-4.html">→ 2. הנמלים</a><a href="exercise-5.html">4. חמשת חלקי הטטריס ←</a></nav>
     <footer class="course-nav"><a href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a><button id="about-button" class="secondary" type="button">מקורות</button></footer>
   </main>
   <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.mit.edu/~rstan/papers/knight.pdf" target="_blank" rel="noopener">Noam D. Elkies ו-Richard P. Stanley - The Mathematical Knight (2003)</a></li></ul><p>עיבוד לימודי לבעיית מסלול הפרש הקלאסית, בהשוואה בין מסלול פתוח לסגור בלוח <bdi>5 × 5</bdi>.</p></dialog>
