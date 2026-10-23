@@ -1,45 +1,91 @@
-/* Compact layout; the shared course theme supplies the visual style. */
-.pisga .course-header{padding:15px 0 13px;margin-bottom:12px}
-.pisga main{margin-top:0}
-.pisga .course-back{margin-bottom:8px;font-size:13px}
-.pisga .lab-heading{align-items:center;gap:16px;margin-bottom:14px}
-.pisga .lab-heading h1{font-size:28px;margin:2px 0 0}
-.pisga .lab-heading .eyebrow{font-size:13px;margin:0 0 3px}
-.pisga .lab-heading .btn{flex-shrink:0;font-size:14px;min-height:40px;padding:7px 12px}
-.pisga .problem-question{font-size:16px;line-height:1.55;padding:10px 14px;margin-bottom:14px}
+/* Keep the working board and controls visible without squeezing the text. */
+body.pisga.coloring-lesson{padding-bottom:12px}
+.pisga main{margin-top:0;padding-bottom:0}
+.pisga .course-header{padding:9px 0 7px;margin-bottom:5px}
+.pisga .course-brand{font-size:21px}
+.pisga .course-home{font-size:14px}
+.pisga .course-back{margin-bottom:4px;font-size:13px;line-height:1.4}
+.pisga .lab-heading{align-items:center;gap:12px;margin-bottom:8px}
+.pisga .lab-heading h1{font-size:26px;margin:0;line-height:1.25}
+.pisga .heading-actions{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0}
+.pisga .lab-heading .btn{font-size:14px;min-height:36px;padding:5px 10px}
+.pisga .problem-question{font-size:16px;line-height:1.45;padding:8px 12px;margin-bottom:10px}
 .pisga .problem-question p{margin:0}
-.pisga .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);max-width:560px;margin-bottom:14px;gap:10px}
-.pisga .stage-button{background:var(--amber);box-shadow:inset 2px 2px 0 #fff0ca,inset -2px -2px 0 #b17f61,3px 3px 0 var(--navy);font-size:15px;min-height:44px;padding:7px 12px}
+.pisga .problem-question p+p{margin-top:5px}
+.pisga .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);max-width:520px;margin-bottom:10px;gap:10px}
+.pisga .stage-button{background:var(--amber);box-shadow:inset 2px 2px 0 #fff0ca,inset -2px -2px 0 #b17f61,3px 3px 0 var(--navy);font-size:14px;min-height:38px;padding:6px 10px}
 .pisga .stage-button[aria-pressed=true]{background:var(--green);box-shadow:inset 2px 2px 0 #d4ffe5,inset -2px -2px 0 #389c79,3px 3px 0 var(--navy);outline:2px solid var(--navy);outline-offset:2px}
-.pisga .widget-panel{padding:14px}
-.pisga .widget-panel .tool-row{margin-bottom:10px}
-.pisga .widget-panel .live-status{padding:7px 11px;min-height:38px;margin-top:10px;font-size:14px}
-.pisga .widget-panel .widget-note{font-size:13px;margin:7px 0}
-.pisga .widget-panel .stats-row{margin:8px 0;gap:7px}
-.pisga .widget-panel .stat{padding:4px 8px;font-size:13px}
+.pisga .widget-panel{padding:10px}
+.pisga .widget-panel .tool-row{margin-bottom:8px}
+.pisga .widget-panel .live-status{padding:7px 10px;min-height:36px;margin-top:8px;font-size:14px;line-height:1.45}
+.pisga .widget-panel .widget-note{font-size:13px;line-height:1.45;margin:6px 0}
+.pisga .widget-panel .stats-row{margin:6px 0;gap:6px}
+.pisga .widget-panel .stat{padding:4px 7px;font-size:13px}
+.pisga select{max-width:100%;font:inherit}
 .pisga .tl-widget .tl-board-shell{--tl-max:352px!important}
-.pisga .tl-widget .tl-stage{gap:22px;padding:0}
-.pisga .tl-widget .tl-tools{margin-bottom:10px}
-.pisga .tl-widget .tl-color-counts{margin:8px 0;gap:7px}
+.pisga .tl-widget .tl-stage{gap:20px;padding:0}
+.pisga .tl-widget .tl-tools{margin-bottom:8px}
+.pisga .tl-widget .tl-color-counts{margin:6px 0;gap:6px}
 .pisga .tl-widget .tl-color-stat{padding:4px 7px;font-size:12px}
-.pisga .pg-games .pg-scoreboard{margin:8px 0 15px;gap:12px}
-.pisga .pg-games .pg-player{padding:8px 12px;min-height:64px}
-.pisga .pg-games .pg-card{min-height:96px}
-.pisga .pg-games .pg-color-stats{padding:8px 12px;margin-top:12px;font-size:14px}
-.pisga .pg-fox .pg-door{min-height:150px}
-.pisga .pg-fox .pg-door-inset{min-height:62px}
-.pisga .pg-fox .pg-fox-day{margin:7px auto}
-.pisga .pg-fox .pg-fox-history{margin-top:12px;padding-top:8px}
+.pisga .pg-games .pg-scoreboard{margin:6px 0 10px;gap:12px}
+.pisga .pg-games .pg-player{padding:7px 11px;min-height:62px}
+.pisga .pg-games .pg-card{min-height:90px}
+.pisga .pg-games .pg-color-stats{padding:7px 10px;margin-top:8px;font-size:14px}
 .pisga .pg-games .pg-ant-board-wrap{max-width:330px}
-.pisga .map-widget .map-paper-wrap{max-width:620px;margin:10px auto}
-.pisga .course-nav{align-items:center;margin-top:18px;padding-top:12px}
 .pisga .widget-panel .tl-cell:hover,.pisga .widget-panel .pg-ant-cell:hover{transform:none}
-html:fullscreen .course-back,html:fullscreen .course-nav{display:none}
+.pisga .knight-controls .knight-actions{margin:0 0 10px}
+.pisga .knight-count{margin:12px 0 8px}
+.pisga .jumpers-board-shell{max-width:360px;margin:10px auto}
+.pisga .lamps-ring{width:min(100%,360px);margin:10px auto}
+html:fullscreen .course-back{display:none}
 html:fullscreen .lab-heading{justify-content:flex-end;margin:8px 0}
-@media(min-width:900px){.pisga .tl-widget{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-items:start}.pisga .tl-widget .tl-tools{grid-column:2;grid-row:1;max-width:270px;align-self:start}.pisga .tl-widget .tl-stage{grid-column:1;grid-row:1/5;flex-direction:row-reverse;justify-content:flex-end}.pisga .tl-widget .tl-piece-area{flex-basis:175px;min-width:125px}.pisga .tl-widget .tl-stats{grid-column:2;grid-row:2;max-width:270px;margin-top:8px}.pisga .tl-widget .tl-color-counts{grid-column:2;grid-row:3;max-width:270px}.pisga .tl-widget .tl-status{grid-column:2;grid-row:4;max-width:270px;margin-top:8px}}
-@media(min-width:900px){.pisga .pg-ants{display:grid;grid-template-columns:350px minmax(0,1fr);column-gap:20px;align-items:start}.pisga .pg-ants .pg-ant-board-wrap{grid-column:1;grid-row:1/6;width:100%}.pisga .pg-ants .pg-actions{grid-column:2;grid-row:1;margin-bottom:7px}.pisga .pg-ants .pg-ant-top{grid-column:2;grid-row:2;justify-content:flex-start;margin:7px 0;gap:10px}.pisga .pg-ants .pg-color-stats{grid-column:2;grid-row:3;margin:7px 0}.pisga .pg-ants .pg-status{grid-column:2;grid-row:4;margin:7px 0}.pisga .pg-ants .pg-note{grid-column:2;grid-row:5;margin:7px 0}.pisga .map-widget{display:grid;grid-template-columns:minmax(0,1fr) 280px;column-gap:18px;align-items:start}.pisga .map-widget .map-paper-wrap{grid-column:1;grid-row:1/5;width:100%;margin:0 auto}.pisga .map-widget .map-toolbar{grid-column:2;grid-row:1;gap:8px;margin-bottom:8px}.pisga .map-widget .map-toolbar button{font-size:14px;padding:7px 10px}.pisga .map-widget .map-stats{grid-column:2;grid-row:2;justify-content:flex-start}.pisga .map-widget .map-feedback{grid-column:2;grid-row:3;margin:8px 0}.pisga .map-widget .map-footnote{grid-column:2;grid-row:4;margin:8px 0}}
-@media(max-width:600px){.pisga .lab-heading{gap:10px}.pisga .lab-heading h1{font-size:24px}.pisga .stage-button{font-size:14px;padding:8px 6px}.pisga .stage-strip{gap:8px}.pisga .widget-panel{padding:11px}.pisga .problem-question{font-size:15px}.pisga .course-header{padding-top:15px}.pisga .tl-widget .tl-stage{gap:10px}.pisga .tl-widget .tl-piece{min-height:49px}.pisga .tl-widget .tl-piece-instruction{margin:8px 0 0}}
-@media(max-width:400px){.pisga .stage-button{flex-direction:row;min-height:44px}}
-
-/* Compare a construction with one changed condition; explanations stay folded. */
-.pisga .problem-question p+p{margin-top:8px}.pisga .investigation-prompt{font-size:14px;font-weight:700}.pisga .exercise-nav{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:18px}.pisga .variant-label{display:block;margin-bottom:12px}.pisga select{max-width:100%;font:inherit}.pisga .knight-controls .knight-actions{margin:10px 0}.pisga .knight-controls .variant-label{grid-column:1/-1}
+@media(min-width:900px){
+.pisga .tl-widget{display:grid;grid-template-columns:minmax(0,1fr) 250px;column-gap:18px;align-items:start}
+.pisga .tl-widget .tl-tools{grid-column:2;grid-row:1;align-self:start}
+.pisga .tl-widget .tl-stage{grid-column:1;grid-row:1/5;flex-direction:row-reverse;justify-content:flex-end}
+.pisga .tl-widget .tl-piece-area{flex-basis:175px;min-width:125px}
+.pisga .tl-widget .tl-stats{grid-column:2;grid-row:2;margin-top:8px}
+.pisga .tl-widget .tl-color-counts{grid-column:2;grid-row:3}
+.pisga .tl-widget .tl-status{grid-column:2;grid-row:4;margin-top:8px}
+.pisga .pg-ants{display:grid;grid-template-columns:330px minmax(0,1fr);column-gap:20px;align-items:start}
+.pisga .pg-ants .pg-ant-board-wrap{grid-column:1;grid-row:1/6;width:100%}
+.pisga .pg-ants .pg-actions{grid-column:2;grid-row:1;margin-bottom:6px}
+.pisga .pg-ants .pg-ant-top{grid-column:2;grid-row:2;justify-content:flex-start;margin:6px 0;gap:10px}
+.pisga .pg-ants .pg-color-stats{grid-column:2;grid-row:3;margin:6px 0}
+.pisga .pg-ants .pg-status{grid-column:2;grid-row:4;margin:6px 0}
+.pisga .pg-ants .pg-note{grid-column:2;grid-row:5;margin:6px 0}
+.pisga .jumpers-widget{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);column-gap:22px;align-items:start}
+.pisga .jumpers-board-shell{grid-column:1;grid-row:1/5;width:100%;margin:0}
+.pisga .jumpers-tools{grid-column:2;grid-row:1;align-self:start}
+.pisga .jumpers-note{grid-column:2;grid-row:2}
+.pisga .jumpers-legend{grid-column:2;grid-row:3;justify-content:flex-start}
+.pisga .jumpers-widget>.live-status{grid-column:2;grid-row:4}
+.pisga .lamps-widget{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);column-gap:22px;align-items:start}
+.pisga .lamps-ring{grid-column:1;grid-row:1/6;width:100%;margin:0}
+.pisga .lamps-tools{grid-column:2;grid-row:1;align-self:start}
+.pisga .lamps-instruction{grid-column:2;grid-row:2;text-align:right}
+.pisga .lamps-legend{grid-column:2;grid-row:3;justify-content:flex-start}
+.pisga .lamps-status{grid-column:2;grid-row:4;text-align:right}
+.pisga .lamps-keyboard{grid-column:2;grid-row:5}
+}
+@media(min-width:900px) and (max-height:760px){
+.pisga .tl-widget .tl-board-shell{--tl-max:336px!important}
+.pisga .jumpers-widget{grid-template-columns:340px minmax(0,1fr)}
+.pisga .lamps-widget{grid-template-columns:340px minmax(0,1fr)}
+.pisga .knight-widget{grid-template-columns:330px minmax(180px,1fr)}
+}
+@media(max-width:600px){
+body.pisga.coloring-lesson{padding-inline:12px}
+.pisga .lab-heading{gap:8px;flex-wrap:wrap}
+.pisga .lab-heading h1{font-size:23px}
+.pisga .heading-actions{gap:7px}
+.pisga .lab-heading .btn{min-height:40px}
+.pisga .stage-button{font-size:14px;padding:7px 6px;min-height:42px}
+.pisga .stage-strip{gap:8px}
+.pisga .problem-question{font-size:15px}
+.pisga .widget-panel{padding:10px}
+.pisga .tl-widget .tl-stage{gap:10px}
+.pisga .tl-widget .tl-piece{min-height:49px}
+.pisga .tl-widget .tl-piece-instruction{margin:6px 0 0}
+}
+@media(max-width:400px){.pisga .stage-button{flex-direction:row}}

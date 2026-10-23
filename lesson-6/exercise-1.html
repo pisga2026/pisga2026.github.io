@@ -9,9 +9,9 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261023-lamps">
-  <script src="assets/tiling.js?v=20261023-lamps" defer></script>
-  <script src="assets/app.js?v=20261023-lamps" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261023-classroom">
+  <script src="assets/tiling.js?v=20261023-classroom" defer></script>
+  <script src="assets/app.js?v=20261023-classroom" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="domino">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -22,21 +22,19 @@
   <main id="main">
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
-      <div><p class="eyebrow">שיעור 6 - בעיות צביעה</p><h1 id="problem-title">תרגיל 1: דומינו</h1></div>
-      <button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button>
+      <div><h1 id="problem-title">תרגיל 1: דומינו</h1></div>
+      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p><strong>א · מתחילים:</strong> מלוח בגודל <bdi>8 × 8</bdi> מסירים את שתי הפינות העליונות. כסו את 62 המשבצות שנותרו ב־31 אבני דומינו. כל אבן מכסה שתי משבצות סמוכות בצלע; בחרו דומינו אופקי או אנכי; אסור לחפוף או לחרוג.</p><p><strong>ב · משנים פרט ובודקים:</strong> שנו בבורר את המשבצות החסרות לשתי פינות נגדיות באלכסון. מספר המשבצות לא השתנה. האם עדיין אפשר לכסות?</p><p class="investigation-prompt">אם אפשר - הראו דרך. אם לא - הסבירו מדוע שום ניסיון לא יצליח.</p></div>
+      <div class="problem-question"><p>מלוח <bdi>8 × 8</bdi> מסירים שתי פינות נגדיות באלכסון. האם אפשר לכסות את 62 המשבצות שנותרו ב־31 אבני דומינו? כל אבן מכסה שתי משבצות סמוכות בצלע. מותר לסובב; אסור לחפוף או לחרוג.</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-domino">ללא צביעה</button>
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-domino">רמז - צביעה של הבעיה</button>
       </div>
       <div id="widget-domino" class="widget-panel" aria-label="התנסות: דומינו"></div>
     </section>
-    <nav class="exercise-nav" aria-label="רצף התרגילים"><span></span><a href="exercise-4.html">2. הנמלים ←</a></nav>
-    <footer class="course-nav"><a href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a><button id="about-button" class="secondary" type="button">מקורות</button></footer>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Francis Su ואחרים, Math Fun Facts - Dominoes on a Chessboard</a></li></ul><p>הבעיה הקלאסית מופיעה במקור. גרסת שתי הפינות העליונות נוספה כפתיחה לשיעור.</p></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Francis Su ואחרים, Math Fun Facts - Dominoes on a Chessboard</a></li></ul><p>בעיית הדומינו הקלאסית: לוח עם שתי פינות נגדיות חסרות.</p></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>

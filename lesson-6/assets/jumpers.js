@@ -7,8 +7,7 @@
     const names = (options.colorNames || ['תכלת', 'כתום', 'ורוד', 'ירוק']).slice(0, 4);
     const marks = ['א', 'ב', 'ג', 'ד'];
     const initial = [16, 17, 23]; // (3,3), (3,4), (4,3), with rows counted from the top.
-    const example = [[16, 18], [23, 11], [11, 25], [18, 32]];
-    const s = {mode: options.mode || 'plain', pieces: initial.slice(), selected: null, target: 32, history: [], free: Array(size * size).fill(-1), paint: true, ink: 0, note: '', demoStep: null};
+    const s = {mode: options.mode || 'plain', pieces: initial.slice(), selected: null, target: 32, history: [], free: Array(size * size).fill(-1), paint: true, ink: 0, note: ''};
     host.classList.add('jumpers-widget');
     function colorAt(cell) {
       if (s.mode === 'plain') return -1;
@@ -24,8 +23,6 @@
     function coordinate(cell) { return '(' + (Math.floor(cell / size) + 1) + ',' + (cell % size + 1) + ')'; }
     function focusCell(cell) { const button = host.querySelector('[data-jumper-cell="' + cell + '"]'); if (button) button.focus({preventScroll: true}); }
     function render(focus) {
-      const demo = host.querySelector('.jumpers-demo');
-      const demoOpen = (demo && demo.open) || s.demoStep !== null;
       const painting = s.mode === 'free' && s.paint, reached = s.pieces.includes(s.target);
       const destinations = s.selected === null ? [] : moves(s.selected);
       let message = s.note || (reached ? 'הגעתם לכוכב ב־' + s.history.length + ' קפיצות! אפשר לחזור להתחלה ולבדוק יעד אחר.' : s.selected === null ? 'בחרו כלי, ואז משבצת מסומנת לקפיצה.' : destinations.length ? 'בחרו אחת ממשבצות הנחיתה המסומנות.' : 'לכלי הזה אין כרגע קפיצה אפשרית. בחרו כלי אחר.');
@@ -39,14 +36,13 @@
         }).join('') + '</div></div></div>' +
         '<p class="widget-note jumpers-note">הקואורדינטות הן <bdi>(שורה, עמודה)</bdi>: שורות מלמעלה למטה, עמודות משמאל לימין. קופצים מעל כלי סמוך אל משבצת ריקה מיד אחריו, גם באלכסון. הכלי שדילגו מעליו נשאר במקומו.</p>' +
         (s.mode === 'suggested' ? '<div class="jumpers-legend" aria-label="מקרא צבעים">' + colors.map((color, i) => '<span><i style="background:' + color + '" aria-hidden="true">' + marks[i] + '</i>' + names[i] + '</span>').join('') + '</div>' : '') +
-        '<p class="live-status' + (reached && !painting ? ' success' : '') + '" role="status" aria-live="polite">' + message + '</p><p class="widget-note">במקלדת: חצים למעבר בין משבצות, Enter או רווח לבחירה. החלפת היעד מחזירה את הכלים להתחלה.</p>' +
-        (s.target === 32 ? '<details class="jumpers-demo"' + (demoOpen ? ' open' : '') + '><summary>עזרה: דרך בארבע קפיצות</summary><p>נסו למצוא דרך בעצמכם לפני ההדגמה. התחלת ההדגמה מחזירה את הכלים למקומות ההתחלה.</p><button type="button" class="btn secondary" data-jumper-action="demo">' + (s.demoStep === null ? 'הדגמת הקפיצה הראשונה' : s.demoStep === 4 ? 'הדגמה מחדש' : 'הדגמת הקפיצה הבאה') + '</button>' + (s.demoStep !== null ? '<p>קפיצה ' + s.demoStep + ' מתוך 4: <bdi>' + coordinate(example[s.demoStep - 1][0]) + ' → ' + coordinate(example[s.demoStep - 1][1]) + '</bdi></p>' : '') + '</details>' : '');
+        '<p class="live-status' + (reached && !painting ? ' success' : '') + '" role="status" aria-live="polite">' + message + '</p><p class="widget-note">במקלדת: חצים למעבר בין משבצות, Enter או רווח לבחירה. החלפת היעד מחזירה את הכלים להתחלה.</p>';
       if (typeof focus === 'number') focusCell(focus);
     }
-    function reset() { s.pieces = initial.slice(); s.selected = null; s.history = []; s.note = ''; s.demoStep = null; render(); }
+    function reset() { s.pieces = initial.slice(); s.selected = null; s.history = []; s.note = ''; render(); }
     function select(cell) {
       if (s.mode === 'free' && s.paint) { s.free[cell] = s.ink; render(cell); return; }
-      s.note = ''; s.demoStep = null;
+      s.note = '';
       if (s.pieces.includes(cell)) { s.selected = s.selected === cell ? null : cell; render(cell); return; }
       if (s.selected !== null && legal(s.selected, cell)) {
         const from = s.selected;
@@ -62,14 +58,7 @@
       const action = event.target.closest('[data-jumper-action]');
       if (action) {
         if (action.dataset.jumperAction === 'reset') { reset(); return; }
-        if (action.dataset.jumperAction === 'undo' && s.history.length) { s.pieces = s.history.pop(); s.selected = null; s.note = ''; s.demoStep = null; }
-        if (action.dataset.jumperAction === 'demo' && s.target === 32) {
-          if (s.demoStep === null || s.demoStep === 4) { s.pieces = initial.slice(); s.history = []; s.demoStep = 0; }
-          const [from, to] = example[s.demoStep];
-          s.history.push(s.pieces.slice()); s.pieces[s.pieces.indexOf(from)] = to;
-          s.demoStep++; s.selected = null; s.paint = false;
-          s.note = s.demoStep === 4 ? 'הגעתם לכוכב בארבע קפיצות. עכשיו אפשר לנסות את יעד ב.' : 'קפיצה ' + s.demoStep + ': מ־' + coordinate(from) + ' אל ' + coordinate(to) + '. הכלי שדילגנו מעליו נשאר במקומו.';
-        }
+        if (action.dataset.jumperAction === 'undo' && s.history.length) { s.pieces = s.history.pop(); s.selected = null; s.note = ''; }
         if (action.dataset.jumperAction === 'clear') s.free.fill(-1);
         render(); return;
       }
@@ -94,7 +83,7 @@
     return {
       setMode(mode) { s.mode = mode; s.selected = null; s.note = ''; render(); },
       reset,
-      getState() { return {mode: s.mode, size, pieces: s.pieces.slice(), target: s.target, selected: s.selected, moves: s.history.length, history: s.history.map(p => p.slice()), freeColors: s.free.slice(), paint: s.paint, reached: s.pieces.includes(s.target), demoStep: s.demoStep}; }
+      getState() { return {mode: s.mode, size, pieces: s.pieces.slice(), target: s.target, selected: s.selected, moves: s.history.length, history: s.history.map(p => p.slice()), freeColors: s.free.slice(), paint: s.paint, reached: s.pieces.includes(s.target)}; }
     };
   };
 })();

@@ -9,9 +9,9 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261023-lamps">
-  <script src="assets/games.js?v=20261023-lamps" defer></script>
-  <script src="assets/app.js?v=20261023-lamps" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261023-classroom">
+  <script src="assets/games.js?v=20261023-classroom" defer></script>
+  <script src="assets/app.js?v=20261023-classroom" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="coin">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -22,19 +22,17 @@
   <main id="main">
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
-      <div><p class="eyebrow">שיעור 6 - בעיות צביעה</p><h1 id="problem-title">תרגיל 8: משחק הקצוות</h1></div>
-      <button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button>
+      <div><h1 id="problem-title">תרגיל 8: משחק הקצוות</h1></div>
+      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p><strong>א · מתחילים:</strong> שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. כל שחקן צובר את המספרים שלקח, ומי שסכומו גדול יותר מנצח. התחילו בארבעה קלפים: מה כדאי לשחקן הראשון לקחת? שחקו בשני הצדדים ובדקו תגובות שונות.</p><p><strong>ב · מרחיבים ומכלילים:</strong> עברו לשמונה קלפים ונסו גם סידורים חדשים. האם לשחקן הראשון יש דרך להבטיח לפחות תיקו בכל שורה עם מספר זוגי של קלפים, בלי קשר לתגובות היריב?</p><p class="investigation-prompt">נסחו אסטרטגיה והסבירו מדוע היא פועלת מול כל תגובה של היריב.</p></div>
+      <div class="problem-question"><p><strong>א · מתחילים:</strong> שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. כל שחקן צובר את המספרים שלקח, ומי שסכומו גדול יותר מנצח. התחילו בארבעה קלפים: מה כדאי לשחקן הראשון לקחת? שחקו בשני הצדדים ובדקו תגובות שונות.</p><p><strong>ב · מרחיבים ומכלילים:</strong> עברו לשמונה קלפים ונסו גם סידורים חדשים. האם לשחקן הראשון יש דרך להבטיח לפחות תיקו בכל שורה עם מספר זוגי של קלפים, בלי קשר לתגובות היריב?</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-coin">ללא צביעה</button>
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-coin">רמז - צביעה של הבעיה</button>
       </div>
       <div id="widget-coin" class="widget-panel" aria-label="התנסות: משחק הקצוות"></div>
     </section>
-    <nav class="exercise-nav" aria-label="רצף התרגילים"><a href="exercise-3.html">→ 7. משחק הנורות</a><span></span></nav>
-    <footer class="course-nav"><a href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a><button id="about-button" class="secondary" type="button">מקורות</button></footer>
   </main>
   <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">דוד גינת - Problem Solving of Mathematical Games (2022), סעיף 2.4: Left/Right Ends</a></li></ul><p>עיבוד המשחק לשורות של ארבעה ושמונה קלפים.</p></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>

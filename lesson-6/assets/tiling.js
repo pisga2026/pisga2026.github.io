@@ -2,14 +2,13 @@
   'use strict';
   window.Widgets = window.Widgets || {};
   const configs = {
-    domino: { rows: 8, cols: 8, limit: 31, size: 2, shapes: { D: [[0,0],[0,1]] }, names: { D: 'אבן דומינו' }, short: {D:'דומינו'}, holes: [[0,0],[0,7]], label: 'לוח דומינו, שמונה שורות ושמונה עמודות' },
+    domino: { rows: 8, cols: 8, limit: 31, size: 2, shapes: { D: [[0,0],[0,1]] }, names: { D: 'אבן דומינו' }, short: {D:'דומינו'}, holes: [[0,0],[7,7]], label: 'לוח דומינו, שמונה שורות ושמונה עמודות' },
     tetris: { rows: 4, cols: 5, limit: 5, size: 4, shapes: { I:[[0,0],[0,1],[0,2],[0,3]], O:[[0,0],[0,1],[1,0],[1,1]], L:[[0,0],[1,0],[2,0],[2,1]], M:[[0,0],[1,0],[2,0],[2,1]], S:[[0,1],[0,2],[1,0],[1,1]] }, names: {I:'קו ישר',O:'ריבוע',L:'צורת L ראשונה',M:'צורת L שנייה',S:'זיגזג'}, short:{I:'I',O:'O',L:'L₁',M:'L₂',S:'S'}, holes: [], unique: true, label: 'לוח טטריס, ארבע שורות וחמש עמודות' },
     tromino: { rows: 5, cols: 5, limit: 8, size: 3, shapes: { R:[[0,0],[0,1],[0,2]] }, names: { R:'אריח באורך שלוש' }, short:{R:'אריח'}, holes:[[2,2]], label:'לוח אריחים, חמש שורות וחמש עמודות' }
   };
   const variants = {
     domino: [
-      {key:'same-edge',label:'א. שתי הפינות העליונות',holes:[[0,0],[0,7]]},
-      {key:'opposite',label:'ב. שתי פינות נגדיות',holes:[[0,0],[7,7]]}
+      {key:'opposite',label:'שתי פינות נגדיות',holes:[[0,0],[7,7]]}
     ],
     tetris: [
       {key:'double-l',label:'א. שני חלקי L',holes:[]},
@@ -19,24 +18,6 @@
       {key:'center',label:'א. חור במרכז',holes:[[2,2]]},
       {key:'corner',label:'ב. חור בפינה',holes:[[0,0]]}
     ]
-  };
-  // These are actual tilings of the first variant. Keep the example folded until requested.
-  const examples = {
-    domino: [
-      ...[1,3,5].map(c=>({key:'D',cells:[[0,c],[0,c+1]]})),
-      ...Array.from({length:7},(_,r)=>[0,2,4,6].map(c=>({key:'D',cells:[[r+1,c],[r+1,c+1]]}))).flat()
-    ],
-    tetris: [
-      {key:'I',cells:[[0,0],[0,1],[0,2],[0,3]]},
-      {key:'O',cells:[[2,3],[2,4],[3,3],[3,4]]},
-      {key:'L',cells:[[0,4],[1,2],[1,3],[1,4]]},
-      {key:'M',cells:[[1,0],[2,0],[3,0],[3,1]]},
-      {key:'S',cells:[[1,1],[2,1],[2,2],[3,2]]}
-    ],
-    tromino: [
-      [[0,0],[1,0],[2,0]],[[3,0],[3,1],[3,2]],[[0,1],[1,1],[2,1]],[[0,2],[0,3],[0,4]],
-      [[1,2],[1,3],[1,4]],[[2,3],[3,3],[4,3]],[[2,4],[3,4],[4,4]],[[4,0],[4,1],[4,2]]
-    ].map(cells=>({key:'R',cells}))
   };
   const copy = a => JSON.parse(JSON.stringify(a));
   function rotate(shape, turns) {
@@ -90,27 +71,7 @@
       state.variant=variant.key;state.holes=copy(variant.holes);configureShapes();
       // An undo may only restore moves made with the current board and piece set.
       state.pieces=[];state.history=[];state.nextId=1;state.selected=Object.keys(cfg.shapes)[0];state.turns=0;
-      render();status(`${variant.label}. החלקים הוחזרו למגש. נסו לכסות את הלוח והסבירו את מסקנתכם.`);
-    }
-    function showExample(){
-      if(state.variant!==variants[type][0].key)return;
-      const occupied=new Set(), used=new Set();
-      const pieces=copy(examples[type]).map((piece,index)=>{
-        const minR=Math.min(...piece.cells.map(p=>p[0])),minC=Math.min(...piece.cells.map(p=>p[1]));
-        const normalized=piece.cells.map(([r,c])=>[r-minR,c-minC]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
-        const turns=[0,1,2,3].find(t=>JSON.stringify(rotate(cfg.shapes[piece.key],t))===JSON.stringify(normalized));
-        if(turns===undefined||cfg.unique&&used.has(piece.key))throw new Error('Invalid example piece');
-        used.add(piece.key);
-        piece.cells.forEach(([r,c])=>{
-          const id=r*cfg.cols+c;
-          if(r<0||c<0||r>=cfg.rows||c>=cfg.cols||hole(r,c)||occupied.has(id))throw new Error('Invalid example placement');
-          occupied.add(id);
-        });
-        return {uid:index+1,key:piece.key,turns,cells:piece.cells};
-      });
-      if(occupied.size!==cfg.rows*cfg.cols-state.holes.length||pieces.length!==cfg.limit)throw new Error('Incomplete example');
-      snapshot();state.pieces=pieces;state.nextId=pieces.length+1;state.action='play';render();
-      status('זו דוגמת כיסוי לחלק א׳. אפשר להסיר חלקים ולבדוק כיצד הכיסוי בנוי, או לחזור לניסיון שלכם באמצעות ״צעד אחורה״.');
+      render();status(`${variant.label}. החלקים הוחזרו למגש. נסו לכסות את הלוח.`);
     }
     function setAction(action){state.action=action;render();status(action==='paint'?'בחרו צבע ולחצו על משבצות. אפשר לצבוע גם מתחת לחלקים.':'בחרו חלק ולחצו על הלוח. לחיצה על חלק שכבר הונח מסירה אותו.');}
     function paintCell(r,c){if(hole(r,c))return;state.paint[r*cfg.cols+c]=state.brush;renderBoard();renderCounts();status(state.brush<0?'הצביעה במשבצת נמחקה.':'המשבצת נצבעה. הצביעה נשמרת במעבר בין השלבים.');}
@@ -134,13 +95,12 @@
       return `<span class="tl-mini" style="grid-template-columns:repeat(${cols},13px);grid-template-rows:repeat(${rows},13px)" aria-hidden="true">${shape.map(([r,c],i)=>`<i class="${i===0?'tl-anchor':''}" style="grid-row:${r+1};grid-column:${c+1}"></i>`).join('')}</span>`;
     }
     function renderTools(){
-      ui.tools.innerHTML=`<label class="tl-hole-label">חלק בתרגיל <select class="tl-variant${type==='tromino'?' tl-hole':''}" aria-label="בחירת חלק בתרגיל">${variants[type].map(v=>`<option value="${v.key}" ${v.key===state.variant?'selected':''}>${v.label}</option>`).join('')}</select></label>${type==='domino'?'':'<button type="button" class="btn tl-rotate">סיבוב ↻</button>'}<button type="button" class="btn secondary tl-undo" ${state.history.length?'':'disabled'}>צעד אחורה</button><button type="button" class="btn secondary tl-reset">ניקוי הלוח</button>${state.variant===variants[type][0].key?'<details class="tl-example"><summary>אחרי הניסיון: דוגמת כיסוי לחלק א׳</summary><p class="widget-note">הדוגמה תחליף את החלקים שעל הלוח. אפשר לחזור לניסיון שלכם בצעד אחורה.</p><button type="button" class="btn secondary tl-show-example">הצגת דוגמה</button></details>':''}`;
-      const rotateButton=ui.tools.querySelector('.tl-rotate');
-      if(rotateButton)rotateButton.onclick=()=>{state.turns=(state.turns+1)%4;renderPicker();clearPreview();status('החלק סובב. לחצו על משבצת להצבה בכיוון החדש.');};
+      const variantControl=variants[type].length>1?`<label class="tl-hole-label">חלק בתרגיל <select class="tl-variant${type==='tromino'?' tl-hole':''}" aria-label="בחירת חלק בתרגיל">${variants[type].map(v=>`<option value="${v.key}" ${v.key===state.variant?'selected':''}>${v.label}</option>`).join('')}</select></label>`:'';
+      ui.tools.innerHTML=`${variantControl}<button type="button" class="btn secondary tl-undo" ${state.history.length?'':'disabled'}>צעד אחורה</button><button type="button" class="btn secondary tl-reset">ניקוי הלוח</button>`;
       ui.tools.querySelector('.tl-undo').onclick=()=>{const last=state.history.pop();if(!last)return;Object.assign(state,last);render();status('הצעד האחרון בוטל.');};
       ui.tools.querySelector('.tl-reset').onclick=reset;
-      ui.tools.querySelector('.tl-variant').onchange=e=>setVariant(e.target.value);
-      const exampleButton=ui.tools.querySelector('.tl-show-example');if(exampleButton)exampleButton.onclick=showExample;
+      const variantPicker=ui.tools.querySelector('.tl-variant');
+      if(variantPicker)variantPicker.onchange=e=>setVariant(e.target.value);
     }
     function renderPaint(){
       ui.paint.hidden=state.mode!=='free';
@@ -152,21 +112,24 @@
       ui.paint.querySelector('.tl-clear').onclick=()=>{state.paint.fill(-1);renderBoard();renderCounts();status('הצביעה החופשית נוקתה. החלקים נשארו במקומם.');};
     }
     function renderPicker(){
-      if(type==='domino'){
-        ui.picker.innerHTML=[{turns:0,label:'אופקי'},{turns:1,label:'אנכי'}].map(({turns,label})=>`<button type="button" draggable="true" class="tl-piece btn ${state.turns%2===turns?'tl-selected':''}" data-shape="D" data-orientation="${turns}" aria-pressed="${state.turns%2===turns}" aria-label="דומינו ${label}">${miniShape('D',turns)}<span>${label}</span></button>`).join('');
-      }else{
-      ui.picker.innerHTML=Object.keys(cfg.shapes).map(key=>{const used=cfg.unique&&state.pieces.some(p=>p.key===key);return `<button type="button" draggable="${!used}" class="tl-piece btn ${key===state.selected?'tl-selected':''}" data-shape="${key}" ${used?'disabled':''} aria-pressed="${key===state.selected}" aria-label="${cfg.names[key]}${used?' - כבר על הלוח':''}">${miniShape(key)}<span>${cfg.short[key]}${used?' ✓':''}</span></button>`;}).join('');
-      }
-      function selectPiece(button){
-        if(type==='domino')state.turns=Number(button.dataset.orientation);
-        else if(state.selected!==button.dataset.shape)state.turns=0;
-        state.selected=button.dataset.shape;if(state.mode==='free')state.action='play';
+      ui.picker.innerHTML=Object.keys(cfg.shapes).map(key=>{const used=cfg.unique&&state.pieces.some(p=>p.key===key);return `<button type="button" draggable="${!used}" class="tl-piece btn ${key===state.selected?'tl-selected':''}" data-shape="${key}" ${used?'disabled':''} aria-pressed="${key===state.selected}" aria-label="${cfg.names[key]}${used?' - כבר על הלוח':key===state.selected?' - לחצו לסיבוב':' - לחצו לבחירה'}">${miniShape(key)}<span>${cfg.short[key]}${used?' ✓':''}</span></button>`;}).join('');
+      function selectPiece(button,rotateSelected){
+        const key=button.dataset.shape;
+        if(state.selected!==key)state.turns=0;
+        else if(rotateSelected)state.turns=(state.turns+1)%4;
+        state.selected=key;if(state.mode==='free')state.action='play';
       }
       ui.picker.querySelectorAll('[data-shape]').forEach(b=>{
-        b.onclick=()=>{selectPiece(b);renderPicker();renderPaint();clearPreview();status('החלק נבחר. לחצו בלוח על המקום שאליו תגיע המשבצת המסומנת בנקודה לבנה.');};
-        b.ondragstart=e=>{selectPiece(b);e.dataTransfer.setData('text/plain',state.selected);e.dataTransfer.effectAllowed='copy';renderPaint();};
+        b.onclick=()=>{
+          const key=b.dataset.shape,rotated=state.selected===key,hadFocus=document.activeElement===b;
+          selectPiece(b,true);renderPicker();renderPaint();clearPreview();
+          if(hadFocus)ui.picker.querySelector(`[data-shape="${key}"]`)?.focus({preventScroll:true});
+          status(rotated?'החלק סובב. לחצו בלוח כדי להניח אותו.':'החלק נבחר. לחיצה נוספת עליו במגש תסובב אותו.');
+        };
+        b.ondragstart=e=>{selectPiece(b,false);e.dataTransfer.setData('text/plain',state.selected);e.dataTransfer.effectAllowed='copy';renderPaint();};
+        b.ondragend=()=>{renderPicker();clearPreview();};
       });
-      ui.instruction.textContent='בחרו חלק ולחצו בלוח במקום של המשבצת המסומנת בנקודה לבנה. אפשר גם לגרור מהמגש. לחיצה על חלק שהונח מחזירה אותו.';
+      ui.instruction.textContent='לחצו שוב על החלק הנבחר במגש כדי לסובב. לחצו בלוח במקום של הנקודה הלבנה, או גררו. לחיצה על חלק בלוח מסירה אותו.';
     }
     function renderBoard(){
       let html='';

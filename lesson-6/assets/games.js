@@ -35,8 +35,8 @@
 
   W.coin = function (host, options) {
     const colors = options.colors, names = options.colorNames;
-    const examples = {4: [8, 30, 2, 3], 8: [8, 30, 2, 3, 4, 5, 6, 1]};
-    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(4).fill(-1), values: examples[4].slice(), picks: []};
+    const initialRows = {4: [8, 30, 2, 3], 8: [8, 30, 2, 3, 4, 5, 6, 1]};
+    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(4).fill(-1), values: initialRows[4].slice(), picks: []};
     host.classList.add('pg-games', 'pg-coin');
     function owners() { const a = Array(s.values.length).fill(-1); s.picks.forEach((p, k) => a[p] = k % 2); return a; }
     function render() {
@@ -47,7 +47,7 @@
       const paints = s.values.map((_, i) => colorIndex(s.mode, s.free, i, j => j % 2));
       let message = done ? (totals[0] === totals[1] ? 'תיקו! לכל שחקן ' + totals[0] + ' נקודות.' : 'שחקן ' + (totals[0] > totals[1] ? '1' : '2') + ' ניצח.') : 'תור שחקן ' + (turn + 1) + ' · בחרו קלף מאחד הקצוות.';
       if (s.mode === 'free' && s.paint) message = 'בחרו צבע ולחצו על קלפים. גם קלפים שכבר נאספו שומרים על מקומם המקורי.';
-      host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">מספר קלפים <select data-coin-size aria-label="מספר הקלפים"><option value="4" ' + (s.values.length === 4 ? 'selected' : '') + '>4</option><option value="8" ' + (s.values.length === 8 ? 'selected' : '') + '>8</option></select></label><button type="button" class="btn secondary" data-coin="undo" ' + (!s.picks.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-coin="reset">משחק מחדש</button><button type="button" class="btn secondary" data-coin="random">שורה אקראית</button><button type="button" class="btn secondary" data-coin="example">שורת דוגמה</button></div>' +
+      host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">מספר קלפים <select data-coin-size aria-label="מספר הקלפים"><option value="4" ' + (s.values.length === 4 ? 'selected' : '') + '>4</option><option value="8" ' + (s.values.length === 8 ? 'selected' : '') + '>8</option></select></label><button type="button" class="btn secondary" data-coin="undo" ' + (!s.picks.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-coin="reset">משחק מחדש</button><button type="button" class="btn secondary" data-coin="random">שורה אקראית</button></div>' +
         painter(s.mode, s.paint, s.ink, colors, names) +
         '<div class="pg-scoreboard">' + [0, 1].map(p => '<div class="pg-player ' + (!done && turn === p ? 'pg-current' : '') + '"><span>שחקן ' + (p + 1) + '</span><strong>' + totals[p] + '</strong><div class="pg-collected" dir="ltr">' + (s.picks.filter((_, k) => k % 2 === p).map(i => s.values[i]).join(' + ') || '-') + '</div></div>').join('') + '</div>' +
         '<div class="pg-card-row" style="grid-template-columns:repeat(' + s.values.length + ',minmax(0,1fr));max-width:' + (s.values.length === 4 ? '460' : '780') + 'px" dir="ltr" role="group" aria-label="שורת הקלפים, משמאל לימין">' + s.values.map((v, i) => {
@@ -66,7 +66,6 @@
         if (action.dataset.coin === 'undo') s.picks.pop();
         if (action.dataset.coin === 'reset') s.picks = [];
         if (action.dataset.coin === 'random') { s.values = Array.from({length: s.values.length}, () => 1 + Math.floor(Math.random() * 30)); s.picks = []; }
-        if (action.dataset.coin === 'example') { s.values = examples[s.values.length].slice(); s.picks = []; }
         render(); return;
       }
       const card = e.target.closest('[data-card]'); if (!card) return;
@@ -78,8 +77,8 @@
     host.addEventListener('change', e => {
       if (!e.target.matches('[data-coin-size]')) return;
       const size = Number(e.target.value);
-      if (!examples[size]) return;
-      s.values = examples[size].slice(); s.free = Array(size).fill(-1); reset();
+      if (!initialRows[size]) return;
+      s.values = initialRows[size].slice(); s.free = Array(size).fill(-1); reset();
     });
     render();
     return {setMode(mode) { s.mode = mode; render(); }, reset, getState() { return {mode: s.mode, values: s.values.slice(), picks: s.picks.slice(), owners: owners(), freeColors: s.free.slice(), paint: s.paint}; }};
@@ -136,7 +135,7 @@
 
   W.ants = function (host, options) {
     const colors = options.colors, names = options.colorNames;
-    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(16).fill(-1), n: 4, targets: Array(16).fill(null), selected: null, phase: 'plan', note: '', history: []};
+    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(25).fill(-1), n: 5, targets: Array(25).fill(null), selected: null, phase: 'plan', note: '', history: []};
     let timer = null, raf = null;
     host.classList.add('pg-games', 'pg-ants');
     function neighbours(i) {
@@ -162,7 +161,7 @@
       let message = s.note || (s.phase === 'result' ? (collisionCells ? 'נמצאו ' + collisionCells + ' משבצות שאליהן הגיעו כמה נמלים, ו־' + emptyCells + ' משבצות ריקות. אפשר לשנות את הכיוונים ולנסות שוב.' : 'הצלחתם! בכל משבצת נחתה בדיוק נמלה אחת.') : s.selected === null ? 'בחרו נמלה, ואז לחצו על משבצת שכנה כדי לקבוע לאן תלך.' : 'בחרו אחת מהמשבצות המסומנות ליד הנמלה שבחרתם.');
       if (s.phase === 'moving') message = 'כל הנמלים זזות יחד…';
       if (paintEnabled) message = 'בחרו צבע ולחצו על משבצות. לחזרה לתכנון התנועה בחרו ״משחקים״.';
-      host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">גודל הלוח <select data-ant-size aria-label="גודל לוח הנמלים"><option value="4" ' + (s.n === 4 ? 'selected' : '') + '>4 × 4</option><option value="5" ' + (s.n === 5 ? 'selected' : '') + '>5 × 5</option></select></label><button type="button" class="btn secondary" data-ants="random" ' + (s.phase === 'moving' ? 'disabled' : '') + '>כיוונים אקראיים</button>' + (s.n === 4 ? '<button type="button" class="btn secondary" data-ants="example" ' + (s.phase === 'moving' ? 'disabled' : '') + '>טעינת סידור לדוגמה</button>' : '') + '<button type="button" class="btn secondary" data-ants="undo" ' + (!s.history.length || s.phase !== 'plan' ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-ants="reset">ניקוי הכיוונים</button></div>' +
+      host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">גודל הלוח <select data-ant-size aria-label="גודל לוח הנמלים"><option value="4" ' + (s.n === 4 ? 'selected' : '') + '>4 × 4</option><option value="5" ' + (s.n === 5 ? 'selected' : '') + '>5 × 5</option></select></label><button type="button" class="btn secondary" data-ants="random" ' + (s.phase === 'moving' ? 'disabled' : '') + '>כיוונים אקראיים</button><button type="button" class="btn secondary" data-ants="undo" ' + (!s.history.length || s.phase !== 'plan' ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-ants="reset">ניקוי הכיוונים</button></div>' +
         painter(s.mode, s.paint, s.ink, colors, names) +
         '<div class="pg-ant-top"><span><strong>' + assigned + '</strong> מתוך <strong>' + s.n * s.n + '</strong> כיוונים נקבעו</span>' +
         (s.phase === 'result' ? '<button type="button" class="btn" data-ants="edit">שינוי הכיוונים</button><button type="button" class="btn secondary" data-ants="replay">הפעלה חוזרת</button>' : '<button type="button" class="btn" data-ants="move" ' + (assigned !== s.n * s.n || s.phase === 'moving' ? 'disabled' : '') + '>כולן זזות!</button>') + '</div>' +
@@ -205,7 +204,6 @@
         if (a === 'move' || a === 'replay') { move(); return; }
         if (a === 'edit') { stopAnimation(); s.phase = 'plan'; s.selected = null; s.note = ''; }
         if (a === 'random') { stopAnimation(); s.history.push(s.targets.slice()); s.targets = s.targets.map((_, i) => { const ns = neighbours(i); return ns[Math.floor(Math.random() * ns.length)]; }); s.phase = 'plan'; s.selected = null; s.note = ''; }
-        if (a === 'example' && s.n === 4) { stopAnimation(); s.history.push(s.targets.slice()); s.targets = s.targets.map((_, i) => i % 2 ? i - 1 : i + 1); s.phase = 'plan'; s.selected = null; s.note = 'הסידור מוכן. הפעילו את התנועה ובדקו מה קורה.'; }
         if (a === 'undo' && s.history.length) { s.targets = s.history.pop(); s.selected = null; }
         render(); return;
       }

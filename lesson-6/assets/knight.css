@@ -1,8 +1,11 @@
 .pisga .knight-widget{display:grid;grid-template-columns:minmax(0,340px) minmax(180px,1fr);align-items:start;gap:24px}
 .pisga .knight-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;isolation:isolate;width:100%;aspect-ratio:1;border:3px solid var(--navy);background:var(--navy);gap:1px;box-shadow:4px 4px 0 var(--navy)}
-.pisga .knight-cell{position:relative;display:grid;place-items:center;min-width:0;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:#fff4d4;color:var(--navy);box-shadow:none;transform:none!important;transition:background .15s;aspect-ratio:1;cursor:default}
+.pisga .knight-widget .knight-cell{position:relative;display:grid;place-items:center;min-width:0;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:#fff4d4;color:var(--navy);box-shadow:none;transform:none!important;transition:background .15s;aspect-ratio:1;cursor:pointer}
 .pisga .knight-colored .knight-cell.is-dark{background:#285575}
 .pisga .knight-cell.is-current{outline:4px solid #45bf8b;outline-offset:-5px}
+.pisga .knight-widget .knight-cell:focus-visible{outline:3px solid #d93b6d;outline-offset:-4px;z-index:3}
+.pisga .knight-possible{display:none;width:15px;height:15px;border:2px solid var(--navy);border-radius:50%;background:#79dfb2;box-shadow:0 0 0 2px #fff4d4;position:relative;z-index:2}
+.pisga .is-possible .knight-possible{display:block}
 .pisga .knight-step{position:relative;z-index:2;display:none;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 3px;background:#fff4d4;border:1px solid var(--navy);font:700 15px/1 Arial,sans-serif;box-sizing:border-box}
 .pisga .is-visited .knight-step{display:inline-flex}
 .pisga .is-start .knight-step{border:3px double var(--navy)}
@@ -16,7 +19,7 @@
 .pisga .knight-controls{max-width:360px}
 .pisga .knight-actions{display:flex;gap:10px;flex-wrap:wrap}
 .pisga .knight-actions .btn{font-size:15px;min-height:42px;padding:7px 13px}
-.pisga .knight-count{font-size:16px;margin:20px 0 12px}
+.pisga .knight-count{font-size:16px;margin:14px 0 10px}
 .pisga .knight-status{margin:0!important}
 @media(max-width:650px){.pisga .knight-widget{grid-template-columns:minmax(0,1fr);gap:14px}.pisga .knight-board{max-width:310px;justify-self:center;grid-row:2}.pisga .knight-controls{max-width:none;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.pisga .knight-count{font-size:13px;margin:0}.pisga .knight-actions{gap:8px}.pisga .knight-actions .btn{font-size:13px;min-height:38px;padding:6px 9px}.pisga .knight-status{grid-column:1/-1}.pisga .knight-piece{font-size:38px}}
 @media(prefers-reduced-motion:reduce){.pisga .knight-cell{transition:none}}
