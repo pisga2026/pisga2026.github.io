@@ -9,10 +9,10 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261025-self-paint">
-  <script src="assets/painting.js?v=20261025-self-paint" defer></script>
-  <script src="assets/tiling.js?v=20261025-self-paint" defer></script>
-  <script src="assets/app.js?v=20261025-self-paint" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261025-audit">
+  <script src="assets/painting.js?v=20261025-audit" defer></script>
+  <script src="assets/tiling.js?v=20261025-audit" defer></script>
+  <script src="assets/app.js?v=20261025-audit" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="domino">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -24,7 +24,7 @@
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
       <div><h1 id="problem-title">תרגיל 1: דומינו</h1></div>
-      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
+      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות למורה</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
       <div class="problem-question"><p>מלוח <bdi>8 × 8</bdi> מסירים שתי פינות נגדיות באלכסון. האם אפשר לכסות את 62 המשבצות שנותרו ב־31 אבני דומינו? כל אבן מכסה שתי משבצות סמוכות בצלע. מותר לסובב; אסור לחפוף או לחרוג.</p></div>
@@ -34,9 +34,10 @@
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-domino">צביעה מוצעת (סיסמה)</button>
       </div>
       <div id="widget-domino" class="widget-panel" aria-label="התנסות: דומינו"></div>
+      <p class="widget-note problem-reflection">סכמו את המסקנה: אם אפשר — הציגו כיסוי מלא; אם אי אפשר — הסבירו מדוע שום סידור לא יצליח.</p>
     </section>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Francis Su ואחרים, Math Fun Facts - Dominoes on a Chessboard</a></li></ul><p>בעיית הדומינו הקלאסית: לוח עם שתי פינות נגדיות חסרות.</p></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות למורה</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.hmc.edu/funfacts/dominoes-on-a-chessboard-2/" target="_blank" rel="noopener">Francis Su ואחרים, Math Fun Facts - Dominoes on a Chessboard</a></li></ul><p>בעיית הדומינו הקלאסית: לוח עם שתי פינות נגדיות חסרות.</p></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>

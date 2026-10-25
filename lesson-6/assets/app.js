@@ -5,7 +5,7 @@
   const colorNames = ['כחול', 'כתום', 'סגול', 'ירוק'];
   const host = document.getElementById('widget-' + id);
   const announcer = document.getElementById('announcer');
-  let controller = null, mode = 'plain', hintUnlocked = false, unlockAttempt = 0;
+  let controller = null, painter = null, mode = 'plain', hintUnlocked = false, unlockAttempt = 0, pendingUnlock = null;
   // Classroom hint gate. Each exercise has its own code; only digests are published.
   const hintDigests = {
   "domino": "f7a358b8e1946e636146c722435493ef810b7aeadbccc255e26a7d5adf28d917",
@@ -19,6 +19,8 @@
   "fox": "0fc570f3caf6fc5b90fbed79898bfc1fe18c21560aa56445eac750447e217475"
 };
   const hintButton = document.querySelector('[data-mode="suggested"]');
+  const about = document.getElementById('about-dialog');
+  const aboutButton = document.getElementById('about-button');
   const hintDialog = document.createElement('dialog');
   hintDialog.id = 'hint-dialog';
   hintDialog.className = 'hint-dialog';
@@ -40,15 +42,39 @@
   const hintPassword = hintDialog.querySelector('input');
   const hintError = hintDialog.querySelector('#hint-error');
   const hintSubmit = hintDialog.querySelector('[type="submit"]');
+  const hintTitle = hintDialog.querySelector('#hint-title');
+  const hintHelp = hintDialog.querySelector('#hint-help');
   hintButton.setAttribute('aria-haspopup', 'dialog');
   hintButton.setAttribute('aria-controls', host.id + ' hint-dialog');
-  hintDialog.querySelectorAll('[data-hint-cancel]').forEach(button => button.addEventListener('click', () => hintDialog.close()));
-  hintDialog.addEventListener('close', () => {
+  aboutButton.setAttribute('aria-haspopup', 'dialog');
+  aboutButton.setAttribute('aria-controls', 'about-dialog hint-dialog');
+  function resetUnlock() {
     unlockAttempt++;
+    pendingUnlock = null;
     hintPassword.value = '';
     hintPassword.removeAttribute('aria-invalid');
     hintError.textContent = '';
     hintSubmit.disabled = false;
+  }
+  function closeUnlock() {
+    resetUnlock();
+    if (hintDialog.open) hintDialog.close();
+  }
+  function requestUnlock(action) {
+    resetUnlock();
+    pendingUnlock = action;
+    const sources = action === 'sources';
+    hintTitle.textContent = sources ? 'מקורות למורה' : 'חשיפת הצביעה';
+    hintHelp.textContent = sources ? 'המקורות עשויים לכלול פתרונות. לפתיחתם יש להזין את הסיסמה לתרגיל הזה.' : 'הצביעה תיפתח בעזרת הסיסמה לתרגיל הזה, כשהמורה יחליט שהגיע הזמן.';
+    hintSubmit.textContent = sources ? 'פתיחת המקורות' : 'חשיפת הצביעה';
+    if (!hintDialog.open) hintDialog.showModal();
+    hintPassword.focus();
+  }
+  hintDialog.querySelectorAll('[data-hint-cancel]').forEach(button => button.addEventListener('click', closeUnlock));
+  hintDialog.addEventListener('cancel', event => { event.preventDefault(); closeUnlock(); });
+  hintDialog.addEventListener('close', () => {
+    // A delayed close event must not invalidate a newly opened request.
+    if (!hintDialog.open) resetUnlock();
   });
   hintPassword.addEventListener('input', () => {
     hintPassword.removeAttribute('aria-invalid');
@@ -56,6 +82,7 @@
   });
   hintForm.addEventListener('submit', async event => {
     event.preventDefault();
+    if (!hintDialog.open || !pendingUnlock) return;
     const attempt = ++unlockAttempt;
     const password = hintPassword.value.trim();
     hintSubmit.disabled = true;
@@ -75,29 +102,33 @@
       hintButton.textContent = 'צביעה מוצעת';
       hintButton.removeAttribute('aria-haspopup');
       hintButton.setAttribute('aria-controls', host.id);
-      hintDialog.close();
-      setMode('suggested');
+      aboutButton.setAttribute('aria-controls', 'about-dialog');
+      const action = pendingUnlock;
+      closeUnlock();
+      if (action === 'sources') about.showModal(); else setMode('suggested');
     } catch (_) {
       if (attempt === unlockAttempt && hintDialog.open) hintError.textContent = 'לא ניתן לבדוק את הסיסמה כרגע. נסו לרענן את הדף.';
     } finally {
       if (attempt === unlockAttempt) hintSubmit.disabled = false;
     }
   });
-  const painter = window.PisgaPainter.create(host, {id, colors, colorNames, onChange: () => { if (controller && controller.repaint) controller.repaint(); }});
   try {
+    painter = window.PisgaPainter.create(host, {id, colors, colorNames, onChange: () => { if (controller && controller.repaint) controller.repaint(); }});
     controller = window.Widgets[id](host, {mode, colors, colorNames, painter});
   } catch (error) {
+    if (painter) painter.dispose();
+    painter = null;
     host.innerHTML = '<p class="error-box">ההתנסות לא נטענה. נסו לרענן את הדף.</p>';
+    document.querySelectorAll('[data-mode]').forEach(button => { button.disabled = true; });
     console.error(error);
   }
   function setMode(next) {
     if (!controller || !['plain', 'free', 'suggested'].includes(next)) return;
     if (next === 'suggested' && !hintUnlocked) {
-      if (!hintDialog.open) hintDialog.showModal();
-      hintPassword.focus();
+      requestUnlock('suggested');
       return;
     }
-    if (hintDialog.open) hintDialog.close();
+    if (hintDialog.open) closeUnlock();
     mode = next;
     painter.setMode(mode);
     controller.setMode(mode);
@@ -116,15 +147,14 @@
     const isFull = Boolean(document.fullscreenElement);
     full.setAttribute('aria-pressed', String(isFull)); full.textContent = isFull ? 'יציאה ממסך מלא' : 'מסך מלא';
   });
-  const about = document.getElementById('about-dialog');
-  document.getElementById('about-button').addEventListener('click', () => about.showModal());
+  aboutButton.addEventListener('click', () => { if (hintUnlocked) about.showModal(); else requestUnlock('sources'); });
   document.getElementById('close-about').addEventListener('click', () => about.close());
   about.addEventListener('click', event => {
     if (event.target !== about) return;
     const rect = about.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) about.close();
   });
-  window.addEventListener('pagehide', event => { if (!event.persisted) { painter.dispose(); if (controller && controller.dispose) controller.dispose(); } });
-  window.PisgaApp = {setMode, getState: () => ({active:id, mode, painting:painter.getState(), widget:controller && controller.getState()})};
+  window.addEventListener('pagehide', event => { if (!event.persisted) { if (painter) painter.dispose(); if (controller && controller.dispose) controller.dispose(); } });
+  window.PisgaApp = {setMode, getState: () => ({active:id, mode, painting:painter && painter.getState(), widget:controller && controller.getState()})};
 })();
 

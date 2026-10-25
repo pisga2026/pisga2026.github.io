@@ -103,10 +103,20 @@ body.pisga.coloring-lesson{padding-inline:12px}
 .pisga .self-paint-tools,.pisga .self-paint-colors,.pisga .self-paint-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .pisga .self-paint-panel button{min-height:40px;font-size:14px;padding:7px 10px}
 .pisga .self-paint-panel .self-paint-swatch{background:var(--paint-color);box-shadow:2px 2px 0 var(--navy);border:2px solid var(--navy);display:flex;align-items:center;gap:5px}
+.pisga .self-paint-panel .self-paint-swatch:hover:not(:disabled){background:var(--paint-color);filter:none}
 .pisga .self-paint-swatch span{display:inline-grid;place-items:center;width:19px;height:19px;border:1px solid var(--navy);background:#ffffff70;font-weight:900}
 .pisga .self-paint-panel [aria-pressed=true]{outline:2px solid var(--navy);outline-offset:2px}
 .pisga .self-paint-help{flex-basis:100%;margin:0;font-size:13px;line-height:1.4}
 .pisga .is-self-painting .tl-cell,.pisga .is-self-painting .pg-ant-cell,.pisga .is-self-painting .pg-card,.pisga .is-self-painting .pg-door,.pisga .is-self-painting .knight-cell,.pisga .is-self-painting .jumpers-cell,.pisga .is-self-painting .lamps-bulb{touch-action:none;cursor:crosshair;user-select:none}
 .pisga .is-self-painting .tl-preview::after,.pisga .is-self-painting .tl-invalid::after,.pisga .is-self-painting .knight-possible{display:none}
 .pisga .is-self-painting .lamps-bulb.is-preview{outline:none}
+/* Hover and selection identify a cell without changing its mathematical color. */
+.pisga .jumpers-widget .jumpers-cell:hover:not(:disabled){background:var(--cell-color);filter:none;transform:none}
+.pisga .knight-widget .knight-cell:hover:not(:disabled){background:#fff4d4;filter:none;box-shadow:none}
+.pisga .knight-colored .knight-cell.is-dark:hover:not(:disabled){background:#285575}
+.pisga .is-current .knight-step{z-index:3}
+.pisga .pg-games .pg-ant-cell.pg-selected{background:var(--cell-color)}
+.pisga .problem-reflection{font-size:14px;line-height:1.5;margin:14px 2px 4px}
+@media print{.pisga .self-paint-panel{display:none!important}.pisga .widget-panel{break-inside:avoid}.pisga .widget-panel button{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
 @media(max-width:600px){.pisga .self-paint-panel{gap:10px;padding:10px}.pisga .self-paint-colors{gap:7px}.pisga .self-paint-panel button{min-height:42px}.pisga .stage-button{font-size:13px}}
+@media(max-width:380px){.pisga .pg-card-row{gap:3px}.pisga .pg-games .pg-card{padding-inline:0}.pisga .pg-card-value{font-size:18px}.pisga .pg-card-owner{white-space:normal;line-height:1.15}}

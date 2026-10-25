@@ -34,7 +34,7 @@
     const names=options.colorNames || ['כחול','כתום','סגול','ירוק'];
     const state={ mode:options.mode||'plain', variant:initialVariant.key, selected:Object.keys(cfg.shapes)[0], turns:0, brush:0, action:'play', paint:Array(cfg.rows*cfg.cols).fill(-1), pieces:[], history:[], holes:copy(initialVariant.holes), nextId:1, status:`${initialVariant.label}. בחרו חלק, ואז לחצו על משבצת כדי להניח אותו.` };
     configureShapes();
-    if(state.mode==='free') state.action='paint';
+    if(state.mode==='free'&&!options.painter) state.action='paint';
     host.classList.add('tl-widget');
     host.innerHTML=`
       <div class="tl-tools tool-row"></div>
@@ -173,7 +173,17 @@
       const shown=state.mode==='suggested'?(type==='tromino'?3:2):colors.length;
       ui.counts.innerHTML=counts.slice(0,shown).map((v,i)=>`<span class="tl-color-stat"><i style="background:${colors[i]}" aria-hidden="true"></i><b>${names[i]}</b>: ${v.total} בלוח · ${v.covered} מכוסות</span>`).join('')+(state.mode==='free'?`<span class="tl-color-stat">ללא צבע: ${blank}</span>`:'');
     }
-    function render(){renderTools();renderPaint();renderPicker();renderBoard();renderCounts();ui.status.textContent=state.status;}
+    function render(){
+      const active=document.activeElement;
+      let focus=null;
+      if(active&&host.contains(active)){
+        if(active.matches('[data-r][data-c]'))focus=`[data-r="${active.dataset.r}"][data-c="${active.dataset.c}"]`;
+        else if(active.matches('[data-shape]'))focus=`[data-shape="${active.dataset.shape}"]`;
+        else focus=['.tl-variant','.tl-undo','.tl-reset'].find(selector=>active.matches(selector));
+      }
+      renderTools();renderPaint();renderPicker();renderBoard();renderCounts();ui.status.textContent=state.status;
+      if(focus){const same=host.querySelector(focus);const next=same&&!same.disabled?same:ui.picker.querySelector('[data-shape]:not(:disabled)');if(next)next.focus({preventScroll:true});}
+    }
     function reset(){if(state.pieces.length)snapshot();state.pieces=[];state.nextId=1;state.selected=Object.keys(cfg.shapes)[0];state.turns=0;render();status('החלקים הוחזרו למגש. הצביעה והחלק הנבחר בתרגיל נשמרו.');}
     render();
     return {

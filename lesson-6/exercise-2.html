@@ -9,10 +9,10 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261025-self-paint">
-  <script src="assets/painting.js?v=20261025-self-paint" defer></script>
-  <script src="assets/games.js?v=20261025-self-paint" defer></script>
-  <script src="assets/app.js?v=20261025-self-paint" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261025-audit">
+  <script src="assets/painting.js?v=20261025-audit" defer></script>
+  <script src="assets/games.js?v=20261025-audit" defer></script>
+  <script src="assets/app.js?v=20261025-audit" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="coin">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -24,19 +24,20 @@
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
       <div><h1 id="problem-title">תרגיל 8: משחק הקצוות</h1></div>
-      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
+      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות למורה</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
-      <div class="problem-question"><p><strong>א · מתחילים:</strong> שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. כל שחקן צובר את המספרים שלקח, ומי שסכומו גדול יותר מנצח. התחילו בארבעה קלפים: מה כדאי לשחקן הראשון לקחת? שחקו בשני הצדדים ובדקו תגובות שונות.</p><p><strong>ב · מרחיבים ומכלילים:</strong> עברו לשמונה קלפים ונסו גם סידורים חדשים. האם לשחקן הראשון יש דרך להבטיח לפחות תיקו בכל שורה עם מספר זוגי של קלפים, בלי קשר לתגובות היריב?</p></div>
+      <div class="problem-question"><p><strong>א · מתחילים:</strong> שני שחקנים לוקחים בתורות קלף אחד מאחד הקצוות של השורה. משחקים עד שכל הקלפים נלקחו. מי שסכום הקלפים שלו גדול יותר מנצח; בשוויון יש תיקו. התחילו בארבעה קלפים: מה כדאי לשחקן הראשון לקחת? החליפו תפקידים ובדקו תגובות שונות.</p><p><strong>ב · מרחיבים ומכלילים:</strong> עברו לשמונה קלפים ונסו גם סידורים חדשים. האם לשחקן הראשון יש דרך להבטיח לפחות תיקו בכל שורה עם מספר זוגי של קלפים, בלי קשר לתגובות היריב?</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-coin">ללא צביעה</button>
         <button class="stage-button" data-mode="free" type="button" aria-pressed="false" aria-controls="widget-coin">צביעה עצמית</button>
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-coin">צביעה מוצעת (סיסמה)</button>
       </div>
       <div id="widget-coin" class="widget-panel" aria-label="התנסות: משחק הקצוות"></div>
+      <p class="widget-note problem-reflection">תארו כלל פעולה לשחקן הראשון, והסבירו מדוע הוא עובד גם אם היריב בוחר אחרת מהבחירות שניסיתם.</p>
     </section>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">דוד גינת - Problem Solving of Mathematical Games (2022), סעיף 2.4: Left/Right Ends</a></li></ul><p>עיבוד המשחק לשורות של ארבעה ושמונה קלפים.</p></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות למורה</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://www.intechopen.com/chapters/84970" target="_blank" rel="noopener">דוד גינת - Problem Solving of Mathematical Games (2022), סעיף 2.4: Left/Right Ends</a></li></ul><p>עיבוד המשחק לשורות של ארבעה ושמונה קלפים.</p></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>

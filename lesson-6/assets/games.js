@@ -24,6 +24,21 @@
     return '<div class="pg-color-stats" aria-label="' + (values ? 'סכומי הקלפים לפי צבע מקורי' : 'מספר משבצות מכל צבע') + '">' + (values ? '<strong>סכום כל צבע:</strong>' : '<strong>משבצות מכל צבע:</strong>') + entries + (unpainted ? '<span class="muted">ללא צבע: ' + unpainted + '</span>' : '') + '</div>';
   }
   function colorIndex(mode, free, i, suggested, custom) { return mode === 'plain' ? -1 : mode === 'free' ? custom ? custom(i) : free[i] : suggested(i); }
+  // These games rebuild their controls after a move. Keep keyboard focus inside
+  // the activity, including when the card or door just used becomes disabled.
+  function rememberFocus(host) {
+    const active = typeof document === 'undefined' ? null : document.activeElement;
+    if (!active || !host.contains(active)) return null;
+    const keys = ['data-card', 'data-coin', 'data-coin-size', 'data-door', 'data-fox', 'data-fox-reveal', 'data-ant-cell', 'data-ants', 'data-ant-size'];
+    const key = keys.find(name => active.hasAttribute(name));
+    return key ? '[' + key + '="' + active.getAttribute(key) + '"]' : null;
+  }
+  function restoreFocus(host, selector, fallback) {
+    if (!selector) return;
+    const same = host.querySelector(selector);
+    const next = same && !same.disabled ? same : host.querySelector(fallback);
+    if (next) next.focus({preventScroll: true});
+  }
   function applyPainterEvent(target, state, render) {
     const tool = target.closest('[data-pg-tool]');
     const swatch = target.closest('[data-pg-color]');
@@ -40,6 +55,7 @@
     host.classList.add('pg-games', 'pg-coin');
     function owners() { const a = Array(s.values.length).fill(-1); s.picks.forEach((p, k) => a[p] = k % 2); return a; }
     function render() {
+      const focus = rememberFocus(host);
       const owned = owners(), remaining = owned.map((p, i) => p < 0 ? i : -1).filter(i => i >= 0);
       const first = remaining[0], last = remaining[remaining.length - 1], turn = s.picks.length % 2;
       const totals = [0, 0]; owned.forEach((p, i) => { if (p >= 0) totals[p] += s.values[i]; });
@@ -53,10 +69,11 @@
         '<div class="pg-card-row" style="grid-template-columns:repeat(' + s.values.length + ',minmax(0,1fr));max-width:' + (s.values.length === 4 ? '460' : '780') + 'px" dir="ltr" role="group" aria-label="שורת הקלפים, משמאל לימין">' + s.values.map((v, i) => {
           const paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
           const available = owned[i] < 0 && (i === first || i === last);
-          return '<button type="button" class="pg-card ' + (owned[i] >= 0 ? 'pg-taken' : '') + (available ? ' pg-endpoint' : '') + '" data-card="' + i + '" style="--card-color:' + (paints[i] < 0 ? neutral : colors[paints[i]]) + '" ' + (!paintEnabled && !available ? 'disabled' : '') + ' aria-label="מקום ' + (i + 1) + ', המספר ' + v + (owned[i] >= 0 ? ', נאסף על ידי שחקן ' + (owned[i] + 1) : available ? ', אפשר לבחור' : '') + '"><small class="pg-card-index">' + (i + 1) + '</small><span class="pg-card-value">' + v + '</span><span class="pg-card-owner">' + (owned[i] < 0 ? (available ? 'בחרו' : '') : 'שחקן ' + (owned[i] + 1)) + '</span></button>';
+          return '<button type="button" class="pg-card ' + (owned[i] >= 0 ? 'pg-taken' : '') + (available ? ' pg-endpoint' : '') + '" data-card="' + i + '" style="--card-color:' + (paints[i] < 0 ? neutral : colors[paints[i]]) + '" ' + (!paintEnabled && !available ? 'disabled' : '') + ' aria-label="מקום ' + (i + 1) + ', המספר ' + v + (paints[i] < 0 ? '' : ', צבע ' + names[paints[i]]) + (owned[i] >= 0 ? ', נאסף על ידי שחקן ' + (owned[i] + 1) : available ? ', אפשר לבחור' : '') + '"><small class="pg-card-index">' + (i + 1) + '</small><span class="pg-card-value">' + v + '</span><span class="pg-card-owner">' + (owned[i] < 0 ? (available ? 'בחרו' : '') : 'שחקן ' + (owned[i] + 1)) + '</span></button>';
         }).join('') + '</div>' +
         '<p class="widget-note pg-note">מספרי המקומות הקטנים נשארים קבועים. הקלפים שנאספו מסומנים בתוך השורה.</p>' +
         (s.mode !== 'plain' ? colorStats(paints, s.values, colors, names) : '') + '<p class="live-status pg-status" role="status" aria-live="polite">' + message + '</p>';
+      restoreFocus(host, focus, done ? '[data-coin="undo"]' : '[data-card]:not(:disabled)');
     }
     function reset() { s.picks = []; render(); }
     host.addEventListener('click', e => {
@@ -100,6 +117,7 @@
       return {possible, caught, steps};
     }
     function render() {
+      const focus = rememberFocus(host);
       const result = calculate(), paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
       const reveal = s.mode === 'suggested' && s.reveal;
       const lastDoor = s.history[s.history.length - 1];
@@ -111,13 +129,14 @@
         '<div class="pg-fox-day"><span>יום <strong>' + day + '</strong></span><span>' + s.history.length + ' בדיקות</span></div>' +
         '<div class="pg-door-row" dir="ltr" role="group" aria-label="חמש דלתות, משמאל לימין">' + [1, 2, 3, 4, 5].map(d => {
           const c = colorIndex(s.mode, s.free, d - 1, i => i % 2, options.painter && (i => options.painter.color(i))), candidate = result.possible.includes(d);
-          const label = 'דלת ' + d + (reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
+          const label = 'דלת ' + d + (c < 0 ? '' : ', צבע ' + names[c]) + (reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
           return '<button type="button" class="pg-door ' + (reveal && !result.caught ? candidate ? 'pg-possible' : 'pg-impossible' : '') + (result.caught && d === lastDoor ? ' pg-caught' : '') + '" data-door="' + d + '" style="--door-color:' + (c < 0 ? neutral : colors[c]) + '" aria-label="' + label + '" ' + (result.caught && !paintEnabled ? 'disabled' : '') + '><span class="pg-door-number">' + d + '</span><span class="pg-door-inset">' + (result.caught && d === lastDoor ? foxSVG : '<span class="pg-door-handle"></span>') + '</span><span class="pg-door-candidate">' + (reveal && !result.caught && candidate ? 'אולי כאן' : '') + '</span></button>';
         }).join('') + '</div>' +
         '<div class="pg-fox-history"><strong>הבדיקות שלכם:</strong><span dir="ltr">' + (s.history.join(' → ') || '-') + '</span></div>' +
         (reveal && !result.caught ? '<div class="pg-possibility-note">לפני הבדיקה הבאה השועל יכול להיות בדלתות <b dir="ltr">' + result.possible.join(', ') + '</b>.</div>' : '') +
         '<p class="live-status pg-status" role="status" aria-live="polite">' + message + '</p>' +
         '<p class="widget-note pg-note"><strong>שועל חכם:</strong> כל עוד קיים מסלול חוקי שמתחמק מכל הבדיקות שלכם, השועל מתחמק. בכל לילה הוא חייב לעבור לדלת סמוכה.</p>';
+      restoreFocus(host, focus, '[data-fox="undo"]');
     }
     function reset() { s.history = []; render(); }
     host.addEventListener('click', e => {
@@ -155,6 +174,7 @@
       s.history.push(s.targets.slice()); s.targets[i] = j; s.selected = null; s.note = ''; render(); focusAnt(i);
     }
     function render() {
+      const focus = rememberFocus(host);
       const assigned = s.targets.filter(t => t !== null).length, paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
       const cells = Array.from({length: s.n * s.n}, (_, i) => i), occupancy = counts();
       const collisionCells = occupancy.filter(x => x > 1).length, emptyCells = occupancy.filter(x => x === 0).length;
@@ -170,6 +190,7 @@
           const selected = s.selected === i, targetable = s.selected !== null && neighbours(s.selected).includes(i);
           const c = painted[i], r = Math.floor(i / s.n), col = i % s.n;
           let label = 'שורה ' + (r + 1) + ', עמודה ' + (col + 1);
+          if (c >= 0) label += ', צבע ' + names[c];
           if (s.phase === 'result') label += ', ' + occupancy[i] + ' נמלים';
           else if (s.targets[i] !== null) label += ', כיוון ' + ({'↑':'למעלה','↓':'למטה','←':'שמאלה','→':'ימינה'}[arrow(i, s.targets[i])]);
           return '<button type="button" class="pg-ant-cell ' + (selected ? 'pg-selected ' : '') + (targetable ? 'pg-targetable ' : '') + (s.phase === 'result' && occupancy[i] > 1 ? 'pg-collision ' : '') + '" style="--cell-color:' + (c < 0 ? neutral : colors[c]) + '" data-ant-cell="' + i + '" aria-label="' + label + '" ' + (s.phase !== 'plan' && !paintEnabled ? 'disabled' : '') + '>' +
@@ -180,6 +201,7 @@
         }).join('') + '</div>' : '') + '</div>' +
         (s.mode !== 'plain' ? colorStats(painted, null, colors, names) : '') +
         '<p class="live-status pg-status" role="status" aria-live="polite">' + message + '</p><p class="widget-note pg-note">מותר לשתי נמלים להחליף מקומות. בודקים את מספר הנמלים בכל משבצת רק בסיום התנועה. אפשר גם לבחור נמלה ולהשתמש בחצי המקלדת.</p>';
+      restoreFocus(host, focus, '[data-ants="reset"]');
     }
     function move() {
       if (s.targets.some(t => t === null) || s.phase === 'moving') return;
@@ -221,7 +243,7 @@
       if (!(e.key in offsets)) return;
       e.preventDefault(); const i = Number(cell.dataset.antCell); setTarget(i, i + offsets[e.key]);
     });
-    host.addEventListener('change', e => { if (e.target.matches('[data-ant-size]')) { s.n = Number(e.target.value); s.free = Array(s.n * s.n).fill(-1); reset(); } });
+    host.addEventListener('change', e => { if (e.target.matches('[data-ant-size]')) { const n = Number(e.target.value); if (n !== 4 && n !== 5) return; s.n = n; s.free = Array(s.n * s.n).fill(-1); reset(); } });
     render();
     return {setMode(mode) { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } s.mode = mode; render(); }, repaint() { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } render(); }, reset, getState() { return {mode: s.mode, n: s.n, targets: s.targets.slice(), freeColors: s.free.slice(), selected: s.selected, phase: s.phase, occupancy: counts(), paint: s.paint}; }, dispose() { stopAnimation(); }};
   };

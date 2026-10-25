@@ -8,7 +8,7 @@
     const names = (options.colorNames || ['כחול', 'כתום', 'סגול', 'ירוק']).slice(0, 4);
     const marks = ['א', 'ב', 'ג', 'ד'];
     const variants = {a: [0, 3], b: [0, 4]};
-    const s = {mode: options.mode === 'suggested' ? 'suggested' : 'plain', variant: 'a', lit: [], history: []};
+    const s = {mode: ['plain', 'free', 'suggested'].includes(options.mode) ? options.mode : 'plain', variant: 'a', lit: [], history: []};
     let hovered = null, focused = null;
 
     function triple(center) { return [(center + size - 1) % size, center, (center + 1) % size]; }
@@ -127,7 +127,7 @@
       reset,
       repaint:render,
       getState() {
-        return {mode: s.mode, size, variant: s.variant, lit: s.lit.slice(), litPositions: s.lit.flatMap((on, i) => on ? [i + 1] : []), moves: s.history.length, history: s.history.map(step => ({center: step.center, lit: step.lit.slice()})), positionColors: s.lit.map((_, i) => s.mode === 'suggested' ? i % 3 : -1), preview: currentPreview(), solved: !s.lit.some(Boolean)};
+        return {mode: s.mode, size, variant: s.variant, lit: s.lit.slice(), litPositions: s.lit.flatMap((on, i) => on ? [i + 1] : []), moves: s.history.length, history: s.history.map(step => ({center: step.center, lit: step.lit.slice()})), positionColors: s.lit.map((_, i) => s.mode === 'suggested' ? i % 3 : s.mode === 'free' && options.painter ? options.painter.color(i) : -1), preview: currentPreview(), solved: !s.lit.some(Boolean)};
       },
       dispose() { Object.keys(handlers).forEach(name => host.removeEventListener(name, handlers[name])); }
     };

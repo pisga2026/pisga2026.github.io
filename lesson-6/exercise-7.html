@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
   <link rel="stylesheet" href="assets/knight.css?v=20261023-classroom">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261025-self-paint">
-  <script src="assets/painting.js?v=20261025-self-paint" defer></script>
-  <script src="assets/knight.js?v=20261025-self-paint" defer></script>
-  <script src="assets/app.js?v=20261025-self-paint" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261025-audit">
+  <script src="assets/painting.js?v=20261025-audit" defer></script>
+  <script src="assets/knight.js?v=20261025-audit" defer></script>
+  <script src="assets/app.js?v=20261025-audit" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="knight">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -25,7 +25,7 @@
     <a class="course-back" href="../#lesson-6">→ לתוכן העניינים · שיעור 6</a>
     <header class="lab-heading">
       <div><h1 id="problem-title">תרגיל 3: מסלול הפרש</h1></div>
-      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
+      <div class="heading-actions"><button id="about-button" class="btn secondary" type="button">מקורות למורה</button><button id="full-screen" class="btn secondary" type="button" aria-pressed="false">מסך מלא</button></div>
     </header>
     <section class="problem-page" aria-labelledby="problem-title">
       <div class="problem-question"><p>נסו לבנות מסלול סגור של פרש בלוח <bdi>5 × 5</bdi>: לבקר בכל 25 המשבצות בדיוק פעם אחת, ואז לחזור למשבצת ההתחלה בקפיצה נוספת. אפשר להתחיל בכל משבצת.</p><p>פרש קופץ שתי משבצות בכיוון אחד ומשבצת אחת בניצב לו. האם אפשר להשלים את המסלול?</p></div>
@@ -35,9 +35,10 @@
         <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-knight">צביעה מוצעת (סיסמה)</button>
       </div>
       <div id="widget-knight" class="widget-panel" aria-label="התנסות: מסלול הפרש"></div>
+      <p class="widget-note problem-reflection">סכמו: האם אפשר לבקר בכל המשבצות וגם לחזור להתחלה? נמקו מעבר לתיאור הניסיונות שלכם.</p>
     </section>
   </main>
-  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.mit.edu/~rstan/papers/knight.pdf" target="_blank" rel="noopener">Noam D. Elkies ו-Richard P. Stanley - The Mathematical Knight (2003)</a></li></ul><p>עיבוד לימודי לבעיית מסלול הפרש הקלאסית, בבניית מסלול סגור בלוח <bdi>5 × 5</bdi>.</p></dialog>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><h2 id="about-title">מקורות למורה</h2><button id="close-about" type="button" aria-label="סגירה">×</button></div><ul><li><a href="https://math.mit.edu/~rstan/papers/knight.pdf" target="_blank" rel="noopener">Noam D. Elkies ו-Richard P. Stanley - The Mathematical Knight (2003)</a></li></ul><p>עיבוד לימודי לבעיית מסלול הפרש הקלאסית, בבניית מסלול סגור בלוח <bdi>5 × 5</bdi>.</p></dialog>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
   <noscript><p class="noscript-warning">כדי להפעיל את ההתנסות יש לאפשר JavaScript בדפדפן.</p></noscript>
 </body>

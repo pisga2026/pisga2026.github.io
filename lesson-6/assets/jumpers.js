@@ -23,6 +23,13 @@
     function coordinate(cell) { return '(' + (Math.floor(cell / size) + 1) + ',' + (cell % size + 1) + ')'; }
     function focusCell(cell) { const button = host.querySelector('[data-jumper-cell="' + cell + '"]'); if (button) button.focus({preventScroll: true}); }
     function render(focus) {
+      const active = typeof document === 'undefined' ? null : document.activeElement;
+      let focusSelector = null;
+      if (active && host.contains(active)) {
+        if (active.matches('[data-jumper-action]')) focusSelector = '[data-jumper-action="' + active.dataset.jumperAction + '"]';
+        else if (active.matches('[data-jumper-target]')) focusSelector = '[data-jumper-target]';
+        else if (active.matches('[data-jumper-cell]') && typeof focus !== 'number') focus = Number(active.dataset.jumperCell);
+      }
       const painting = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint), reached = s.pieces.includes(s.target);
       const destinations = s.selected === null ? [] : moves(s.selected);
       let message = s.note || (reached ? 'הגעתם לכוכב ב־' + s.history.length + ' קפיצות! אפשר לחזור להתחלה ולבדוק יעד אחר.' : s.selected === null ? 'בחרו כלי, ואז משבצת מסומנת לקפיצה.' : destinations.length ? 'בחרו אחת ממשבצות הנחיתה המסומנות.' : 'לכלי הזה אין כרגע קפיצה אפשרית. בחרו כלי אחר.');
@@ -38,6 +45,10 @@
         (s.mode === 'suggested' ? '<div class="jumpers-legend" aria-label="מקרא צבעים">' + colors.map((color, i) => '<span><i style="background:' + color + '" aria-hidden="true">' + marks[i] + '</i>' + names[i] + '</span>').join('') + '</div>' : '') +
         '<p class="live-status' + (reached && !painting ? ' success' : '') + '" role="status" aria-live="polite">' + message + '</p><p class="widget-note">במקלדת: חצים למעבר בין משבצות, Enter או רווח לבחירה. החלפת היעד מחזירה את הכלים להתחלה.</p>';
       if (typeof focus === 'number') focusCell(focus);
+      else if (focusSelector) {
+        const same = host.querySelector(focusSelector);
+        (same && !same.disabled ? same : host.querySelector('[data-jumper-action="reset"]')).focus({preventScroll: true});
+      }
     }
     function reset() { s.pieces = initial.slice(); s.selected = null; s.history = []; s.note = ''; render(); }
     function select(cell) {

@@ -101,6 +101,12 @@
       const cellElement = event.target.closest('[data-cell]');
       if (cellElement && cells.includes(cellElement)) choose(Number(cellElement.dataset.cell));
     }
+    function focusin(event) {
+      const cellElement = event.target.closest('[data-cell]');
+      if (!cellElement || !cells.includes(cellElement)) return;
+      focused = Number(cellElement.dataset.cell);
+      cells.forEach((element, index) => element.setAttribute('tabindex', index === focused ? '0' : '-1'));
+    }
     function keydown(event) {
       const cellElement = event.target.closest('[data-cell]');
       if (disposed || !cellElement || !cells.includes(cellElement)) return;
@@ -124,6 +130,7 @@
       cells[next].focus();
     }
     host.addEventListener('click', click);
+    host.addEventListener('focusin', focusin);
     host.addEventListener('keydown', keydown);
     undoButton.addEventListener('click', undo);
     resetButton.addEventListener('click', reset);
@@ -137,6 +144,7 @@
         if (disposed) return;
         disposed = true;
         host.removeEventListener('click', click);
+        host.removeEventListener('focusin', focusin);
         host.removeEventListener('keydown', keydown);
         undoButton.removeEventListener('click', undo);
         resetButton.removeEventListener('click', reset);

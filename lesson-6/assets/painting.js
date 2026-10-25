@@ -32,12 +32,15 @@
       panel.querySelectorAll('[data-paint-color]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.paintColor) === brush)));
       panel.querySelector('[data-paint-undo]').disabled = history.length === 0;
       panel.querySelector('[data-paint-clear]').disabled = ink.size === 0;
-      help.textContent = tool === 'paint' ? 'בחרו צבע וצבעו בלחיצה או בגרירה. כדי להמשיך בתרגיל, בחרו ״משחקים״. הצביעה נשמרת.' : 'המשיכו בתרגיל עם הצביעה שלכם. אפשר לחזור לצביעה בכל רגע.';
+      const instruction = tool === 'paint' ? 'בחרו צבע וצבעו בלחיצה או בגרירה. כדי להמשיך בתרגיל, בחרו ״משחקים״. הצביעה נשמרת.' : 'המשיכו בתרגיל עם הצביעה שלכם. אפשר לחזור לצביעה בכל רגע.';
+      if (help.textContent !== instruction) help.textContent = instruction;
     }
     function refresh() { options.onChange(); update(); }
     function finish() {
-      if (stroke) { remember(stroke); stroke = null; }
+      const captured = pointer;
       pointer = null; lastPoint = null;
+      if (stroke) { remember(stroke); stroke = null; }
+      if (captured !== null && host.hasPointerCapture && host.hasPointerCapture(captured)) host.releasePointerCapture(captured);
       update();
     }
     function paint(key) {
@@ -72,6 +75,8 @@
       if (!active() || (event.button !== undefined && event.button !== 0)) return;
       const cell = cellAt(event.target); if (!cell) return;
       stop(event);
+      // One pointer owns the stroke. A second finger must not split its undo entry.
+      if (pointer !== null || event.isPrimary === false) return;
       finish();
       pointer = event.pointerId;
       lastPoint = {x: event.clientX, y: event.clientY};
@@ -91,9 +96,15 @@
       if (active() && event.type !== 'pointercancel') paintLine(lastPoint, {x: event.clientX, y: event.clientY});
       finish();
     }
+    function lostCapture(event) { if (event.pointerId === pointer) finish(); }
+    function selectPiece(event) {
+      if (!active() || !event.target.closest('[data-shape]')) return false;
+      finish(); tool = 'play'; update();
+      return true;
+    }
     function click(event) {
       if (!active()) return;
-      if (event.target.closest('[data-shape]')) { finish(); tool = 'play'; update(); return; }
+      if (selectPiece(event)) return;
       const cell = cellAt(event.target); if (!cell) return;
       stop(event);
       // Keyboard and accessibility activation have no pointer stroke.
@@ -140,7 +151,7 @@
         }
       }
     }
-    const handlers = {pointerdown: down, pointermove: move, pointerup: up, pointercancel: up, click, keydown};
+    const handlers = {pointerdown: down, pointermove: move, pointerup: up, pointercancel: up, lostpointercapture: lostCapture, dragstart: selectPiece, click, keydown};
     Object.entries(handlers).forEach(([name, callback]) => host.addEventListener(name, callback, true));
     panel.addEventListener('keydown', keydown);
     update();
@@ -149,7 +160,7 @@
       isPainting:active,
       setMode(next) { finish(); mode = next; update(); },
       getState() { return {mode, tool, brush, colors: Object.fromEntries(ink), undoCount: history.length}; },
-      dispose() { Object.entries(handlers).forEach(([name, callback]) => host.removeEventListener(name, callback, true)); panel.remove(); }
+      dispose() { finish(); Object.entries(handlers).forEach(([name, callback]) => host.removeEventListener(name, callback, true)); panel.remove(); }
     };
   }
   window.PisgaPainter = {create};
