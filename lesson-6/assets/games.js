@@ -35,7 +35,7 @@
 
   W.coin = function (host, options) {
     const colors = options.colors, names = options.colorNames;
-    const initialRows = {4: [8, 30, 2, 3], 8: [8, 30, 2, 3, 4, 5, 6, 1]};
+    const initialRows = {4: [12, 14, 9, 10], 8: [10, 14, 11, 12, 15, 13, 9, 7]};
     const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(4).fill(-1), values: initialRows[4].slice(), picks: []};
     host.classList.add('pg-games', 'pg-coin');
     function owners() { const a = Array(s.values.length).fill(-1); s.picks.forEach((p, k) => a[p] = k % 2); return a; }
