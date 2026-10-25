@@ -4,9 +4,9 @@
   W.lamps = function (host, options) {
     options = options || {};
     const size = 12;
-    const colors = (options.colors || ['#63c6ef', '#ffb77b', '#b6a4ed']).slice(0, 3);
-    const names = (options.colorNames || ['כחול', 'כתום', 'סגול']).slice(0, 3);
-    const marks = ['א', 'ב', 'ג'];
+    const colors = (options.colors || ['#63c6ef', '#ffb77b', '#b6a4ed', '#8fdeb1']).slice(0, 4);
+    const names = (options.colorNames || ['כחול', 'כתום', 'סגול', 'ירוק']).slice(0, 4);
+    const marks = ['א', 'ב', 'ג', 'ד'];
     const variants = {a: [0, 3], b: [0, 4]};
     const s = {mode: options.mode === 'suggested' ? 'suggested' : 'plain', variant: 'a', lit: [], history: []};
     let hovered = null, focused = null;
@@ -17,7 +17,7 @@
     function buttonOf(target) { return target && target.closest ? target.closest('[data-lamp]') : null; }
     function currentPreview() { return hovered === null ? focused : hovered; }
     function preview() {
-      const center = currentPreview();
+      const center = options.painter && options.painter.isPainting() ? null : currentPreview();
       const cells = center === null ? [] : triple(center);
       lampButtons.forEach((button, i) => {
         button.classList.toggle('is-preview', cells.includes(i));
@@ -25,22 +25,23 @@
       });
     }
     function render() {
-      const painted = s.mode === 'suggested';
+      const painted = s.mode !== 'plain';
       const litCount = s.lit.filter(Boolean).length;
       host.classList.toggle('has-coloring', painted);
       host.classList.toggle('is-solved', litCount === 0);
       lampButtons.forEach((button, i) => {
-        const on = s.lit[i], color = i % 3;
+        const on = s.lit[i], color = s.mode === 'suggested' ? i % 3 : s.mode === 'free' && options.painter ? options.painter.color(i) : -1;
         button.classList.toggle('is-on', on);
         button.setAttribute('aria-pressed', String(on));
-        button.setAttribute('aria-label', 'נורה ' + (i + 1) + ', ' + (on ? 'דולקת' : 'כבויה') + (painted ? ', צבע ' + names[color] + ', קבוצה ' + marks[color] : '') + '. לחיצה הופכת את נורות ' + triple(i).map(j => j + 1).join(', ') + '.');
-        button.style.setProperty('--lamp-group', painted ? colors[color] : '#e8f1ee');
-        button.querySelector('.lamps-color-mark').hidden = !painted;
+        button.setAttribute('aria-label', 'נורה ' + (i + 1) + ', ' + (on ? 'דולקת' : 'כבויה') + (color >= 0 ? ', צבע ' + names[color] + ', קבוצה ' + marks[color] : '') + '. לחיצה הופכת את נורות ' + triple(i).map(j => j + 1).join(', ') + '.');
+        button.style.setProperty('--lamp-group', color >= 0 ? colors[color] : '#e8f1ee');
+        button.querySelector('.lamps-color-mark').hidden = color < 0;
+        button.querySelector('.lamps-color-mark').textContent = color < 0 ? '' : marks[color];
       });
       host.querySelector('[data-lamps-count]').textContent = litCount;
       host.querySelector('[data-lamps-moves]').textContent = s.history.length;
       host.querySelector('[data-lamps-action="undo"]').disabled = !s.history.length;
-      host.querySelector('[data-lamps-legend]').hidden = !painted;
+      host.querySelector('[data-lamps-legend]').hidden = s.mode !== 'suggested';
       const status = host.querySelector('[data-lamps-status]');
       status.classList.toggle('success', litCount === 0);
       status.textContent = litCount === 0 ? 'כל הנורות כבויות! הצלחתם ב-' + s.history.length + ' מהלכים.' : 'נסו לכבות את כל הנורות.';
@@ -63,7 +64,7 @@
         const x = 50 + 40.5 * Math.cos(angle), y = 50 + 40.5 * Math.sin(angle);
         return '<button type="button" class="lamps-bulb" data-lamp="' + i + '" style="left:' + x.toFixed(3) + '%;top:' + y.toFixed(3) + '%"><span class="lamps-light" aria-hidden="true"><span class="lamps-filament"></span></span><span class="lamps-number" aria-hidden="true">' + (i + 1) + '</span><span class="lamps-color-mark" aria-hidden="true" hidden>' + marks[i % 3] + '</span></button>';
       }).join('') + '</div>' +
-      '<div class="lamps-legend" data-lamps-legend aria-label="מקרא צבעים" hidden>' + colors.map((color, i) => '<span><i style="background:' + color + '" aria-hidden="true">' + marks[i] + '</i>' + names[i] + '</span>').join('') + '</div>' +
+      '<div class="lamps-legend" data-lamps-legend aria-label="מקרא צבעים" hidden>' + colors.slice(0, 3).map((color, i) => '<span><i style="background:' + color + '" aria-hidden="true">' + marks[i] + '</i>' + names[i] + '</span>').join('') + '</div>' +
       '<p class="live-status lamps-status" data-lamps-status role="status" aria-live="polite"></p><p class="widget-note lamps-keyboard">במקלדת: חצים למעבר בין הנורות, Enter או רווח לביצוע מהלך. החלפת גרסה מחזירה את הנורות להתחלה.</p>';
     const lampButtons = Array.from(host.querySelectorAll('[data-lamp]'));
 
@@ -122,8 +123,9 @@
     Object.keys(handlers).forEach(name => host.addEventListener(name, handlers[name]));
     reset();
     return {
-      setMode(mode) { if (mode === 'plain' || mode === 'suggested') { s.mode = mode; render(); } },
+      setMode(mode) { if (['plain', 'free', 'suggested'].includes(mode)) { s.mode = mode; render(); } },
       reset,
+      repaint:render,
       getState() {
         return {mode: s.mode, size, variant: s.variant, lit: s.lit.slice(), litPositions: s.lit.flatMap((on, i) => on ? [i + 1] : []), moves: s.history.length, history: s.history.map(step => ({center: step.center, lit: step.lit.slice()})), positionColors: s.lit.map((_, i) => s.mode === 'suggested' ? i % 3 : -1), preview: currentPreview(), solved: !s.lit.some(Boolean)};
       },
@@ -131,3 +133,4 @@
     };
   };
 })();
+

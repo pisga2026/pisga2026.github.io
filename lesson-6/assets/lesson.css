@@ -12,7 +12,7 @@ body.pisga.coloring-lesson{padding-bottom:12px}
 .pisga .problem-question{font-size:16px;line-height:1.45;padding:8px 12px;margin-bottom:10px}
 .pisga .problem-question p{margin:0}
 .pisga .problem-question p+p{margin-top:5px}
-.pisga .stage-strip{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);max-width:520px;margin-bottom:10px;gap:10px}
+.pisga .stage-strip{grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px;margin-bottom:10px;gap:10px}
 .pisga .stage-button{background:var(--amber);box-shadow:inset 2px 2px 0 #fff0ca,inset -2px -2px 0 #b17f61,3px 3px 0 var(--navy);font-size:14px;min-height:38px;padding:6px 10px}
 .pisga .stage-button[aria-pressed=true]{background:var(--green);box-shadow:inset 2px 2px 0 #d4ffe5,inset -2px -2px 0 #389c79,3px 3px 0 var(--navy);outline:2px solid var(--navy);outline-offset:2px}
 .pisga .widget-panel{padding:10px}
@@ -98,3 +98,15 @@ body.pisga.coloring-lesson{padding-inline:12px}
 .pisga .hint-dialog .hint-error{min-height:23px;color:#8c261a;font-weight:800;margin:8px 0 14px}
 .pisga .hint-dialog .hint-actions{display:flex;flex-wrap:wrap;gap:10px}
 .pisga .hint-dialog .hint-actions .btn{flex:1;min-width:120px}
+.pisga .self-paint-panel{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:12px;margin:0 0 12px;background:#fff3d6;border:3px solid var(--navy);box-shadow:3px 3px 0 var(--navy)}
+.pisga .self-paint-panel[hidden]{display:none}
+.pisga .self-paint-tools,.pisga .self-paint-colors,.pisga .self-paint-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.pisga .self-paint-panel button{min-height:40px;font-size:14px;padding:7px 10px}
+.pisga .self-paint-panel .self-paint-swatch{background:var(--paint-color);box-shadow:2px 2px 0 var(--navy);border:2px solid var(--navy);display:flex;align-items:center;gap:5px}
+.pisga .self-paint-swatch span{display:inline-grid;place-items:center;width:19px;height:19px;border:1px solid var(--navy);background:#ffffff70;font-weight:900}
+.pisga .self-paint-panel [aria-pressed=true]{outline:2px solid var(--navy);outline-offset:2px}
+.pisga .self-paint-help{flex-basis:100%;margin:0;font-size:13px;line-height:1.4}
+.pisga .is-self-painting .tl-cell,.pisga .is-self-painting .pg-ant-cell,.pisga .is-self-painting .pg-card,.pisga .is-self-painting .pg-door,.pisga .is-self-painting .knight-cell,.pisga .is-self-painting .jumpers-cell,.pisga .is-self-painting .lamps-bulb{touch-action:none;cursor:crosshair;user-select:none}
+.pisga .is-self-painting .tl-preview::after,.pisga .is-self-painting .tl-invalid::after,.pisga .is-self-painting .knight-possible{display:none}
+.pisga .is-self-painting .lamps-bulb.is-preview{outline:none}
+@media(max-width:600px){.pisga .self-paint-panel{gap:10px;padding:10px}.pisga .self-paint-colors{gap:7px}.pisga .self-paint-panel button{min-height:42px}.pisga .stage-button{font-size:13px}}

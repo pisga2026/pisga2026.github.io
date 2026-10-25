@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="assets/coloring.css">
   <link rel="stylesheet" href="../assets/theme.css">
   <link rel="stylesheet" href="assets/knight.css?v=20261023-classroom">
-  <link rel="stylesheet" href="assets/lesson.css?v=20261025-hint-lock">
-  <script src="assets/knight.js?v=20261023-classroom" defer></script>
-  <script src="assets/app.js?v=20261025-hint-lock" defer></script>
+  <link rel="stylesheet" href="assets/lesson.css?v=20261025-self-paint">
+  <script src="assets/painting.js?v=20261025-self-paint" defer></script>
+  <script src="assets/knight.js?v=20261025-self-paint" defer></script>
+  <script src="assets/app.js?v=20261025-self-paint" defer></script>
 </head>
 <body class="pisga coloring-lesson" data-problem="knight">
   <a href="#main" class="skip-link">דילוג לפעילות</a>
@@ -30,7 +31,8 @@
       <div class="problem-question"><p>נסו לבנות מסלול סגור של פרש בלוח <bdi>5 × 5</bdi>: לבקר בכל 25 המשבצות בדיוק פעם אחת, ואז לחזור למשבצת ההתחלה בקפיצה נוספת. אפשר להתחיל בכל משבצת.</p><p>פרש קופץ שתי משבצות בכיוון אחד ומשבצת אחת בניצב לו. האם אפשר להשלים את המסלול?</p></div>
       <div class="stage-strip" role="group" aria-label="תצוגת הבעיה">
         <button class="stage-button" data-mode="plain" type="button" aria-pressed="true" aria-controls="widget-knight">ללא צביעה</button>
-        <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-knight">רמז - צביעה (סיסמה)</button>
+        <button class="stage-button" data-mode="free" type="button" aria-pressed="false" aria-controls="widget-knight">צביעה עצמית</button>
+        <button class="stage-button" data-mode="suggested" type="button" aria-pressed="false" aria-controls="widget-knight">צביעה מוצעת (סיסמה)</button>
       </div>
       <div id="widget-knight" class="widget-panel" aria-label="התנסות: מסלול הפרש"></div>
     </section>

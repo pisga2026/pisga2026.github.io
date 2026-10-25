@@ -7,11 +7,11 @@
     const names = (options.colorNames || ['תכלת', 'כתום', 'ורוד', 'ירוק']).slice(0, 4);
     const marks = ['א', 'ב', 'ג', 'ד'];
     const initial = [16, 17, 23]; // (3,3), (3,4), (4,3), with rows counted from the top.
-    const s = {mode: options.mode || 'plain', pieces: initial.slice(), selected: null, target: 32, history: [], free: Array(size * size).fill(-1), paint: true, ink: 0, note: ''};
+    const s = {mode: options.mode || 'plain', pieces: initial.slice(), selected: null, target: 32, history: [], free: Array(size * size).fill(-1), paint: !options.painter, ink: 0, note: ''};
     host.classList.add('jumpers-widget');
     function colorAt(cell) {
       if (s.mode === 'plain') return -1;
-      return s.mode === 'free' ? s.free[cell] : 2 * (Math.floor(cell / size) % 2) + cell % size % 2;
+      return s.mode === 'free' ? options.painter ? options.painter.color(cell) : s.free[cell] : 2 * (Math.floor(cell / size) % 2) + cell % size % 2;
     }
     function legal(from, to) {
       if (!s.pieces.includes(from) || s.pieces.includes(to) || from === to || to < 0 || to >= size * size) return false;
@@ -23,12 +23,12 @@
     function coordinate(cell) { return '(' + (Math.floor(cell / size) + 1) + ',' + (cell % size + 1) + ')'; }
     function focusCell(cell) { const button = host.querySelector('[data-jumper-cell="' + cell + '"]'); if (button) button.focus({preventScroll: true}); }
     function render(focus) {
-      const painting = s.mode === 'free' && s.paint, reached = s.pieces.includes(s.target);
+      const painting = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint), reached = s.pieces.includes(s.target);
       const destinations = s.selected === null ? [] : moves(s.selected);
       let message = s.note || (reached ? 'הגעתם לכוכב ב־' + s.history.length + ' קפיצות! אפשר לחזור להתחלה ולבדוק יעד אחר.' : s.selected === null ? 'בחרו כלי, ואז משבצת מסומנת לקפיצה.' : destinations.length ? 'בחרו אחת ממשבצות הנחיתה המסומנות.' : 'לכלי הזה אין כרגע קפיצה אפשרית. בחרו כלי אחר.');
       if (painting) message = 'בחרו צבע וצבעו משבצות. כדי לקפוץ בחרו ״משחקים״.';
       host.innerHTML = '<div class="tool-row jumpers-tools"><label class="jumpers-target-label">יעד <select data-jumper-target aria-label="בחירת יעד הקפיצות"><option value="32" ' + (s.target === 32 ? 'selected' : '') + '>א · יעד (5,5)</option><option value="24" ' + (s.target === 24 ? 'selected' : '') + '>ב · יעד (4,4)</option></select></label><button type="button" class="btn secondary" data-jumper-action="undo" ' + (!s.history.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-jumper-action="reset">חזרה להתחלה</button><span class="jumpers-count">קפיצות: <strong>' + s.history.length + '</strong></span></div>' +
-        (s.mode === 'free' ? '<div class="paint-panel jumpers-painter"><div class="control-group" role="group" aria-label="כלי עבודה"><button type="button" class="btn" data-jumper-tool="paint" aria-pressed="' + s.paint + '">צובעים</button><button type="button" class="btn" data-jumper-tool="play" aria-pressed="' + !s.paint + '">משחקים</button></div><div class="control-group" role="group" aria-label="צבע למכחול">' + colors.map((color, i) => '<button type="button" class="jumpers-swatch" style="--swatch:' + color + '" data-jumper-color="' + i + '" aria-pressed="' + (s.ink === i) + '" aria-label="' + names[i] + ', סימן ' + marks[i] + '">' + marks[i] + '</button>').join('') + '<button type="button" class="btn secondary" data-jumper-color="-1" aria-pressed="' + (s.ink === -1) + '">מחק</button></div><button type="button" class="btn secondary" data-jumper-action="clear">ניקוי צביעה</button></div>' : '') +
+        (s.mode === 'free' && !options.painter ? '<div class="paint-panel jumpers-painter"><div class="control-group" role="group" aria-label="כלי עבודה"><button type="button" class="btn" data-jumper-tool="paint" aria-pressed="' + s.paint + '">צובעים</button><button type="button" class="btn" data-jumper-tool="play" aria-pressed="' + !s.paint + '">משחקים</button></div><div class="control-group" role="group" aria-label="צבע למכחול">' + colors.map((color, i) => '<button type="button" class="jumpers-swatch" style="--swatch:' + color + '" data-jumper-color="' + i + '" aria-pressed="' + (s.ink === i) + '" aria-label="' + names[i] + ', סימן ' + marks[i] + '">' + marks[i] + '</button>').join('') + '<button type="button" class="btn secondary" data-jumper-color="-1" aria-pressed="' + (s.ink === -1) + '">מחק</button></div><button type="button" class="btn secondary" data-jumper-action="clear">ניקוי צביעה</button></div>' : '') +
         '<div class="jumpers-board-shell"><div class="jumpers-column-labels" dir="ltr" aria-hidden="true">' + Array.from({length: size}, (_, i) => '<span>' + (i + 1) + '</span>').join('') + '</div><div class="jumpers-board-row"><div class="jumpers-row-labels" aria-hidden="true">' + Array.from({length: size}, (_, i) => '<span>' + (i + 1) + '</span>').join('') + '</div><div class="jumpers-board" dir="ltr" role="group" aria-label="לוח קפיצות: 7 שורות ו־7 עמודות">' + Array.from({length: size * size}, (_, cell) => {
           const piece = s.pieces.indexOf(cell), color = colorAt(cell), target = cell === s.target;
           const label = 'שורה ' + (Math.floor(cell / size) + 1) + ', עמודה ' + (cell % size + 1) + (piece >= 0 ? ', כלי ' + (piece + 1) : ', משבצת ריקה') + (target ? ', יעד' : '') + (destinations.includes(cell) ? ', נחיתה אפשרית' : '') + (color >= 0 ? ', צבע ' + names[color] + ', סימן ' + marks[color] : '');
@@ -83,7 +83,9 @@
     return {
       setMode(mode) { s.mode = mode; s.selected = null; s.note = ''; render(); },
       reset,
+      repaint:render,
       getState() { return {mode: s.mode, size, pieces: s.pieces.slice(), target: s.target, selected: s.selected, moves: s.history.length, history: s.history.map(p => p.slice()), freeColors: s.free.slice(), paint: s.paint, reached: s.pieces.includes(s.target)}; }
     };
   };
 })();
+

@@ -53,7 +53,7 @@
     ui.svg.setAttribute('preserveAspectRatio','none');
     function hole(r,c){return state.holes.some(p=>isSame(p,[r,c]));}
     function owner(r,c){return state.pieces.find(p=>p.cells.some(q=>isSame(q,[r,c])));}
-    function cellColor(r,c){return state.mode==='plain'?-1:state.mode==='suggested'?(r+c)%(type==='tromino'?3:2):state.paint[r*cfg.cols+c];}
+    function cellColor(r,c){return state.mode==='plain'?-1:state.mode==='suggested'?(r+c)%(type==='tromino'?3:2):options.painter?options.painter.color(r+','+c):state.paint[r*cfg.cols+c];}
     function status(text,error=false){state.status=text;ui.status.textContent=text;ui.status.classList.toggle('tl-error',error);}
     function currentShape(){return rotate(cfg.shapes[state.selected],state.turns);}
     function candidate(r,c){const shape=currentShape(),anchor=shape[0];return shape.map(([dr,dc])=>[r+dr-anchor[0],c+dc-anchor[1]]);}
@@ -89,7 +89,7 @@
       status(remaining===0?'הצלחתם! כל המשבצות כוסו בדיוק, בלי חפיפות ובלי חורים.':`החלק הונח. נותרו ${remaining} משבצות לכיסוי.`);
     }
     function clearPreview(){ui.grid.querySelectorAll('.tl-preview,.tl-invalid').forEach(el=>el.classList.remove('tl-preview','tl-invalid'));}
-    function preview(r,c){clearPreview();if(state.action==='paint'&&state.mode==='free'||owner(r,c))return;const cells=candidate(r,c),valid=allowed(cells);cells.forEach(([rr,cc])=>{const el=ui.grid.querySelector(`[data-r="${rr}"][data-c="${cc}"]`);if(el&&!hole(rr,cc))el.classList.add(valid?'tl-preview':'tl-invalid');});}
+    function preview(r,c){clearPreview();if(options.painter&&options.painter.isPainting()||state.action==='paint'&&state.mode==='free'||owner(r,c))return;const cells=candidate(r,c),valid=allowed(cells);cells.forEach(([rr,cc])=>{const el=ui.grid.querySelector(`[data-r="${rr}"][data-c="${cc}"]`);if(el&&!hole(rr,cc))el.classList.add(valid?'tl-preview':'tl-invalid');});}
     function miniShape(key,turns=key===state.selected?state.turns:0){
       const shape=rotate(cfg.shapes[key],turns), rows=1+Math.max(...shape.map(p=>p[0])),cols=1+Math.max(...shape.map(p=>p[1]));
       return `<span class="tl-mini" style="grid-template-columns:repeat(${cols},13px);grid-template-rows:repeat(${rows},13px)" aria-hidden="true">${shape.map(([r,c],i)=>`<i class="${i===0?'tl-anchor':''}" style="grid-row:${r+1};grid-column:${c+1}"></i>`).join('')}</span>`;
@@ -103,8 +103,8 @@
       if(variantPicker)variantPicker.onchange=e=>setVariant(e.target.value);
     }
     function renderPaint(){
-      ui.paint.hidden=state.mode!=='free';
-      if(state.mode!=='free')return;
+      ui.paint.hidden=!!options.painter||state.mode!=='free';
+      if(options.painter||state.mode!=='free')return;
       ui.paint.innerHTML=`<div class="tool-row tl-action-row" role="group" aria-label="כלי עבודה"><button type="button" class="btn tl-action ${state.action==='paint'?'is-active':''}" data-action="paint" aria-pressed="${state.action==='paint'}">צובעים</button><button type="button" class="btn secondary tl-action ${state.action==='play'?'is-active':''}" data-action="play" aria-pressed="${state.action==='play'}">מניחים חלקים</button></div><div class="tool-row tl-brushes" role="group" aria-label="בחירת צבע">${colors.map((color,i)=>`<button class="swatch tl-swatch" type="button" data-brush="${i}" style="background:${color}" aria-label="${names[i]}" aria-pressed="${state.brush===i}"><span>${names[i]}</span></button>`).join('')}<button type="button" class="btn secondary tl-eraser" aria-pressed="${state.brush===-1}">מחק</button><button type="button" class="btn secondary tl-clear">ניקוי צביעה</button></div><p class="widget-note tl-paint-help">הצבעים שייכים למשבצות הלוח. כדי להניח או להסיר חלקים, עברו ל״מניחים חלקים״.</p>`;
       ui.paint.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>setAction(b.dataset.action));
       ui.paint.querySelectorAll('[data-brush]').forEach(b=>b.onclick=()=>{state.brush=Number(b.dataset.brush);state.action='paint';renderPaint();status(`צבע נבחר: ${names[state.brush]}. לחצו על משבצות לצביעה.`);});
@@ -177,12 +177,14 @@
     function reset(){if(state.pieces.length)snapshot();state.pieces=[];state.nextId=1;state.selected=Object.keys(cfg.shapes)[0];state.turns=0;render();status('החלקים הוחזרו למגש. הצביעה והחלק הנבחר בתרגיל נשמרו.');}
     render();
     return {
-      setMode(mode){if(!['plain','free','suggested'].includes(mode))return;state.mode=mode;state.action=mode==='free'?'paint':'play';render();status(mode==='free'?'בחרו צבע וצבעו משבצות. אפשר לעבור להנחת חלקים בכל רגע.':mode==='suggested'?'הצביעה מוצגת.':'הצביעה הוסתרה.');},
+      setMode(mode){if(!['plain','free','suggested'].includes(mode))return;state.mode=mode;state.action=mode==='free'&&!options.painter?'paint':'play';render();status(mode==='free'?'בחרו צבע וצבעו משבצות. אפשר לעבור להנחת חלקים בכל רגע.':mode==='suggested'?'הצביעה מוצגת.':'הצביעה הוסתרה.');},
       reset,
       setVariant,
+      repaint:render,
       getState(){return {type,mode:state.mode,variant:state.variant,rows:cfg.rows,cols:cfg.cols,holes:copy(state.holes),pieces:copy(state.pieces),freeColors:state.paint.slice(),selected:state.selected,turns:state.turns,action:state.action,covered:state.pieces.length*cfg.size,remaining:cfg.rows*cfg.cols-state.holes.length-state.pieces.length*cfg.size};}
     };
   }
   Object.keys(configs).forEach(type=>{window.Widgets[type]=(host,options)=>makeWidget(host,options||{},type);});
   window.PisgaTilingMath={rotate,configs};
 })();
+

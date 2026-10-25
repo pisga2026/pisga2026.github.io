@@ -72,7 +72,7 @@
         return;
       }
       hintUnlocked = true;
-      hintButton.textContent = 'רמז - צביעה של הבעיה';
+      hintButton.textContent = 'צביעה מוצעת';
       hintButton.removeAttribute('aria-haspopup');
       hintButton.setAttribute('aria-controls', host.id);
       hintDialog.close();
@@ -83,14 +83,15 @@
       if (attempt === unlockAttempt) hintSubmit.disabled = false;
     }
   });
+  const painter = window.PisgaPainter.create(host, {id, colors, colorNames, onChange: () => { if (controller && controller.repaint) controller.repaint(); }});
   try {
-    controller = window.Widgets[id](host, {mode, colors, colorNames});
+    controller = window.Widgets[id](host, {mode, colors, colorNames, painter});
   } catch (error) {
     host.innerHTML = '<p class="error-box">ההתנסות לא נטענה. נסו לרענן את הדף.</p>';
     console.error(error);
   }
   function setMode(next) {
-    if (!controller || !['plain', 'suggested'].includes(next)) return;
+    if (!controller || !['plain', 'free', 'suggested'].includes(next)) return;
     if (next === 'suggested' && !hintUnlocked) {
       if (!hintDialog.open) hintDialog.showModal();
       hintPassword.focus();
@@ -98,9 +99,10 @@
     }
     if (hintDialog.open) hintDialog.close();
     mode = next;
+    painter.setMode(mode);
     controller.setMode(mode);
     document.querySelectorAll('[data-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
-    announcer.textContent = mode === 'plain' ? 'הצביעה מוסתרת.' : 'הצביעה מוצגת.';
+    announcer.textContent = mode === 'plain' ? 'הצביעה מוסתרת.' : mode === 'free' ? 'הצביעה העצמית מוצגת.' : 'הצביעה המוצעת מוצגת.';
     document.body.classList.toggle('hint-visible', mode === 'suggested');
   }
   document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
@@ -122,7 +124,7 @@
     const rect = about.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) about.close();
   });
-  window.addEventListener('pagehide', event => { if (!event.persisted && controller && controller.dispose) controller.dispose(); });
-  window.PisgaApp = {setMode, getState: () => ({active:id, mode, widget:controller && controller.getState()})};
+  window.addEventListener('pagehide', event => { if (!event.persisted) { painter.dispose(); if (controller && controller.dispose) controller.dispose(); } });
+  window.PisgaApp = {setMode, getState: () => ({active:id, mode, painting:painter.getState(), widget:controller && controller.getState()})};
 })();
 

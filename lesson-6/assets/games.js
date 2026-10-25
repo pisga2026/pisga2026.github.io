@@ -4,8 +4,8 @@
   const neutral = '#edf7f5';
   const antSVG = '<svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M16 15 9 10M24 15l7-5M15 21 7 19M25 21l8-2M15 27l-7 5M25 27l7 5M18 9l-4-5M22 9l4-5"/></g><g fill="currentColor"><ellipse cx="20" cy="29" rx="6" ry="8"/><ellipse cx="20" cy="20" rx="5" ry="5"/><circle cx="20" cy="11" r="5"/></g><circle cx="18" cy="10" r="1" fill="white"/><circle cx="22" cy="10" r="1" fill="white"/></svg>';
   const foxSVG = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M18 12 42 30 58 30 82 12 89 53 50 89 11 53Z" fill="#f8a064" stroke="#15274b" stroke-width="4"/><path d="m18 17 4 27 15-12M82 17l-4 27-15-12" fill="#ffe2b8"/><path d="M14 53 43 60 50 83 57 60 86 53 50 88Z" fill="#fff7e8"/><path d="m43 72 14 0-7 9Z" fill="#15274b"/><circle cx="34" cy="48" r="4" fill="#15274b"/><circle cx="66" cy="48" r="4" fill="#15274b"/></svg>';
-  function painter(mode, paint, ink, colors, names) {
-    if (mode !== 'free') return '';
+  function painter(mode, paint, ink, colors, names, external) {
+    if (external || mode !== 'free') return '';
     return '<div class="paint-panel pg-painter"><div class="pg-tool-choice" role="group" aria-label="בחירת כלי">' +
       '<button type="button" class="btn pg-tool ' + (paint ? 'is-selected' : '') + '" data-pg-tool="paint" aria-pressed="' + paint + '">צובעים</button>' +
       '<button type="button" class="btn pg-tool ' + (!paint ? 'is-selected' : '') + '" data-pg-tool="play" aria-pressed="' + !paint + '">משחקים</button></div>' +
@@ -23,7 +23,7 @@
     const unpainted = indices.filter(i => i < 0).length;
     return '<div class="pg-color-stats" aria-label="' + (values ? 'סכומי הקלפים לפי צבע מקורי' : 'מספר משבצות מכל צבע') + '">' + (values ? '<strong>סכום כל צבע:</strong>' : '<strong>משבצות מכל צבע:</strong>') + entries + (unpainted ? '<span class="muted">ללא צבע: ' + unpainted + '</span>' : '') + '</div>';
   }
-  function colorIndex(mode, free, i, suggested) { return mode === 'plain' ? -1 : mode === 'free' ? free[i] : suggested(i); }
+  function colorIndex(mode, free, i, suggested, custom) { return mode === 'plain' ? -1 : mode === 'free' ? custom ? custom(i) : free[i] : suggested(i); }
   function applyPainterEvent(target, state, render) {
     const tool = target.closest('[data-pg-tool]');
     const swatch = target.closest('[data-pg-color]');
@@ -36,7 +36,7 @@
   W.coin = function (host, options) {
     const colors = options.colors, names = options.colorNames;
     const initialRows = {4: [12, 14, 9, 10], 8: [10, 14, 11, 12, 15, 13, 9, 7]};
-    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(4).fill(-1), values: initialRows[4].slice(), picks: []};
+    const s = {mode: options.mode || 'plain', paint: !options.painter, ink: 0, free: Array(4).fill(-1), values: initialRows[4].slice(), picks: []};
     host.classList.add('pg-games', 'pg-coin');
     function owners() { const a = Array(s.values.length).fill(-1); s.picks.forEach((p, k) => a[p] = k % 2); return a; }
     function render() {
@@ -44,14 +44,14 @@
       const first = remaining[0], last = remaining[remaining.length - 1], turn = s.picks.length % 2;
       const totals = [0, 0]; owned.forEach((p, i) => { if (p >= 0) totals[p] += s.values[i]; });
       const done = !remaining.length;
-      const paints = s.values.map((_, i) => colorIndex(s.mode, s.free, i, j => j % 2));
+      const paints = s.values.map((_, i) => colorIndex(s.mode, s.free, i, j => j % 2, options.painter && (j => options.painter.color(j))));
       let message = done ? (totals[0] === totals[1] ? 'תיקו! לכל שחקן ' + totals[0] + ' נקודות.' : 'שחקן ' + (totals[0] > totals[1] ? '1' : '2') + ' ניצח.') : 'תור שחקן ' + (turn + 1) + ' · בחרו קלף מאחד הקצוות.';
       if (s.mode === 'free' && s.paint) message = 'בחרו צבע ולחצו על קלפים. גם קלפים שכבר נאספו שומרים על מקומם המקורי.';
       host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">מספר קלפים <select data-coin-size aria-label="מספר הקלפים"><option value="4" ' + (s.values.length === 4 ? 'selected' : '') + '>4</option><option value="8" ' + (s.values.length === 8 ? 'selected' : '') + '>8</option></select></label><button type="button" class="btn secondary" data-coin="undo" ' + (!s.picks.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-coin="reset">משחק מחדש</button><button type="button" class="btn secondary" data-coin="random">שורה אקראית</button></div>' +
-        painter(s.mode, s.paint, s.ink, colors, names) +
+        painter(s.mode, s.paint, s.ink, colors, names, options.painter) +
         '<div class="pg-scoreboard">' + [0, 1].map(p => '<div class="pg-player ' + (!done && turn === p ? 'pg-current' : '') + '"><span>שחקן ' + (p + 1) + '</span><strong>' + totals[p] + '</strong><div class="pg-collected" dir="ltr">' + (s.picks.filter((_, k) => k % 2 === p).map(i => s.values[i]).join(' + ') || '-') + '</div></div>').join('') + '</div>' +
         '<div class="pg-card-row" style="grid-template-columns:repeat(' + s.values.length + ',minmax(0,1fr));max-width:' + (s.values.length === 4 ? '460' : '780') + 'px" dir="ltr" role="group" aria-label="שורת הקלפים, משמאל לימין">' + s.values.map((v, i) => {
-          const paintEnabled = s.mode === 'free' && s.paint;
+          const paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
           const available = owned[i] < 0 && (i === first || i === last);
           return '<button type="button" class="pg-card ' + (owned[i] >= 0 ? 'pg-taken' : '') + (available ? ' pg-endpoint' : '') + '" data-card="' + i + '" style="--card-color:' + (paints[i] < 0 ? neutral : colors[paints[i]]) + '" ' + (!paintEnabled && !available ? 'disabled' : '') + ' aria-label="מקום ' + (i + 1) + ', המספר ' + v + (owned[i] >= 0 ? ', נאסף על ידי שחקן ' + (owned[i] + 1) : available ? ', אפשר לבחור' : '') + '"><small class="pg-card-index">' + (i + 1) + '</small><span class="pg-card-value">' + v + '</span><span class="pg-card-owner">' + (owned[i] < 0 ? (available ? 'בחרו' : '') : 'שחקן ' + (owned[i] + 1)) + '</span></button>';
         }).join('') + '</div>' +
@@ -81,12 +81,12 @@
       s.values = initialRows[size].slice(); s.free = Array(size).fill(-1); reset();
     });
     render();
-    return {setMode(mode) { s.mode = mode; render(); }, reset, getState() { return {mode: s.mode, values: s.values.slice(), picks: s.picks.slice(), owners: owners(), freeColors: s.free.slice(), paint: s.paint}; }};
+    return {setMode(mode) { s.mode = mode; render(); }, repaint: render, reset, getState() { return {mode: s.mode, values: s.values.slice(), picks: s.picks.slice(), owners: owners(), freeColors: s.free.slice(), paint: s.paint}; }};
   };
 
   W.fox = function (host, options) {
     const colors = options.colors, names = options.colorNames;
-    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(5).fill(-1), history: [], reveal: false};
+    const s = {mode: options.mode || 'plain', paint: !options.painter, ink: 0, free: Array(5).fill(-1), history: [], reveal: false};
     host.classList.add('pg-games', 'pg-fox');
     function calculate() {
       let possible = [1, 2, 3, 4, 5], caught = false;
@@ -100,17 +100,17 @@
       return {possible, caught, steps};
     }
     function render() {
-      const result = calculate(), paintEnabled = s.mode === 'free' && s.paint;
+      const result = calculate(), paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
       const reveal = s.mode === 'suggested' && s.reveal;
       const lastDoor = s.history[s.history.length - 1];
       const day = result.caught ? s.history.length : s.history.length + 1;
       let message = result.caught ? 'נתפס בוודאות! אחרי ' + s.history.length + ' בדיקות לא נשאר שום מסלול בריחה חוקי.' : !s.history.length ? 'באיזו דלת תבחרו להתחיל?' : 'בדלת ' + lastDoor + ' השועל התחמק. לאחר הבדיקה הוא עבר לדלת סמוכה. בחרו את הבדיקה הבאה.';
       if (paintEnabled) message = 'צבעו את הדלתות כרצונכם. כדי לפתוח דלת עברו לכלי ״משחקים״.';
       host.innerHTML = '<div class="tool-row pg-actions"><button type="button" class="btn secondary" data-fox="undo" ' + (!s.history.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-fox="reset">משחק מחדש</button>' + (s.mode === 'suggested' ? '<label class="pg-check"><input type="checkbox" data-fox-reveal ' + (reveal ? 'checked' : '') + '>הצגת מקומות אפשריים</label>' : '') + '</div>' +
-        painter(s.mode, s.paint, s.ink, colors, names) +
+        painter(s.mode, s.paint, s.ink, colors, names, options.painter) +
         '<div class="pg-fox-day"><span>יום <strong>' + day + '</strong></span><span>' + s.history.length + ' בדיקות</span></div>' +
         '<div class="pg-door-row" dir="ltr" role="group" aria-label="חמש דלתות, משמאל לימין">' + [1, 2, 3, 4, 5].map(d => {
-          const c = colorIndex(s.mode, s.free, d - 1, i => i % 2), candidate = result.possible.includes(d);
+          const c = colorIndex(s.mode, s.free, d - 1, i => i % 2, options.painter && (i => options.painter.color(i))), candidate = result.possible.includes(d);
           const label = 'דלת ' + d + (reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
           return '<button type="button" class="pg-door ' + (reveal && !result.caught ? candidate ? 'pg-possible' : 'pg-impossible' : '') + (result.caught && d === lastDoor ? ' pg-caught' : '') + '" data-door="' + d + '" style="--door-color:' + (c < 0 ? neutral : colors[c]) + '" aria-label="' + label + '" ' + (result.caught && !paintEnabled ? 'disabled' : '') + '><span class="pg-door-number">' + d + '</span><span class="pg-door-inset">' + (result.caught && d === lastDoor ? foxSVG : '<span class="pg-door-handle"></span>') + '</span><span class="pg-door-candidate">' + (reveal && !result.caught && candidate ? 'אולי כאן' : '') + '</span></button>';
         }).join('') + '</div>' +
@@ -131,12 +131,12 @@
     });
     host.addEventListener('change', e => { if (s.mode === 'suggested' && e.target.matches('[data-fox-reveal]')) { s.reveal = e.target.checked; render(); } });
     render();
-    return {setMode(mode) { s.mode = mode; if (mode !== 'suggested') s.reveal = false; render(); }, reset, getState() { return {mode: s.mode, history: s.history.slice(), freeColors: s.free.slice(), reveal: s.reveal, ...calculate()}; }};
+    return {setMode(mode) { s.mode = mode; if (mode !== 'suggested') s.reveal = false; render(); }, repaint: render, reset, getState() { return {mode: s.mode, history: s.history.slice(), freeColors: s.free.slice(), reveal: s.reveal, ...calculate()}; }};
   };
 
   W.ants = function (host, options) {
     const colors = options.colors, names = options.colorNames;
-    const s = {mode: options.mode || 'plain', paint: true, ink: 0, free: Array(25).fill(-1), n: 5, targets: Array(25).fill(null), selected: null, phase: 'plan', note: '', history: []};
+    const s = {mode: options.mode || 'plain', paint: !options.painter, ink: 0, free: Array(25).fill(-1), n: 5, targets: Array(25).fill(null), selected: null, phase: 'plan', note: '', history: []};
     let timer = null, raf = null;
     host.classList.add('pg-games', 'pg-ants');
     function neighbours(i) {
@@ -155,15 +155,15 @@
       s.history.push(s.targets.slice()); s.targets[i] = j; s.selected = null; s.note = ''; render(); focusAnt(i);
     }
     function render() {
-      const assigned = s.targets.filter(t => t !== null).length, paintEnabled = s.mode === 'free' && s.paint;
+      const assigned = s.targets.filter(t => t !== null).length, paintEnabled = s.mode === 'free' && (options.painter ? options.painter.isPainting() : s.paint);
       const cells = Array.from({length: s.n * s.n}, (_, i) => i), occupancy = counts();
       const collisionCells = occupancy.filter(x => x > 1).length, emptyCells = occupancy.filter(x => x === 0).length;
-      const painted = cells.map(i => colorIndex(s.mode, s.free, i, j => (Math.floor(j / s.n) + j % s.n) % 2));
+      const painted = cells.map(i => colorIndex(s.mode, s.free, i, j => (Math.floor(j / s.n) + j % s.n) % 2, options.painter && (j => options.painter.color(Math.floor(j / s.n) + ',' + j % s.n))));
       let message = s.note || (s.phase === 'result' ? (collisionCells ? 'נמצאו ' + collisionCells + ' משבצות שאליהן הגיעו כמה נמלים, ו־' + emptyCells + ' משבצות ריקות. אפשר לשנות את הכיוונים ולנסות שוב.' : 'הצלחתם! בכל משבצת נחתה בדיוק נמלה אחת.') : s.selected === null ? 'בחרו נמלה, ואז לחצו על משבצת שכנה כדי לקבוע לאן תלך.' : 'בחרו אחת מהמשבצות המסומנות ליד הנמלה שבחרתם.');
       if (s.phase === 'moving') message = 'כל הנמלים זזות יחד…';
       if (paintEnabled) message = 'בחרו צבע ולחצו על משבצות. לחזרה לתכנון התנועה בחרו ״משחקים״.';
       host.innerHTML = '<div class="tool-row pg-actions"><label class="pg-size-label">גודל הלוח <select data-ant-size aria-label="גודל לוח הנמלים"><option value="4" ' + (s.n === 4 ? 'selected' : '') + '>4 × 4</option><option value="5" ' + (s.n === 5 ? 'selected' : '') + '>5 × 5</option></select></label><button type="button" class="btn secondary" data-ants="random" ' + (s.phase === 'moving' ? 'disabled' : '') + '>כיוונים אקראיים</button><button type="button" class="btn secondary" data-ants="undo" ' + (!s.history.length || s.phase !== 'plan' ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-ants="reset">ניקוי הכיוונים</button></div>' +
-        painter(s.mode, s.paint, s.ink, colors, names) +
+        painter(s.mode, s.paint, s.ink, colors, names, options.painter) +
         '<div class="pg-ant-top"><span><strong>' + assigned + '</strong> מתוך <strong>' + s.n * s.n + '</strong> כיוונים נקבעו</span>' +
         (s.phase === 'result' ? '<button type="button" class="btn" data-ants="edit">שינוי הכיוונים</button><button type="button" class="btn secondary" data-ants="replay">הפעלה חוזרת</button>' : '<button type="button" class="btn" data-ants="move" ' + (assigned !== s.n * s.n || s.phase === 'moving' ? 'disabled' : '') + '>כולן זזות!</button>') + '</div>' +
         '<div class="pg-ant-board-wrap"><div class="pg-ant-board" dir="ltr" style="--n:' + s.n + '" role="group" aria-label="לוח הנמלים">' + cells.map(i => {
@@ -223,7 +223,7 @@
     });
     host.addEventListener('change', e => { if (e.target.matches('[data-ant-size]')) { s.n = Number(e.target.value); s.free = Array(s.n * s.n).fill(-1); reset(); } });
     render();
-    return {setMode(mode) { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } s.mode = mode; render(); }, reset, getState() { return {mode: s.mode, n: s.n, targets: s.targets.slice(), freeColors: s.free.slice(), selected: s.selected, phase: s.phase, occupancy: counts(), paint: s.paint}; }, dispose() { stopAnimation(); }};
+    return {setMode(mode) { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } s.mode = mode; render(); }, repaint() { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } render(); }, reset, getState() { return {mode: s.mode, n: s.n, targets: s.targets.slice(), freeColors: s.free.slice(), selected: s.selected, phase: s.phase, occupancy: counts(), paint: s.paint}; }, dispose() { stopAnimation(); }};
   };
 })();
 

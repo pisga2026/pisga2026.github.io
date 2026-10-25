@@ -39,10 +39,13 @@
         cellElement.classList.toggle('is-start', cell === route[0]);
         cellElement.classList.toggle('is-current', current);
         cellElement.classList.toggle('is-possible', possible);
+        const custom = mode === 'free' && options.painter ? options.painter.color(cell) : -1;
+        if (mode === 'free') cellElement.style.background = custom < 0 ? '#fff4d4' : options.colors[custom]; else cellElement.style.removeProperty('background');
         cellElement.disabled = disposed;
         cellElement.setAttribute('tabindex', cell === focused ? '0' : '-1');
         cellElement.querySelector('.knight-step').textContent = step === -1 ? '' : String(step + 1);
         const label = [`שורה ${row + 1}, עמודה ${column + 1}`];
+        if (custom >= 0) label.push('צבע ' + options.colorNames[custom]);
         if (mode === 'suggested') label.push((row + column) % 2 ? 'כהה' : 'בהירה');
         if (step !== -1) label.push(`משבצת ${step + 1} במסלול`);
         if (cell === route[0]) label.push('התחלה');
@@ -128,6 +131,7 @@
     return {
       setMode(next) { if (!disposed) { mode = next; render(); } },
       reset,
+      repaint:render,
       getState() { return {mode, route: [...route], closed, goal: 'closed'}; },
       dispose() {
         if (disposed) return;
@@ -141,3 +145,4 @@
     };
   };
 })();
+
