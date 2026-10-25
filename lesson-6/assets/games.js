@@ -101,20 +101,21 @@
     }
     function render() {
       const result = calculate(), paintEnabled = s.mode === 'free' && s.paint;
+      const reveal = s.mode === 'suggested' && s.reveal;
       const lastDoor = s.history[s.history.length - 1];
       const day = result.caught ? s.history.length : s.history.length + 1;
       let message = result.caught ? 'נתפס בוודאות! אחרי ' + s.history.length + ' בדיקות לא נשאר שום מסלול בריחה חוקי.' : !s.history.length ? 'באיזו דלת תבחרו להתחיל?' : 'בדלת ' + lastDoor + ' השועל התחמק. לאחר הבדיקה הוא עבר לדלת סמוכה. בחרו את הבדיקה הבאה.';
       if (paintEnabled) message = 'צבעו את הדלתות כרצונכם. כדי לפתוח דלת עברו לכלי ״משחקים״.';
-      host.innerHTML = '<div class="tool-row pg-actions"><button type="button" class="btn secondary" data-fox="undo" ' + (!s.history.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-fox="reset">משחק מחדש</button><label class="pg-check"><input type="checkbox" data-fox-reveal ' + (s.reveal ? 'checked' : '') + '>הצגת מקומות אפשריים</label></div>' +
+      host.innerHTML = '<div class="tool-row pg-actions"><button type="button" class="btn secondary" data-fox="undo" ' + (!s.history.length ? 'disabled' : '') + '>צעד אחורה</button><button type="button" class="btn secondary" data-fox="reset">משחק מחדש</button>' + (s.mode === 'suggested' ? '<label class="pg-check"><input type="checkbox" data-fox-reveal ' + (reveal ? 'checked' : '') + '>הצגת מקומות אפשריים</label>' : '') + '</div>' +
         painter(s.mode, s.paint, s.ink, colors, names) +
         '<div class="pg-fox-day"><span>יום <strong>' + day + '</strong></span><span>' + s.history.length + ' בדיקות</span></div>' +
         '<div class="pg-door-row" dir="ltr" role="group" aria-label="חמש דלתות, משמאל לימין">' + [1, 2, 3, 4, 5].map(d => {
           const c = colorIndex(s.mode, s.free, d - 1, i => i % 2), candidate = result.possible.includes(d);
-          const label = 'דלת ' + d + (s.reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
-          return '<button type="button" class="pg-door ' + (s.reveal && !result.caught ? candidate ? 'pg-possible' : 'pg-impossible' : '') + (result.caught && d === lastDoor ? ' pg-caught' : '') + '" data-door="' + d + '" style="--door-color:' + (c < 0 ? neutral : colors[c]) + '" aria-label="' + label + '" ' + (result.caught && !paintEnabled ? 'disabled' : '') + '><span class="pg-door-number">' + d + '</span><span class="pg-door-inset">' + (result.caught && d === lastDoor ? foxSVG : '<span class="pg-door-handle"></span>') + '</span><span class="pg-door-candidate">' + (s.reveal && !result.caught && candidate ? 'אולי כאן' : '') + '</span></button>';
+          const label = 'דלת ' + d + (reveal && !result.caught ? candidate ? ', השועל עשוי להימצא כאן' : ', השועל אינו יכול להימצא כאן כרגע' : '');
+          return '<button type="button" class="pg-door ' + (reveal && !result.caught ? candidate ? 'pg-possible' : 'pg-impossible' : '') + (result.caught && d === lastDoor ? ' pg-caught' : '') + '" data-door="' + d + '" style="--door-color:' + (c < 0 ? neutral : colors[c]) + '" aria-label="' + label + '" ' + (result.caught && !paintEnabled ? 'disabled' : '') + '><span class="pg-door-number">' + d + '</span><span class="pg-door-inset">' + (result.caught && d === lastDoor ? foxSVG : '<span class="pg-door-handle"></span>') + '</span><span class="pg-door-candidate">' + (reveal && !result.caught && candidate ? 'אולי כאן' : '') + '</span></button>';
         }).join('') + '</div>' +
         '<div class="pg-fox-history"><strong>הבדיקות שלכם:</strong><span dir="ltr">' + (s.history.join(' → ') || '-') + '</span></div>' +
-        (s.reveal && !result.caught ? '<div class="pg-possibility-note">לפני הבדיקה הבאה השועל יכול להיות בדלתות <b dir="ltr">' + result.possible.join(', ') + '</b>.</div>' : '') +
+        (reveal && !result.caught ? '<div class="pg-possibility-note">לפני הבדיקה הבאה השועל יכול להיות בדלתות <b dir="ltr">' + result.possible.join(', ') + '</b>.</div>' : '') +
         '<p class="live-status pg-status" role="status" aria-live="polite">' + message + '</p>' +
         '<p class="widget-note pg-note"><strong>שועל חכם:</strong> כל עוד קיים מסלול חוקי שמתחמק מכל הבדיקות שלכם, השועל מתחמק. בכל לילה הוא חייב לעבור לדלת סמוכה.</p>';
     }
@@ -128,9 +129,9 @@
       if (s.mode === 'free' && s.paint) { s.free[d - 1] = s.ink; render(); return; }
       if (!calculate().caught) { s.history.push(d); render(); }
     });
-    host.addEventListener('change', e => { if (e.target.matches('[data-fox-reveal]')) { s.reveal = e.target.checked; render(); } });
+    host.addEventListener('change', e => { if (s.mode === 'suggested' && e.target.matches('[data-fox-reveal]')) { s.reveal = e.target.checked; render(); } });
     render();
-    return {setMode(mode) { s.mode = mode; render(); }, reset, getState() { return {mode: s.mode, history: s.history.slice(), freeColors: s.free.slice(), reveal: s.reveal, ...calculate()}; }};
+    return {setMode(mode) { s.mode = mode; if (mode !== 'suggested') s.reveal = false; render(); }, reset, getState() { return {mode: s.mode, history: s.history.slice(), freeColors: s.free.slice(), reveal: s.reveal, ...calculate()}; }};
   };
 
   W.ants = function (host, options) {
@@ -225,3 +226,4 @@
     return {setMode(mode) { if (s.phase === 'moving') { stopAnimation(); s.phase = 'result'; } s.mode = mode; render(); }, reset, getState() { return {mode: s.mode, n: s.n, targets: s.targets.slice(), freeColors: s.free.slice(), selected: s.selected, phase: s.phase, occupancy: counts(), paint: s.paint}; }, dispose() { stopAnimation(); }};
   };
 })();
+

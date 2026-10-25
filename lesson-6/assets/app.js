@@ -15,7 +15,8 @@
   "tetris": "1b30db7a154ee7c3ac08540eaaf6a3d3a1c30f5ffa1afb92ea66625cc853a069",
   "tromino": "3c14ee0de286566cb48459822ac93b5c245f7cd9ef2a09a9c2b1ce12842d5b3a",
   "knight": "a63e68c552371d3d8aefc2cbbe5dbd5bfb712b1e9a08a430688d20538d2fcbf9",
-  "jumpers": "59079caa7de0006c64ce1932363d724fb5ca47e847c61cb056bd4043aa982fa5"
+  "jumpers": "59079caa7de0006c64ce1932363d724fb5ca47e847c61cb056bd4043aa982fa5",
+  "fox": "0fc570f3caf6fc5b90fbed79898bfc1fe18c21560aa56445eac750447e217475"
 };
   const hintButton = document.querySelector('[data-mode="suggested"]');
   const hintDialog = document.createElement('dialog');
