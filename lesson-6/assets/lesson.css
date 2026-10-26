@@ -89,15 +89,6 @@ body.pisga.coloring-lesson{padding-inline:12px}
 .pisga .tl-widget .tl-piece-instruction{margin:6px 0 0}
 }
 @media(max-width:400px){.pisga .stage-button{flex-direction:row}}
-.pisga .hint-dialog{width:min(420px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:22px}
-.pisga .hint-dialog .dialog-heading{margin-bottom:10px}
-.pisga .hint-dialog .hint-exercise-title{font-weight:900;margin-bottom:10px}
-.pisga .hint-dialog label{display:block;margin-top:18px}
-.pisga .hint-dialog input[type=password]{display:block;width:100%;min-width:0;min-height:48px;margin-top:6px;padding:10px 12px;border:3px solid var(--navy);border-radius:0;background:#e5f9f3;color:var(--ink);font:700 20px Arial,sans-serif;direction:ltr;text-align:center;letter-spacing:5px}
-.pisga .hint-dialog input[aria-invalid=true]{border-color:#9b2e20}
-.pisga .hint-dialog .hint-error{min-height:23px;color:#8c261a;font-weight:800;margin:8px 0 14px}
-.pisga .hint-dialog .hint-actions{display:flex;flex-wrap:wrap;gap:10px}
-.pisga .hint-dialog .hint-actions .btn{flex:1;min-width:120px}
 .pisga .self-paint-panel{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:12px;margin:0 0 12px;background:#fff3d6;border:3px solid var(--navy);box-shadow:3px 3px 0 var(--navy)}
 .pisga .self-paint-panel[hidden]{display:none}
 .pisga .self-paint-tools,.pisga .self-paint-colors,.pisga .self-paint-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
